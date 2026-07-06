@@ -70,8 +70,8 @@ export default function ProjectsSection({ data }: ProjectsSectionProps) {
                   isReverse ? "md:flex-row-reverse" : "md:flex-row"
                 }`}
               >
-                {/* Image Column - expands width on hover without increasing height */}
-                <div className={`w-full md:w-[60%] group-hover:md:w-[65%] transition-all duration-1000 ease-[cubic-bezier(0.25,1,0.5,1)] relative h-[50vh] md:h-[65vh] min-h-[350px] overflow-hidden shadow-[0_20px_50px_rgba(0,0,0,0.3)]`}>
+                {/* Image Column - Uses hardware-accelerated transforms instead of layout width animation */}
+                <div className={`w-full md:w-[60%] relative h-[50vh] md:h-[65vh] min-h-[350px] overflow-hidden shadow-xl`}>
                   <Link href={item.link} className="block w-full h-full relative outline-none focus:outline-none cursor-pointer">
                     <Image
                       src={item.image}
@@ -79,12 +79,12 @@ export default function ProjectsSection({ data }: ProjectsSectionProps) {
                       fill
                       priority={index === 0}
                       sizes="(max-width: 1024px) 100vw, 70vw"
-                      className="object-cover object-center group-hover:scale-105 transition-transform duration-[2000ms] ease-out"
+                      className="object-cover object-center group-hover:scale-[1.03] transition-transform duration-[1500ms] ease-out"
                     />
                     
                     {/* Know More button - left bottom on hover */}
-                    <div className="absolute bottom-6 left-6 sm:bottom-10 sm:left-10 opacity-0 translate-y-4 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-700 ease-out z-20">
-                      <span className="inline-flex items-center justify-center bg-white/10 backdrop-blur-md border border-white/40 text-white hover:bg-white hover:text-[#563320] font-ivymode px-6 py-2 sm:px-8 sm:py-3 text-sm tracking-widest uppercase transition-colors duration-300">
+                    <div className="absolute bottom-6 left-6 sm:bottom-10 sm:left-10 opacity-0 translate-y-4 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-500 ease-out z-20">
+                      <span className="inline-flex items-center justify-center bg-black/40 backdrop-blur-sm border border-white/40 text-white hover:bg-white hover:text-[#563320] font-ivymode px-6 py-2 sm:px-8 sm:py-3 text-sm tracking-widest uppercase transition-colors duration-300">
                         Know More
                       </span>
                     </div>
@@ -92,7 +92,7 @@ export default function ProjectsSection({ data }: ProjectsSectionProps) {
                 </div>
 
                 {/* Info Column */}
-                <div className={`w-full flex-1 flex flex-col justify-center py-6 md:py-0 transition-all duration-1000 ease-in-out ${
+                <div className={`w-full flex-1 flex flex-col justify-center py-6 md:py-0 ${
                   isReverse 
                     ? "pl-[4vw] sm:pl-[6vw] md:pl-[7.5vw] pr-6 sm:pr-10 md:pr-16" 
                     : "pr-[4vw] sm:pr-[6vw] md:pr-[7.5vw] pl-6 sm:pl-10 md:pl-16"
@@ -119,7 +119,7 @@ export default function ProjectsSection({ data }: ProjectsSectionProps) {
 
         {/* Call To Action Block */}
         <div className="w-full flex flex-col items-center justify-center gap-6 mt-8 pb-8 text-center px-4">
-          <p className="font-ivymode text-base sm:text-lg md:text-xl text-[#563320] tracking-wide max-w-md">
+          <p className="font-ivymode text-base sm:text-lg md:text-xl text-[#563320] tracking-wide max-w-none whitespace-nowrap">
             Take a closer look at our projects and capabilities.
           </p>
           <a

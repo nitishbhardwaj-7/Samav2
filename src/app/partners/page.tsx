@@ -23,7 +23,7 @@ export default async function PartnersPage() {
     <div className="relative w-full min-h-screen flex flex-col">
       <div className="bg-gradient-to-b from-[#7C8C70] from-[70%] via-[#DAC6AE] via-[90%] to-white flex flex-col pt-32 flex-grow">
       {/* Header section (Centered) */}
-      <div className="w-full max-w-[92%] sm:max-w-[88%] md:max-w-[80%] mx-auto flex flex-col items-center text-center pb-10">
+      <div className="w-full max-w-[92%] sm:max-w-[88%] md:max-w-[85%] mx-auto flex flex-col items-center text-center pb-10">
         
         {/* Title */}
         <h1 className="font-ivymode font-normal text-5xl sm:text-6xl md:text-7xl lg:text-8xl text-white leading-tight mb-6 tracking-wide select-none">
@@ -64,7 +64,7 @@ export default async function PartnersPage() {
 
       {/* Logos Grid Section */}
       <section className="w-full pb-20 px-4 sm:px-8 md:px-12 lg:px-16 flex-grow">
-        <div className="w-full max-w-[92%] sm:max-w-[88%] md:max-w-[80%] mx-auto">
+        <div className="w-full max-w-[92%] sm:max-w-[88%] md:max-w-[85%] mx-auto">
           <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3 sm:gap-4 md:gap-5">
             {logos.map((logo, index) => (
               <div 

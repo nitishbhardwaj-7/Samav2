@@ -62,8 +62,8 @@ const FALLBACK_DATA: HomepageData = {
     subtitle: "Spaces Brought to Life",
     description: "A curated selection of interiors that reflect our design philosophy, attention to detail, and regional expertise.",
     items: [
-      { number: "01", title: "Interior", image: "https://samaproductionme.com/wp-content/uploads/2026/06/interior-1-1.png", link: "#" },
-      { number: "02", title: "Exhibition Design & Build", image: "https://samaproductionme.com/wp-content/uploads/2026/06/Exhibition-1-1.png", link: "#" },
+      { number: "01", title: "Interior", image: "https://samaproductionme.com/wp-content/uploads/2026/06/interior-1-1.png", link: "/interior" },
+      { number: "02", title: "Exhibition Design & Build", image: "https://samaproductionme.com/wp-content/uploads/2026/06/Exhibition-1-1.png", link: "/exhibition" },
       { number: "03", title: "Events", image: "https://samaproductionme.com/wp-content/uploads/2026/06/events-1-1.png", link: "#" },
       { number: "04", title: "Mall Activation & Travel Retail", image: "https://samaproductionme.com/wp-content/uploads/2026/06/Mall-Activation-1-1-2.png", link: "#" },
     ],
@@ -100,13 +100,34 @@ export function mapWpUrl(url: string): string {
   return url;
 }
 
+export function decodeHtmlEntities(str: string): string {
+  if (!str) return "";
+  return str
+    .replace(/&#038;/g, "&")
+    .replace(/&amp;/g, "&")
+    .replace(/&#8217;/g, "'")
+    .replace(/&rsquo;/g, "'")
+    .replace(/&#8211;/g, "–")
+    .replace(/&ndash;/g, "–")
+    .replace(/&#8212;/g, "—")
+    .replace(/&mdash;/g, "—")
+    .replace(/&#8220;/g, "“")
+    .replace(/&ldquo;/g, "“")
+    .replace(/&#8221;/g, "”")
+    .replace(/&rdquo;/g, "”")
+    .replace(/&#39;/g, "'")
+    .replace(/&apos;/g, "'")
+    .replace(/&quot;/g, '"')
+    .replace(/&#34;/g, '"');
+}
+
 export async function getHomepageData(): Promise<HomepageData> {
   const url = "https://samaproductionme.com/wp-json/wp/v2/pages/7";
   try {
     const res = await fetch(url, {
       next: { revalidate: 3600 }, // Cache for 1 hour
     });
-    
+
     if (!res.ok) {
       console.warn(`Failed to fetch WordPress page data: ${res.statusText}. Using fallback data.`);
       return FALLBACK_DATA;
@@ -114,7 +135,7 @@ export async function getHomepageData(): Promise<HomepageData> {
 
     const page = await res.json();
     const html = page.content?.rendered || "";
-    
+
     if (!html) {
       console.warn("WordPress response contains empty content. Using fallback data.");
       return FALLBACK_DATA;
@@ -147,24 +168,38 @@ export async function getHomepageData(): Promise<HomepageData> {
       const parsedItems: ProjectItem[] = [];
       for (let i = 1; i < projectCards.length; i++) {
         const cardHtml = projectCards[i];
-        
+
         const numMatch = cardHtml.match(/class="proj-number-box">([^<]+)/);
         const titleMatch = cardHtml.match(/<h3><a[^>]*>([\s\S]*?)<\/a>/);
         const imgMatch = cardHtml.match(/<img[^>]+src="([^"]+)"/);
         const linkMatch = cardHtml.match(/class="proj-btn"><a href="([^"]+)"/);
-        
+
         if (imgMatch) {
+          let finalLink = "#";
+          if (linkMatch) {
+            const rawLink = linkMatch[1].trim();
+            if (rawLink.startsWith("http")) {
+              try {
+                finalLink = new URL(rawLink).pathname;
+              } catch (e) {
+                finalLink = rawLink;
+              }
+            } else {
+              finalLink = rawLink;
+            }
+          }
+
           parsedItems.push({
             number: numMatch ? numMatch[1].trim() : `0${i}`,
-            title: titleMatch 
-              ? titleMatch[1].replace(/<br\s*\/?>/g, " ").replace(/<[^>]+>/g, "").trim() 
+            title: titleMatch
+              ? decodeHtmlEntities(titleMatch[1].replace(/<br\s*\/?>/g, " ").replace(/<[^>]+>/g, "").trim())
               : "Project",
             image: mapWpUrl(imgMatch[1].trim()),
-            link: linkMatch ? linkMatch[1].trim() : "#",
+            link: finalLink,
           });
         }
       }
-      
+
       if (parsedItems.length > 0) {
         data.projects.items = parsedItems;
       }
@@ -180,7 +215,7 @@ export async function getHomepageData(): Promise<HomepageData> {
         if (imgMatch) {
           const src = mapWpUrl(imgMatch[1].trim());
           const altMatch = slideHtml.match(/alt="([^"]*)"/);
-          
+
           if (!parsedLogos.some((l) => l.src === src)) {
             parsedLogos.push({
               src,
@@ -189,7 +224,7 @@ export async function getHomepageData(): Promise<HomepageData> {
           }
         }
       }
-      
+
       if (parsedLogos.length > 0) {
         data.clients.logos = parsedLogos;
       }
@@ -202,12 +237,12 @@ export async function getHomepageData(): Promise<HomepageData> {
       if (imgMatch) {
         data.reachOut.image = mapWpUrl(imgMatch[1].trim());
       }
-      
+
       const phoneMatch = reachOutPart.match(/href="tel:([^"]+)"/);
       if (phoneMatch) {
         data.reachOut.phoneRaw = decodeURIComponent(phoneMatch[1].trim());
       }
-      
+
       const phoneTextMatch = reachOutPart.match(/class="elementor-icon-list-text">([^<]+)/);
       if (phoneTextMatch) {
         data.reachOut.phone = phoneTextMatch[1].trim();
@@ -315,7 +350,7 @@ export async function getAboutPageData(): Promise<AboutPageData> {
     const res = await fetch(url, {
       next: { revalidate: 3600 }, // Cache for 1 hour
     });
-    
+
     if (!res.ok) {
       console.warn(`Failed to fetch About Us WordPress page data: ${res.statusText}. Using fallback data.`);
       return FALLBACK_ABOUT_DATA;
@@ -323,7 +358,7 @@ export async function getAboutPageData(): Promise<AboutPageData> {
 
     const page = await res.json();
     const html = page.content?.rendered || "";
-    
+
     if (!html) {
       console.warn("WordPress response for About Us contains empty content. Using fallback data.");
       return FALLBACK_ABOUT_DATA;
@@ -374,29 +409,29 @@ export async function getAboutPageData(): Promise<AboutPageData> {
     // 6. Extract Who We Are Pillars
     const whoWeAreTitleMatch = html.match(/<h[1-6][^>]*>\s*Who We Are\s*<\/h[1-6]>/i);
     if (whoWeAreTitleMatch) {
-       data.whoWeAre.title = "Who We Are";
+      data.whoWeAre.title = "Who We Are";
     }
 
     const pillars = [];
     const parts = html.split(/<h[234]/);
     for (let i = 1; i < parts.length; i++) {
-       const part = parts[i];
-       const endHeading = part.match(/<\/h[234]>/);
-       if (!endHeading) continue;
-       
-       const titleHtml = part.substring(part.indexOf('>') + 1, endHeading.index);
-       const title = titleHtml.replace(/<[^>]+>/g, "").trim().replace(/&amp;/g, "&");
-       
-       if (title.length < 50) {
-         if (title.includes("Design Led") || title.includes("End to End") || title.includes("Craftsmanship")) {
-           const afterHeading = part.substring(endHeading.index);
-           const pMatch = afterHeading.match(/<p>([\s\S]*?)<\/p>/);
-           if (pMatch) {
-             const desc = pMatch[1].replace(/<[^>]+>/g, "").trim();
-             pillars.push({ title, description: desc });
-           }
-         }
-       }
+      const part = parts[i];
+      const endHeading = part.match(/<\/h[234]>/);
+      if (!endHeading) continue;
+
+      const titleHtml = part.substring(part.indexOf('>') + 1, endHeading.index);
+      const title = titleHtml.replace(/<[^>]+>/g, "").trim().replace(/&amp;/g, "&");
+
+      if (title.length < 50) {
+        if (title.includes("Design Led") || title.includes("End to End") || title.includes("Craftsmanship")) {
+          const afterHeading = part.substring(endHeading.index);
+          const pMatch = afterHeading.match(/<p>([\s\S]*?)<\/p>/);
+          if (pMatch) {
+            const desc = pMatch[1].replace(/<[^>]+>/g, "").trim();
+            pillars.push({ title, description: desc });
+          }
+        }
+      }
     }
     if (pillars.length > 0) {
       data.whoWeAre.pillars = pillars;
@@ -439,7 +474,7 @@ export async function getAboutPageData(): Promise<AboutPageData> {
       title: "Certifications",
       items: certItems
     };
-    
+
     return data;
   } catch (err) {
     console.error("Error in getAboutPageData:", err);
@@ -477,14 +512,14 @@ export async function getInteriorPageData(): Promise<InteriorPageData> {
     }
     const page = await res.json();
     const html = page.content?.rendered || "";
-    
+
     // Extract description
     let description = "Our clients include leading global brands who trust us to deliver refined, high-quality environments.";
     const descMatch = html.match(/Our clients include leading global brands[\s\S]*?<\/p>/i);
     if (descMatch) {
       description = descMatch[0].replace(/<[^>]+>/g, "").replace(/\s+/g, " ").trim();
     }
-    
+
     // Use the featured media of the page, or fallback
     let backgroundImage = "https://samaproductionme.com/wp-content/uploads/2026/06/interior-1-1.png";
     if (page.featured_media) {
@@ -500,9 +535,9 @@ export async function getInteriorPageData(): Promise<InteriorPageData> {
         backgroundImage = mapWpUrl(imgMatch[1]);
       }
     }
-    
+
     return {
-      title: page.title?.rendered || "Interior",
+      title: decodeHtmlEntities(page.title?.rendered || "Interior"),
       description,
       backgroundImage
     };
@@ -523,7 +558,7 @@ export async function getInteriorProjects(): Promise<InteriorProject[]> {
     });
     if (!res.ok) return [];
     const rawProjects = await res.json();
-    
+
     const projects: InteriorProject[] = [];
     for (const p of rawProjects) {
       // Get featured image
@@ -535,7 +570,7 @@ export async function getInteriorProjects(): Promise<InteriorProject[]> {
           featuredImage = mapWpUrl(featMedia.source_url);
         }
       }
-      
+
       // Get gallery (attached media items)
       const mediaRes = await fetch(`https://samaproductionme.com/wp-json/wp/v2/media?parent=${p.id}&per_page=100`, {
         next: { revalidate: 3600 },
@@ -545,22 +580,22 @@ export async function getInteriorProjects(): Promise<InteriorProject[]> {
         const mediaItems = await mediaRes.json();
         gallery = mediaItems.map((m: any) => mapWpUrl(m.source_url));
       }
-      
+
       // If gallery is empty, put featured image inside it
       if (gallery.length === 0 && featuredImage) {
         gallery = [featuredImage];
       }
-      
+
       projects.push({
         id: p.id,
         slug: p.slug,
-        title: p.title?.rendered || "",
+        title: decodeHtmlEntities(p.title?.rendered || ""),
         content: p.content?.rendered || "",
         featuredImage,
         gallery
       });
     }
-    
+
     return projects;
   } catch (err) {
     console.error("Error in getInteriorProjects:", err);
@@ -577,7 +612,7 @@ export async function getProjectBySlug(slug: string): Promise<InteriorProject | 
     const projects = await res.json();
     if (projects.length === 0) return null;
     const p = projects[0];
-    
+
     let featuredImage = "";
     if (p.featured_media) {
       const featRes = await fetch(`https://samaproductionme.com/wp-json/wp/v2/media/${p.featured_media}`);
@@ -586,7 +621,7 @@ export async function getProjectBySlug(slug: string): Promise<InteriorProject | 
         featuredImage = mapWpUrl(featMedia.source_url);
       }
     }
-    
+
     const mediaRes = await fetch(`https://samaproductionme.com/wp-json/wp/v2/media?parent=${p.id}&per_page=100`, {
       next: { revalidate: 3600 },
     });
@@ -595,15 +630,15 @@ export async function getProjectBySlug(slug: string): Promise<InteriorProject | 
       const mediaItems = await mediaRes.json();
       gallery = mediaItems.map((m: any) => mapWpUrl(m.source_url));
     }
-    
+
     if (gallery.length === 0 && featuredImage) {
       gallery = [featuredImage];
     }
-    
+
     return {
       id: p.id,
       slug: p.slug,
-      title: p.title?.rendered || "",
+      title: decodeHtmlEntities(p.title?.rendered || ""),
       content: p.content?.rendered || "",
       featuredImage,
       gallery
@@ -611,6 +646,55 @@ export async function getProjectBySlug(slug: string): Promise<InteriorProject | 
   } catch (err) {
     console.error(`Error fetching project by slug ${slug}:`, err);
     return null;
+  }
+}
+
+export async function getExhibitionProjects(): Promise<InteriorProject[]> {
+  try {
+    const res = await fetch("https://samaproductionme.com/wp-json/wp/v2/project?project_category=8&per_page=100", {
+      next: { revalidate: 3600 },
+    });
+    if (!res.ok) return [];
+    const rawProjects = await res.json();
+
+    const projects: InteriorProject[] = [];
+    for (const p of rawProjects) {
+      let featuredImage = "";
+      if (p.featured_media) {
+        const featRes = await fetch(`https://samaproductionme.com/wp-json/wp/v2/media/${p.featured_media}`);
+        if (featRes.ok) {
+          const featMedia = await featRes.json();
+          featuredImage = mapWpUrl(featMedia.source_url);
+        }
+      }
+
+      const mediaRes = await fetch(`https://samaproductionme.com/wp-json/wp/v2/media?parent=${p.id}&per_page=100`, {
+        next: { revalidate: 3600 },
+      });
+      let gallery: string[] = [];
+      if (mediaRes.ok) {
+        const mediaItems = await mediaRes.json();
+        gallery = mediaItems.map((m: any) => mapWpUrl(m.source_url));
+      }
+
+      if (gallery.length === 0 && featuredImage) {
+        gallery = [featuredImage];
+      }
+
+      projects.push({
+        id: p.id,
+        slug: p.slug,
+        title: decodeHtmlEntities(p.title?.rendered || ""),
+        content: p.content?.rendered || "",
+        featuredImage,
+        gallery
+      });
+    }
+
+    return projects;
+  } catch (err) {
+    console.error("Error in getExhibitionProjects:", err);
+    return [];
   }
 }
 
@@ -711,7 +795,7 @@ export async function getPartnersPageData(): Promise<PartnersPageData> {
     const imgRegex = /<img[^>]+src="([^"]+)"/g;
     let match;
     const parsedLogos: PartnerLogo[] = [];
-    
+
     const galleryParts = html.split(/class="[^"]*gallery[^"]*"/i);
     const targetHtml = galleryParts.length > 1 ? galleryParts[1] : html;
 

@@ -25,6 +25,15 @@ body {
   font-family: var(--font-ivymode), sans-serif;
 }
 
+/* Hide global scrollbar */
+::-webkit-scrollbar {
+  display: none;
+}
+html {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
 /* ─── Global keyframes ───────────────────────────────────────── */
 @keyframes hero-zoom {
   from { transform: scale(1.08); }

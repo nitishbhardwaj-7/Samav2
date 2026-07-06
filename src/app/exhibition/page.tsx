@@ -2,23 +2,21 @@ import Image from "next/image";
 import Link from "next/link";
 import ReachOutSection from "../../components/ReachOutSection";
 import Footer from "../../components/Footer";
-import { getInteriorPageData, getInteriorProjects, getHomepageData } from "../../lib/wordpress";
+import { getExhibitionProjects, getHomepageData } from "../../lib/wordpress";
 
 export const revalidate = 3600;
 
 export const metadata = {
-  title: "Interior – SAMA Production",
-  description: "A curated collection of interior design & build projects by SAMA Production.",
+  title: "Exhibition Design & Build – SAMA Production",
+  description: "A curated collection of exhibition design & build projects by SAMA Production.",
 };
 
-export default async function InteriorPage() {
-  const [pageData, projects, homepageData] = await Promise.all([
-    getInteriorPageData(),
-    getInteriorProjects(),
+export default async function ExhibitionPage() {
+  const [projects, homepageData] = await Promise.all([
+    getExhibitionProjects(),
     getHomepageData(),
   ]);
 
-  const { title, description } = pageData;
   const { reachOut } = homepageData;
 
   return (
@@ -26,11 +24,11 @@ export default async function InteriorPage() {
       {/* ─── HEADER ───────────────────────────────────────────── */}
       <div className="w-full pt-32 sm:pt-40 pb-8 px-4 flex flex-col items-center text-center max-w-[92%] sm:max-w-[88%] md:max-w-[85%] mx-auto">
         <h1 className="font-ivymode font-normal text-[3.5rem] sm:text-[5rem] md:text-[6.5rem] lg:text-[7.5rem] text-white leading-[1.1] select-none">
-          {title}
+          Exhibition Design <span className="italic font-light">&</span> Build
         </h1>
 
         <p className="font-ivymode text-sm sm:text-base md:text-lg text-white mt-4 sm:mt-6 leading-relaxed tracking-wide max-w-4xl mx-auto">
-          {description}
+          Our clients include leading global brands who trust us to deliver refined, high-quality environments that elevate their presence and reflect their identity with excellence.
         </p>
 
         <div className="mt-8 flex items-center justify-center gap-2 font-ivymode text-sm sm:text-base text-white select-none">
@@ -40,7 +38,7 @@ export default async function InteriorPage() {
           </svg>
           <Link href="/" className="hover:text-white/80 transition-colors no-underline">Home</Link>
           <span className="mx-1 opacity-70">/</span>
-          <span className="underline decoration-white/60 underline-offset-4">Interior</span>
+          <span className="underline decoration-white/60 underline-offset-4">Exhibition Design Build</span>
         </div>
       </div>
 

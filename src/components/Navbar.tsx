@@ -20,7 +20,7 @@ export default function Navbar() {
   return (
     <>
       <header className="fixed top-0 left-0 w-full z-[9999] bg-transparent transition-all duration-300 pointer-events-none">
-        <div className="w-full max-w-[92%] sm:max-w-[88%] md:max-w-[80%] mx-auto py-6 sm:py-8 flex items-center justify-between pointer-events-auto">
+        <div className="w-full max-w-[92%] sm:max-w-[88%] md:max-w-[85%] mx-auto py-6 sm:py-8 flex items-center justify-between pointer-events-auto">
           
           {/* Logo */}
           <Link href="/" className="relative w-28 h-10 sm:w-32 sm:h-12 select-none">

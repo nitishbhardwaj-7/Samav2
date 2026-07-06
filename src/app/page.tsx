@@ -14,9 +14,9 @@ export default async function Home() {
     <div className="relative w-full min-h-screen bg-[#7C8C70]">
 
       {/* Section 1: Hero Section */}
-      <div className="relative w-full h-screen pt-24 sm:pt-28 md:pt-32 pb-4 sm:pb-8 md:pb-12 lg:pb-16 px-4 sm:px-8 md:px-12 lg:px-16 flex flex-col items-center justify-center overflow-hidden">
+      <div className="relative w-full h-screen pt-16 sm:pt-20 md:pt-24 pb-2 sm:pb-4 md:pb-6 lg:pb-8 flex flex-col items-center justify-center overflow-hidden">
         {/* Framed Hero Card */}
-        <main className="group relative flex-1 w-full max-w-[92%] sm:max-w-[88%] md:max-w-[85%] h-full overflow-hidden rounded-2xl shadow-[0_20px_50px_rgba(0,0,0,0.3)] bg-[#2b2a22]">
+        <main className="group relative flex-1 w-full max-w-[92%] sm:max-w-[88%] md:max-w-[85%] h-full overflow-hidden rounded-2xl bg-[#2b2a22]">
           
           {/* Background Image with Olive/Dark Overlay */}
           <div className="absolute inset-0 select-none">
@@ -28,7 +28,9 @@ export default async function Home() {
               sizes="100vw"
               className="object-cover object-center filter contrast-[1.05]"
             />
-            {/* No dark overlay */}
+            {/* Green Overlay Filter */}
+            <div className="absolute inset-0 bg-[#7C8C70]/50 mix-blend-multiply" />
+            <div className="absolute inset-0 bg-[#7C8C70]/20" />
           </div>
 
           {/* Hero Content */}
