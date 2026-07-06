@@ -1,10 +1,51 @@
+"use client";
+
+import { useEffect, useRef } from "react";
 import Image from "next/image";
 import Link from "next/link";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+
+if (typeof window !== "undefined") {
+  gsap.registerPlugin(ScrollTrigger);
+}
 
 export default function Footer() {
+  const footerRef = useRef<HTMLElement>(null);
+  const contentRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const prefersReducedMotion = window.matchMedia(
+      "(prefers-reduced-motion: reduce)"
+    ).matches;
+
+    if (prefersReducedMotion) return;
+
+    const ctx = gsap.context(() => {
+      if (!contentRef.current) return;
+
+      const children = contentRef.current.children;
+
+      gsap.from(children, {
+        y: 50,
+        opacity: 0,
+        duration: 1,
+        stagger: 0.15,
+        ease: "power4.out",
+        scrollTrigger: {
+          trigger: footerRef.current,
+          start: "top 85%",
+          toggleActions: "play none none none",
+        },
+      });
+    }, footerRef);
+
+    return () => ctx.revert();
+  }, []);
+
   return (
-    <footer className="relative w-full bg-[#7C8C70] pt-16 pb-8 px-6 sm:px-10 md:px-14 lg:px-16 flex flex-col items-center overflow-hidden">
-      <div className="w-full max-w-[92%] sm:max-w-[88%] md:max-w-[85%] mx-auto flex flex-col gap-12 sm:gap-16 z-10">
+    <footer ref={footerRef} className="relative w-full bg-[#7C8C70] pt-16 pb-8 px-6 sm:px-10 md:px-14 lg:px-16 flex flex-col items-center overflow-hidden">
+      <div ref={contentRef} className="w-full max-w-[92%] sm:max-w-[88%] md:max-w-[85%] mx-auto flex flex-col gap-12 sm:gap-16 z-10">
 
         {/* Main Content Row */}
         <div className="w-full flex flex-col lg:flex-row items-center lg:items-stretch justify-between gap-10 lg:gap-6">
@@ -17,6 +58,7 @@ export default function Footer() {
                 alt="SAMA Production Logo"
                 fill
                 priority
+                sizes="224px"
                 className="object-contain object-center"
               />
             </div>

@@ -9,6 +9,7 @@ const ivyMode = localFont({
 });
 
 import Navbar from "../components/Navbar";
+import AnimationProvider from "../components/AnimationProvider";
 
 export const metadata: Metadata = {
   title: "Sama Production",
@@ -26,8 +27,10 @@ export default function RootLayout({
       className={`${ivyMode.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col">
-        {children}
-        <Navbar />
+        <AnimationProvider>
+          {children}
+          <Navbar />
+        </AnimationProvider>
       </body>
     </html>
   );

@@ -2,19 +2,19 @@ import Image from "next/image";
 import Link from "next/link";
 import ReachOutSection from "../../components/ReachOutSection";
 import Footer from "../../components/Footer";
-import { getExhibitionProjects, getHomepageData, getExhibitionPageData } from "../../lib/wordpress";
+import { getEventsProjects, getHomepageData, getEventsPageData } from "../../lib/wordpress";
 
 export const revalidate = 3600;
 
 export const metadata = {
-  title: "Exhibition Design & Build – SAMA Production",
-  description: "A curated collection of exhibition design & build projects by SAMA Production.",
+  title: "Events – SAMA Production",
+  description: "A curated collection of events projects by SAMA Production.",
 };
 
-export default async function ExhibitionPage() {
+export default async function EventsPage() {
   const [pageData, projects, homepageData] = await Promise.all([
-    getExhibitionPageData(),
-    getExhibitionProjects(),
+    getEventsPageData(),
+    getEventsProjects(),
     getHomepageData(),
   ]);
 
@@ -52,7 +52,7 @@ export default async function ExhibitionPage() {
           </svg>
           <Link href="/" className="hover:text-white/80 transition-colors no-underline">Home</Link>
           <span className="mx-1 opacity-70">/</span>
-          <span className="underline decoration-white/60 underline-offset-4">Exhibition Design Build</span>
+          <span className="underline decoration-white/60 underline-offset-4">Events</span>
         </div>
       </div>
 

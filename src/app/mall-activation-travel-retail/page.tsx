@@ -2,19 +2,19 @@ import Image from "next/image";
 import Link from "next/link";
 import ReachOutSection from "../../components/ReachOutSection";
 import Footer from "../../components/Footer";
-import { getExhibitionProjects, getHomepageData, getExhibitionPageData } from "../../lib/wordpress";
+import { getMallActivationProjects, getHomepageData, getMallActivationPageData } from "../../lib/wordpress";
 
 export const revalidate = 3600;
 
 export const metadata = {
-  title: "Exhibition Design & Build – SAMA Production",
-  description: "A curated collection of exhibition design & build projects by SAMA Production.",
+  title: "Mall Activation & Travel Retail – SAMA Production",
+  description: "A curated collection of mall activation & travel retail projects by SAMA Production.",
 };
 
-export default async function ExhibitionPage() {
+export default async function MallActivationPage() {
   const [pageData, projects, homepageData] = await Promise.all([
-    getExhibitionPageData(),
-    getExhibitionProjects(),
+    getMallActivationPageData(),
+    getMallActivationProjects(),
     getHomepageData(),
   ]);
 
@@ -37,7 +37,7 @@ export default async function ExhibitionPage() {
     <div className="relative w-full min-h-screen bg-[#8A6450]">
       {/* ─── HEADER ───────────────────────────────────────────── */}
       <div className="w-full pt-32 sm:pt-40 pb-8 px-4 flex flex-col items-center text-center max-w-[92%] sm:max-w-[88%] md:max-w-[85%] mx-auto">
-        <h1 className="font-ivymode font-normal text-[3.5rem] sm:text-[5rem] md:text-[6.5rem] lg:text-[7.5rem] text-white leading-[1.1] select-none whitespace-normal md:whitespace-nowrap">
+        <h1 className="font-ivymode font-normal text-[2.25rem] xs:text-[2.75rem] sm:text-[3.75rem] md:text-[4.5rem] lg:text-[5rem] text-white leading-[1.1] select-none whitespace-normal md:whitespace-nowrap">
           {renderTitle(title)}
         </h1>
 
@@ -52,7 +52,7 @@ export default async function ExhibitionPage() {
           </svg>
           <Link href="/" className="hover:text-white/80 transition-colors no-underline">Home</Link>
           <span className="mx-1 opacity-70">/</span>
-          <span className="underline decoration-white/60 underline-offset-4">Exhibition Design Build</span>
+          <span className="underline decoration-white/60 underline-offset-4">Mall Activation & Travel Retail</span>
         </div>
       </div>
 

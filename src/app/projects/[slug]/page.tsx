@@ -2,8 +2,12 @@ import Image from "next/image";
 import Link from "next/link";
 import ReachOutSection from "../../../components/ReachOutSection";
 import Footer from "../../../components/Footer";
+import GalleryScrollButton from "../../../components/GalleryScrollButton";
 import {
   getInteriorProjects,
+  getExhibitionProjects,
+  getEventsProjects,
+  getMallActivationProjects,
   getProjectBySlug,
   getHomepageData,
 } from "../../../lib/wordpress";
@@ -12,8 +16,14 @@ import { notFound } from "next/navigation";
 export const revalidate = 3600;
 
 export async function generateStaticParams() {
-  const projects = await getInteriorProjects();
-  return projects.map((p) => ({ slug: p.slug }));
+  const [interior, exhibition, events, mallActivation] = await Promise.all([
+    getInteriorProjects(),
+    getExhibitionProjects(),
+    getEventsProjects(),
+    getMallActivationProjects(),
+  ]);
+  const allProjects = [...interior, ...exhibition, ...events, ...mallActivation];
+  return allProjects.map((p) => ({ slug: p.slug }));
 }
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }) {
@@ -88,7 +98,7 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
           </div>
 
           {/* ─── TITLE ─── */}
-          <h1 className="font-['Instrument_Serif'] text-[4rem] sm:text-[5rem] md:text-[6.5rem] lg:text-[7.5rem] text-[#E5D9C4] leading-[0.9] font-normal mb-12 sm:mb-16">
+          <h1 className="font-ivymode text-[3rem] sm:text-[4rem] md:text-[5rem] lg:text-[5.5rem] text-[#E5D9C4] leading-[1] font-normal mb-10 sm:mb-14">
             {project.title}
           </h1>
 
@@ -101,24 +111,24 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
               {/* COLUMN 1: META */}
               <div className="flex flex-col border-b md:border-b-0 border-[#E5D9C4]/20 md:border-r md:border-[#E5D9C4]/20 pr-0 md:pr-6 pb-6 md:pb-0 mb-6 md:mb-0 gap-8">
                 <div className="flex flex-col">
-                  <span className="font-['Italiana'] text-[1.75rem] text-[#E5D9C4] mb-1">Client</span>
-                  <span className="font-inter text-sm md:text-base text-white tracking-wider uppercase">{project.title}</span>
+                  <span className="font-ivymode text-[1.75rem] text-[#E5D9C4] mb-1">Client</span>
+                  <span className="font-ivymode text-sm md:text-base text-white tracking-wider uppercase">{project.title}</span>
                 </div>
                 <div className="flex flex-col">
-                  <span className="font-['Italiana'] text-[1.75rem] text-[#E5D9C4] mb-1">Size</span>
-                  <span className="font-inter text-sm md:text-base text-white tracking-wider">140 Sqm</span>
+                  <span className="font-ivymode text-[1.75rem] text-[#E5D9C4] mb-1">Size</span>
+                  <span className="font-ivymode text-sm md:text-base text-white tracking-wider">140 Sqm</span>
                 </div>
                 <div className="flex flex-col">
-                  <span className="font-['Italiana'] text-[1.75rem] text-[#E5D9C4] mb-1">Location</span>
-                  <span className="font-inter text-sm md:text-base text-white tracking-wider uppercase">DIFC</span>
+                  <span className="font-ivymode text-[1.75rem] text-[#E5D9C4] mb-1">Location</span>
+                  <span className="font-ivymode text-sm md:text-base text-white tracking-wider uppercase">DIFC</span>
                 </div>
               </div>
 
               {/* COLUMN 2: DESCRIPTION */}
               <div className="flex flex-col md:pl-8 lg:pl-12">
-                <h2 className="font-['Italiana'] text-[2.25rem] text-[#E5D9C4] mb-6">About the Project</h2>
+                <h2 className="font-ivymode text-[2.25rem] text-[#E5D9C4] mb-6">About the Project</h2>
                 <div 
-                  className="font-inter text-sm md:text-base text-white/90 leading-relaxed space-y-4 mb-10"
+                  className="font-ivymode text-sm md:text-base text-white/90 leading-relaxed space-y-4 mb-10"
                   dangerouslySetInnerHTML={{ __html: project.content }}
                 />
                 
@@ -140,33 +150,43 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
 
             {/* COLUMN 3: GALLERY (Vertical CSS Slider without visible scrollbar) */}
             <div 
-              className="flex flex-col gap-6 w-full overflow-y-auto snap-y snap-mandatory relative [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]"
+              className="gallery-container flex flex-col gap-6 w-full overflow-y-auto snap-y snap-mandatory relative [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]"
               style={{ aspectRatio: '1 / 1.7' }}
             >
-              {gallery.map((img, i) => (
-                <div 
-                  key={i} 
-                  className="relative w-full shrink-0 aspect-[4/3] rounded-xl overflow-hidden shadow-lg border border-[#E5D9C4]/10 group snap-start"
-                >
-                  <Image
-                    src={img}
-                    alt={`${project.title} gallery ${i}`}
-                    fill
-                    sizes="(max-width: 768px) 100vw, 33vw"
-                    className="object-cover group-hover:scale-105 transition-transform duration-700 ease-out"
-                  />
-                </div>
-              ))}
+              {gallery.map((mediaUrl, i) => {
+                const isVideo = mediaUrl.toLowerCase().endsWith('.mp4') || mediaUrl.toLowerCase().endsWith('.webm');
+                
+                return (
+                  <div 
+                    key={i} 
+                    className="relative w-full shrink-0 aspect-[4/3] rounded-xl overflow-hidden shadow-lg border border-[#E5D9C4]/10 group snap-start bg-black/10"
+                  >
+                    {isVideo ? (
+                      <video
+                        src={mediaUrl}
+                        autoPlay
+                        loop
+                        muted
+                        playsInline
+                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-out"
+                      />
+                    ) : (
+                      <Image
+                        src={mediaUrl}
+                        alt={`${project.title} gallery ${i}`}
+                        fill
+                        priority={i === 0}
+                        sizes="(max-width: 768px) 100vw, 33vw"
+                        className="object-cover group-hover:scale-105 transition-transform duration-700 ease-out"
+                      />
+                    )}
+                  </div>
+                );
+              })}
               
               {/* Scroll indicator overlay pinned to the bottom of the container */}
               {gallery.length > 1 && (
-                <div className="sticky bottom-4 left-0 right-0 flex justify-center pointer-events-none z-10 pb-2">
-                  <div className="w-8 h-8 rounded-full bg-black/60 backdrop-blur flex items-center justify-center text-white shadow-xl animate-bounce">
-                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7" />
-                    </svg>
-                  </div>
-                </div>
+                <GalleryScrollButton />
               )}
             </div>
 

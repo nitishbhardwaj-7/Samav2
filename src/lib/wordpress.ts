@@ -144,19 +144,18 @@ export async function getHomepageData(): Promise<HomepageData> {
     const data: HomepageData = JSON.parse(JSON.stringify(FALLBACK_DATA));
 
     // 1. Parse Hero Description & Quote (if found in content)
-    // Looking for: Elegant spaces crafted with purpose...
-    const heroDescMatch = html.match(/Elegant spaces crafted with purpose[\s\S]*?<\/p>/);
+    const heroDescMatch = html.match(/class="[^"]*elementor-icon-box-description[^"]*"[^>]*>([\s\S]*?)<\/p>/i);
     if (heroDescMatch) {
-      data.hero.description = heroDescMatch[0]
+      data.hero.description = heroDescMatch[1]
         .replace(/<[^>]+>/g, "")
         .replace(/\s+/g, " ")
         .trim();
     }
 
     // 2. Parse About Section Description
-    const aboutDescMatch = html.match(/SAMA Production is a multidisciplinary[\s\S]*?<\/p>/);
+    const aboutDescMatch = html.match(/class="[^"]*elementor-widget-text-editor[^"]*"[^>]*>[\s\S]*?<p>([\s\S]*?)<\/p>/i);
     if (aboutDescMatch) {
-      data.about.description = aboutDescMatch[0]
+      data.about.description = aboutDescMatch[1]
         .replace(/<[^>]+>/g, "")
         .replace(/\s+/g, " ")
         .trim();
@@ -189,11 +188,24 @@ export async function getHomepageData(): Promise<HomepageData> {
             }
           }
 
+          const parsedTitle = titleMatch
+            ? decodeHtmlEntities(titleMatch[1].replace(/<br\s*\/?>/g, " ").replace(/<[^>]+>/g, "").trim())
+            : "Project";
+
+          // Override link for known major categories
+          if (parsedTitle.toLowerCase().includes("interior")) {
+            finalLink = "/interior";
+          } else if (parsedTitle.toLowerCase().includes("exhibition")) {
+            finalLink = "/exhibition";
+          } else if (parsedTitle.toLowerCase().includes("events")) {
+            finalLink = "/events";
+          } else if (parsedTitle.toLowerCase().includes("mall activation") || parsedTitle.toLowerCase().includes("travel retail")) {
+            finalLink = "/mall-activation-travel-retail";
+          }
+
           parsedItems.push({
             number: numMatch ? numMatch[1].trim() : `0${i}`,
-            title: titleMatch
-              ? decodeHtmlEntities(titleMatch[1].replace(/<br\s*\/?>/g, " ").replace(/<[^>]+>/g, "").trim())
-              : "Project",
+            title: parsedTitle,
             image: mapWpUrl(imgMatch[1].trim()),
             link: finalLink,
           });
@@ -366,114 +378,83 @@ export async function getAboutPageData(): Promise<AboutPageData> {
 
     const data: AboutPageData = JSON.parse(JSON.stringify(FALLBACK_ABOUT_DATA));
 
-    // 1. Extract Hero Title parts (from VISION THAT DRIVES THE CRAFT)
-    if (html.includes("THAT DRIVES THE")) {
-      data.hero.title = "VISION";
-      data.hero.middleText = "THAT DRIVES THE";
-      data.hero.subtitle = "CRAFT";
-    }
+    // 1. Extract Hero Title parts (from Elementor container ee18c44, 313664f, 1cf2ad1)
+    const titleMatch = html.match(/class="[^"]*elementor-element-ee18c44[^"]*"[\s\S]*?<h1[^>]*>([\s\S]*?)<\/h1>/i);
+    const middleMatch = html.match(/class="[^"]*elementor-element-313664f[^"]*"[\s\S]*?<p[^>]*>([\s\S]*?)<\/p>/i);
+    const subtitleMatch = html.match(/class="[^"]*elementor-element-1cf2ad1[^"]*"[\s\S]*?<h2[^>]*>([\s\S]*?)<\/h2>/i);
 
-    // 2. Extract Hero Description/Quote
-    const heroDescMatch = html.match(/Elegant spaces crafted with purpose[\s\S]*?<\/p>/);
+    if (titleMatch) data.hero.title = titleMatch[1].replace(/<[^>]+>/g, "").trim();
+    if (middleMatch) data.hero.middleText = middleMatch[1].replace(/<[^>]+>/g, "").trim();
+    if (subtitleMatch) data.hero.subtitle = subtitleMatch[1].replace(/<[^>]+>/g, "").trim();
+
+    // 2. Extract Hero Description/Quote (from Elementor container dae6a9c)
+    const heroDescMatch = html.match(/class="[^"]*elementor-element-dae6a9c[^"]*"[\s\S]*?<p class="elementor-icon-box-description">([\s\S]*?)<\/p>/i);
     if (heroDescMatch) {
-      data.hero.description = heroDescMatch[0]
+      data.hero.description = heroDescMatch[1]
         .replace(/<[^>]+>/g, "")
         .replace(/\s+/g, " ")
         .trim();
     }
 
-    // 3. Extract About Section Description
-    const aboutDescMatch = html.match(/SAMA Production is a multidisciplinary[\s\S]*?<\/p>/);
+    // 3. Extract About Section Description (from Elementor container 8ba34d7)
+    const aboutDescMatch = html.match(/class="[^"]*elementor-element-8ba34d7[^"]*"[\s\S]*?<p>([\s\S]*?)<\/p>/i);
     if (aboutDescMatch) {
-      data.about.description = aboutDescMatch[0]
+      data.about.description = aboutDescMatch[1]
         .replace(/<[^>]+>/g, "")
         .replace(/\s+/g, " ")
         .trim();
     }
 
-    // 4. Extract Design Section Quote
-    const designQuoteMatch = html.match(/“We design and build spaces[\s\S]*?”/i) || html.match(/We design and build spaces[^<]+/i);
+    // 4. Extract Design Section Quote (from Elementor container 5abb09a)
+    const designQuoteMatch = html.match(/class="[^"]*elementor-element-5abb09a[^"]*"[\s\S]*?<h2[^>]*>([\s\S]*?)<\/h2>/i);
     if (designQuoteMatch) {
-      data.designSection.quote = designQuoteMatch[0]
+      data.designSection.quote = designQuoteMatch[1]
         .replace(/<[^>]+>/g, "")
         .replace(/\s+/g, " ")
         .trim();
     }
 
-    // 5. Extract Design Section Image
-    const designImgMatch = html.match(/<img[^>]+src="([^"]+Mask-group[^"]+)"/i) || html.match(/<img[^>]+src="([^"]+)"/i);
+    // 5. Extract Design Section Image (from Elementor container 7fc50ff)
+    const designImgMatch = html.match(/class="[^"]*elementor-element-7fc50ff[^"]*"[\s\S]*?<img[^>]+src="([^"]+)"/i);
     if (designImgMatch) {
       data.designSection.image = designImgMatch[1].trim();
     }
 
-    // 6. Extract Who We Are Pillars
-    const whoWeAreTitleMatch = html.match(/<h[1-6][^>]*>\s*Who We Are\s*<\/h[1-6]>/i);
-    if (whoWeAreTitleMatch) {
-      data.whoWeAre.title = "Who We Are";
+    // 6. Extract Who We Are Pillars (from Elementor containers 5362fc1, f6f0b1a, 39d30e4)
+    const pillarHashes = ["5362fc1", "f6f0b1a", "39d30e4"];
+    const pillars = pillarHashes.map(hash => {
+      const regex = new RegExp(`class="[^"]*elementor-element-${hash}[^"]*"[\\s\\S]*?<h3[^>]*>([\\s\\S]*?)<\\/h3>[\\s\\S]*?<p>([\\s\\S]*?)<\\/p>`, "i");
+      const match = html.match(regex);
+      if (match) {
+        return {
+          title: match[1].replace(/<[^>]+>/g, "").trim().replace(/&amp;/g, "&"),
+          description: match[2].replace(/<[^>]+>/g, "").trim()
+        };
+      }
+      return null;
+    }).filter(Boolean);
+
+    if (pillars && pillars.length > 0) {
+      data.whoWeAre.pillars = pillars as any;
     }
 
-    const pillars = [];
-    const parts = html.split(/<h[234]/);
-    for (let i = 1; i < parts.length; i++) {
-      const part = parts[i];
-      const endHeading = part.match(/<\/h[234]>/);
-      if (!endHeading) continue;
-
-      const titleHtml = part.substring(part.indexOf('>') + 1, endHeading.index);
-      const title = titleHtml.replace(/<[^>]+>/g, "").trim().replace(/&amp;/g, "&");
-
-      if (title.length < 50) {
-        if (title.includes("Design Led") || title.includes("End to End") || title.includes("Craftsmanship")) {
-          const afterHeading = part.substring(endHeading.index);
-          const pMatch = afterHeading.match(/<p>([\s\S]*?)<\/p>/);
-          if (pMatch) {
-            const desc = pMatch[1].replace(/<[^>]+>/g, "").trim();
-            pillars.push({ title, description: desc });
-          }
-        }
+    // 7. Extract Certifications (from Elementor containers d3f1b55, fe59af5, 6eff2f5)
+    const certHashes = ["d3f1b55", "fe59af5", "6eff2f5"];
+    const certItems = certHashes.map(hash => {
+      const regex = new RegExp(`class="[^"]*elementor-element-${hash}[^"]*"[\\s\\S]*?<img[^>]+src="([^"]+)"[\\s\\S]*?<p[^>]*>([\\s\\S]*?)<\\/p>`, "i");
+      const match = html.match(regex);
+      if (match) {
+        return {
+          image: match[1].trim(),
+          title: match[2].replace(/<[^>]+>/g, "").trim().replace(/&amp;/g, "&")
+        };
       }
+      return null;
+    }).filter(Boolean);
+
+    if (certItems && certItems.length > 0) {
+      data.certificationsSection.items = certItems as any;
     }
-    if (pillars.length > 0) {
-      data.whoWeAre.pillars = pillars;
-    }
-
-    // 7. Extract Certifications
-    const certImages = [
-      { key: "blue-certificates", defaultTitle: "2015 Quality Management System Certification" },
-      { key: "2-230132", defaultTitle: "2018 Occupational Health & Safety Certification" },
-      { key: "3-61", defaultTitle: "2015 Environmental Management Certification" }
-    ];
-
-    const certItems = certImages.map(item => {
-      let image = "";
-      let title = item.defaultTitle;
-
-      const imgRegex = new RegExp(`<img[^>]+src="([^"]+${item.key}[^"]*)"`, "i");
-      const imgMatch = html.match(imgRegex);
-      if (imgMatch) {
-        image = imgMatch[1].trim();
-      } else {
-        if (item.key === "blue-certificates") image = "https://samaproductionme.com/wp-content/uploads/2026/05/blue-certificates.png";
-        else if (item.key === "2-230132") image = "https://samaproductionme.com/wp-content/uploads/2026/05/2-230132.png";
-        else image = "https://samaproductionme.com/wp-content/uploads/2026/05/3-61.png";
-      }
-
-      const idx = html.indexOf(item.key);
-      if (idx !== -1) {
-        const afterImg = html.substring(idx, idx + 1000);
-        const textMatch = afterImg.match(/>([^<]*Certification[^<]*)</i);
-        if (textMatch) {
-          title = textMatch[1].trim();
-        }
-      }
-
-      return { image, title };
-    });
-
-    data.certificationsSection = {
-      title: "Certifications",
-      items: certItems
-    };
 
     return data;
   } catch (err) {
@@ -497,31 +478,42 @@ export interface InteriorPageData {
   backgroundImage: string;
 }
 
-export async function getInteriorPageData(): Promise<InteriorPageData> {
-  const url = "https://samaproductionme.com/wp-json/wp/v2/pages/472";
+export type CategoryPageData = InteriorPageData;
+
+export async function getGenericCategoryPageData(
+  id: number | string,
+  fallbackTitle: string,
+  fallbackDesc: string,
+  fallbackBg: string
+): Promise<CategoryPageData> {
+  const url = `https://samaproductionme.com/wp-json/wp/v2/pages/${id}`;
   try {
     const res = await fetch(url, {
       next: { revalidate: 3600 },
     });
     if (!res.ok) {
       return {
-        title: "Interior",
-        description: "Our clients include leading global brands who trust us to deliver refined, high-quality environments that elevate their presence.",
-        backgroundImage: "https://samaproductionme.com/wp-content/uploads/2026/06/interior-1-1.png"
+        title: fallbackTitle,
+        description: fallbackDesc,
+        backgroundImage: fallbackBg,
       };
     }
     const page = await res.json();
     const html = page.content?.rendered || "";
 
-    // Extract description
-    let description = "Our clients include leading global brands who trust us to deliver refined, high-quality environments.";
-    const descMatch = html.match(/Our clients include leading global brands[\s\S]*?<\/p>/i);
-    if (descMatch) {
-      description = descMatch[0].replace(/<[^>]+>/g, "").replace(/\s+/g, " ").trim();
+    // 1. Title
+    const title = decodeHtmlEntities(page.title?.rendered || fallbackTitle);
+
+    // 2. Description
+    let description = fallbackDesc;
+    const revealPart = html.split('id="sama-reveal-content"')[1] || html;
+    const pMatch = revealPart.match(/<p[^>]*>([\s\S]*?)<\/p>/i);
+    if (pMatch) {
+      description = pMatch[1].replace(/<[^>]+>/g, "").replace(/\s+/g, " ").trim();
     }
 
-    // Use the featured media of the page, or fallback
-    let backgroundImage = "https://samaproductionme.com/wp-content/uploads/2026/06/interior-1-1.png";
+    // 3. Background Image
+    let backgroundImage = fallbackBg;
     if (page.featured_media) {
       const mediaRes = await fetch(`https://samaproductionme.com/wp-json/wp/v2/media/${page.featured_media}`);
       if (mediaRes.ok) {
@@ -529,7 +521,6 @@ export async function getInteriorPageData(): Promise<InteriorPageData> {
         backgroundImage = mapWpUrl(media.source_url);
       }
     } else {
-      // Look for first large image in the html
       const imgMatch = html.match(/<img[^>]+src="([^"]+)"/i);
       if (imgMatch) {
         backgroundImage = mapWpUrl(imgMatch[1]);
@@ -537,18 +528,54 @@ export async function getInteriorPageData(): Promise<InteriorPageData> {
     }
 
     return {
-      title: decodeHtmlEntities(page.title?.rendered || "Interior"),
+      title,
       description,
-      backgroundImage
+      backgroundImage,
     };
   } catch (err) {
-    console.error("Error fetching interior page data:", err);
+    console.error(`Error fetching category page ${id} data:`, err);
     return {
-      title: "Interior",
-      description: "Our clients include leading global brands who trust us to deliver refined, high-quality environments.",
-      backgroundImage: "https://samaproductionme.com/wp-content/uploads/2026/06/interior-1-1.png"
+      title: fallbackTitle,
+      description: fallbackDesc,
+      backgroundImage: fallbackBg,
     };
   }
+}
+
+export async function getInteriorPageData(): Promise<CategoryPageData> {
+  return getGenericCategoryPageData(
+    472,
+    "Interior",
+    "Our clients include leading global brands who trust us to deliver refined, high-quality environments.",
+    "https://samaproductionme.com/wp-content/uploads/2026/06/interior-1-1.png"
+  );
+}
+
+export async function getExhibitionPageData(): Promise<CategoryPageData> {
+  return getGenericCategoryPageData(
+    874,
+    "Exhibition Design & Build",
+    "Our clients include leading global brands who trust us to deliver refined, high-quality environments.",
+    "https://samaproductionme.com/wp-content/uploads/2026/06/Frame-146-3-1.png"
+  );
+}
+
+export async function getEventsPageData(): Promise<CategoryPageData> {
+  return getGenericCategoryPageData(
+    1006,
+    "Events",
+    "Our clients include leading global brands who trust us to deliver refined, high-quality environments.",
+    "https://samaproductionme.com/wp-content/uploads/2026/06/Frame-146-3-1.png"
+  );
+}
+
+export async function getMallActivationPageData(): Promise<CategoryPageData> {
+  return getGenericCategoryPageData(
+    1113,
+    "Mall Activation & Travel Retail",
+    "Our clients include leading global brands who trust us to deliver refined, high-quality environments.",
+    "https://samaproductionme.com/wp-content/uploads/2026/06/Frame-146-3-1.png"
+  );
 }
 
 export async function getInteriorProjects(): Promise<InteriorProject[]> {
@@ -698,6 +725,104 @@ export async function getExhibitionProjects(): Promise<InteriorProject[]> {
   }
 }
 
+export async function getEventsProjects(): Promise<InteriorProject[]> {
+  try {
+    const res = await fetch("https://samaproductionme.com/wp-json/wp/v2/project?project_category=13&per_page=100", {
+      next: { revalidate: 3600 },
+    });
+    if (!res.ok) return [];
+    const rawProjects = await res.json();
+
+    const projects: InteriorProject[] = [];
+    for (const p of rawProjects) {
+      let featuredImage = "";
+      if (p.featured_media) {
+        const featRes = await fetch(`https://samaproductionme.com/wp-json/wp/v2/media/${p.featured_media}`);
+        if (featRes.ok) {
+          const featMedia = await featRes.json();
+          featuredImage = mapWpUrl(featMedia.source_url);
+        }
+      }
+
+      const mediaRes = await fetch(`https://samaproductionme.com/wp-json/wp/v2/media?parent=${p.id}&per_page=100`, {
+        next: { revalidate: 3600 },
+      });
+      let gallery: string[] = [];
+      if (mediaRes.ok) {
+        const mediaItems = await mediaRes.json();
+        gallery = mediaItems.map((m: any) => mapWpUrl(m.source_url));
+      }
+
+      if (gallery.length === 0 && featuredImage) {
+        gallery = [featuredImage];
+      }
+
+      projects.push({
+        id: p.id,
+        slug: p.slug,
+        title: decodeHtmlEntities(p.title?.rendered || ""),
+        content: p.content?.rendered || "",
+        featuredImage,
+        gallery
+      });
+    }
+
+    return projects;
+  } catch (err) {
+    console.error("Error in getEventsProjects:", err);
+    return [];
+  }
+}
+
+export async function getMallActivationProjects(): Promise<InteriorProject[]> {
+  try {
+    const res = await fetch("https://samaproductionme.com/wp-json/wp/v2/project?project_category=14&per_page=100", {
+      next: { revalidate: 3600 },
+    });
+    if (!res.ok) return [];
+    const rawProjects = await res.json();
+
+    const projects: InteriorProject[] = [];
+    for (const p of rawProjects) {
+      let featuredImage = "";
+      if (p.featured_media) {
+        const featRes = await fetch(`https://samaproductionme.com/wp-json/wp/v2/media/${p.featured_media}`);
+        if (featRes.ok) {
+          const featMedia = await featRes.json();
+          featuredImage = mapWpUrl(featMedia.source_url);
+        }
+      }
+
+      const mediaRes = await fetch(`https://samaproductionme.com/wp-json/wp/v2/media?parent=${p.id}&per_page=100`, {
+        next: { revalidate: 3600 },
+      });
+      let gallery: string[] = [];
+      if (mediaRes.ok) {
+        const mediaItems = await mediaRes.json();
+        gallery = mediaItems.map((m: any) => mapWpUrl(m.source_url));
+      }
+
+      if (gallery.length === 0 && featuredImage) {
+        gallery = [featuredImage];
+      }
+
+      projects.push({
+        id: p.id,
+        slug: p.slug,
+        title: decodeHtmlEntities(p.title?.rendered || ""),
+        content: p.content?.rendered || "",
+        featuredImage,
+        gallery
+      });
+    }
+
+    return projects;
+  } catch (err) {
+    console.error("Error in getMallActivationProjects:", err);
+    return [];
+  }
+}
+
 export interface PartnerLogo {
   src: string;
   alt: string;
@@ -787,7 +912,7 @@ export async function getPartnersPageData(): Promise<PartnersPageData> {
     }
 
     let description = fallback.description;
-    const descMatch = html.match(/Our clients include leading global brands[\s\S]*?<\/p>/i);
+    const descMatch = html.match(/<p[^>]*>([\s\S]*?)<\/p>/i);
     if (descMatch) {
       description = descMatch[0].replace(/<[^>]+>/g, "").replace(/\s+/g, " ").trim();
     }

@@ -23,7 +23,7 @@ export default function DesignSection({ data }: DesignSectionProps) {
             alt="SAMA Design spaces background"
             fill
             priority
-            className="object-cover object-center transform group-hover:scale-105 transition-transform duration-[1500ms] ease-out filter contrast-[1.02]"
+            className="object-cover object-center transform group-hover:scale-105 transition-transform duration-[1500ms] ease-out"
           />
         </div>
 
