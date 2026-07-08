@@ -87,7 +87,7 @@ const FALLBACK_DATA: HomepageData = {
   },
 };
 
-const REVALIDATE_VAL = process.env.NODE_ENV === "development" ? 0 : 3600;
+const REVALIDATE_VAL = process.env.NODE_ENV === "development" ? 0 : 60;
 
 /**
  * Returns the full live WordPress URL for an image.
