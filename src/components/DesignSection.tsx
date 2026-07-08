@@ -12,7 +12,7 @@ export default function DesignSection({ data }: DesignSectionProps) {
   const quote = data?.quote || ""
 
   return (
-    <section className="relative w-full py-12 sm:py-16 md:py-20 px-4 sm:px-8 md:px-12 lg:px-16 flex flex-col items-center justify-center overflow-hidden bg-gradient-to-b from-[#7C8C70] to-[#523225]">
+    <section className="relative w-full py-12 sm:py-16 md:py-20 px-4 sm:px-8 md:px-12 lg:px-16 flex flex-col items-center justify-center overflow-hidden">
       {/* Framed Card Wrapper */}
       <div className="group relative w-full max-w-[92%] sm:max-w-[88%] md:max-w-[85%] aspect-[16/9] md:aspect-[21/9] lg:aspect-[2.3/1] overflow-hidden rounded-2xl sm:rounded-3xl shadow-2xl bg-[#2b2a22]">
 

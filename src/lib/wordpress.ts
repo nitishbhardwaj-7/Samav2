@@ -87,6 +87,8 @@ const FALLBACK_DATA: HomepageData = {
   },
 };
 
+const REVALIDATE_VAL = process.env.NODE_ENV === "development" ? 0 : 3600;
+
 /**
  * Returns the full live WordPress URL for an image.
  * We do NOT convert to local paths — images are served directly from WordPress.
@@ -125,7 +127,7 @@ export async function getHomepageData(): Promise<HomepageData> {
   const url = "https://samaproductionme.com/wp-json/wp/v2/pages/7";
   try {
     const res = await fetch(url, {
-      next: { revalidate: 3600 }, // Cache for 1 hour
+      next: { revalidate: REVALIDATE_VAL }, // Cache for 1 hour in production, 0 in development
     });
 
     if (!res.ok) {
@@ -360,7 +362,7 @@ export async function getAboutPageData(): Promise<AboutPageData> {
   const url = "https://samaproductionme.com/wp-json/wp/v2/pages/1822";
   try {
     const res = await fetch(url, {
-      next: { revalidate: 3600 }, // Cache for 1 hour
+      next: { revalidate: REVALIDATE_VAL }, // Cache for 1 hour in production, 0 in development
     });
 
     if (!res.ok) {
@@ -489,7 +491,7 @@ export async function getGenericCategoryPageData(
   const url = `https://samaproductionme.com/wp-json/wp/v2/pages/${id}`;
   try {
     const res = await fetch(url, {
-      next: { revalidate: 3600 },
+      next: { revalidate: REVALIDATE_VAL },
     });
     if (!res.ok) {
       return {
@@ -581,7 +583,7 @@ export async function getMallActivationPageData(): Promise<CategoryPageData> {
 export async function getInteriorProjects(): Promise<InteriorProject[]> {
   try {
     const res = await fetch("https://samaproductionme.com/wp-json/wp/v2/project?project_category=7&per_page=100", {
-      next: { revalidate: 3600 },
+      next: { revalidate: REVALIDATE_VAL },
     });
     if (!res.ok) return [];
     const rawProjects = await res.json();
@@ -600,7 +602,7 @@ export async function getInteriorProjects(): Promise<InteriorProject[]> {
 
       // Get gallery (attached media items)
       const mediaRes = await fetch(`https://samaproductionme.com/wp-json/wp/v2/media?parent=${p.id}&per_page=100`, {
-        next: { revalidate: 3600 },
+        next: { revalidate: REVALIDATE_VAL },
       });
       let gallery: string[] = [];
       if (mediaRes.ok) {
@@ -633,7 +635,7 @@ export async function getInteriorProjects(): Promise<InteriorProject[]> {
 export async function getProjectBySlug(slug: string): Promise<InteriorProject | null> {
   try {
     const res = await fetch(`https://samaproductionme.com/wp-json/wp/v2/project?slug=${slug}`, {
-      next: { revalidate: 3600 },
+      next: { revalidate: REVALIDATE_VAL },
     });
     if (!res.ok) return null;
     const projects = await res.json();
@@ -650,7 +652,7 @@ export async function getProjectBySlug(slug: string): Promise<InteriorProject | 
     }
 
     const mediaRes = await fetch(`https://samaproductionme.com/wp-json/wp/v2/media?parent=${p.id}&per_page=100`, {
-      next: { revalidate: 3600 },
+      next: { revalidate: REVALIDATE_VAL },
     });
     let gallery: string[] = [];
     if (mediaRes.ok) {
@@ -679,7 +681,7 @@ export async function getProjectBySlug(slug: string): Promise<InteriorProject | 
 export async function getExhibitionProjects(): Promise<InteriorProject[]> {
   try {
     const res = await fetch("https://samaproductionme.com/wp-json/wp/v2/project?project_category=8&per_page=100", {
-      next: { revalidate: 3600 },
+      next: { revalidate: REVALIDATE_VAL },
     });
     if (!res.ok) return [];
     const rawProjects = await res.json();
@@ -696,7 +698,7 @@ export async function getExhibitionProjects(): Promise<InteriorProject[]> {
       }
 
       const mediaRes = await fetch(`https://samaproductionme.com/wp-json/wp/v2/media?parent=${p.id}&per_page=100`, {
-        next: { revalidate: 3600 },
+        next: { revalidate: REVALIDATE_VAL },
       });
       let gallery: string[] = [];
       if (mediaRes.ok) {
@@ -728,7 +730,7 @@ export async function getExhibitionProjects(): Promise<InteriorProject[]> {
 export async function getEventsProjects(): Promise<InteriorProject[]> {
   try {
     const res = await fetch("https://samaproductionme.com/wp-json/wp/v2/project?project_category=13&per_page=100", {
-      next: { revalidate: 3600 },
+      next: { revalidate: REVALIDATE_VAL },
     });
     if (!res.ok) return [];
     const rawProjects = await res.json();
@@ -745,7 +747,7 @@ export async function getEventsProjects(): Promise<InteriorProject[]> {
       }
 
       const mediaRes = await fetch(`https://samaproductionme.com/wp-json/wp/v2/media?parent=${p.id}&per_page=100`, {
-        next: { revalidate: 3600 },
+        next: { revalidate: REVALIDATE_VAL },
       });
       let gallery: string[] = [];
       if (mediaRes.ok) {
@@ -777,7 +779,7 @@ export async function getEventsProjects(): Promise<InteriorProject[]> {
 export async function getMallActivationProjects(): Promise<InteriorProject[]> {
   try {
     const res = await fetch("https://samaproductionme.com/wp-json/wp/v2/project?project_category=14&per_page=100", {
-      next: { revalidate: 3600 },
+      next: { revalidate: REVALIDATE_VAL },
     });
     if (!res.ok) return [];
     const rawProjects = await res.json();
@@ -794,7 +796,7 @@ export async function getMallActivationProjects(): Promise<InteriorProject[]> {
       }
 
       const mediaRes = await fetch(`https://samaproductionme.com/wp-json/wp/v2/media?parent=${p.id}&per_page=100`, {
-        next: { revalidate: 3600 },
+        next: { revalidate: REVALIDATE_VAL },
       });
       let gallery: string[] = [];
       if (mediaRes.ok) {
@@ -893,7 +895,7 @@ export async function getPartnersPageData(): Promise<PartnersPageData> {
 
   try {
     const res = await fetch(url, {
-      next: { revalidate: 3600 },
+      next: { revalidate: REVALIDATE_VAL },
     });
     if (!res.ok) {
       console.warn(`Failed to fetch partners page data: ${res.statusText}. Using fallback.`);

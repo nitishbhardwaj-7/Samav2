@@ -26,7 +26,10 @@ export default async function AboutUsPage() {
       <AboutSection data={about} />
 
       {/* Shared Gradient Wrapper for Design and Who We Are */}
-      <div className="relative w-full bg-gradient-to-b from-[#7C8C70] via-[#523225] to-[#AC8872]">
+      <div 
+        className="relative w-full"
+        style={{ background: 'linear-gradient(180deg, #496449 0%, #714230 50%, #8B6759 80%, #DAC6AE 100%)' }}
+      >
         {/* Section 3: Design Section */}
         <DesignSection data={designSection} />
 
@@ -38,7 +41,9 @@ export default async function AboutUsPage() {
       <CertificationsSection data={certificationsSection} />
 
       {/* Section 5: Reach Out Section */}
-      <ReachOutSection data={reachOut} />
+      <div className="w-full bg-white">
+        <ReachOutSection data={reachOut} />
+      </div>
 
       {/* Section 6: Footer */}
       <Footer />

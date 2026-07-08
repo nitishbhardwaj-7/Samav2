@@ -21,7 +21,10 @@ export default async function PartnersPage() {
 
   return (
     <div className="relative w-full min-h-screen flex flex-col">
-      <div className="bg-gradient-to-b from-[#7C8C70] from-[70%] via-[#DAC6AE] via-[90%] to-white flex flex-col pt-32 flex-grow">
+      <div 
+        className="flex flex-col pt-32 flex-grow"
+        style={{ background: 'linear-gradient(180deg, #778065 0%, #778065 10%, #496449 47.5%, #496449 52.5%, #DAC6AE 100%)' }}
+      >
       {/* Header section (Centered) */}
       <div className="w-full max-w-[92%] sm:max-w-[88%] md:max-w-[85%] mx-auto flex flex-col items-center text-center pb-10">
         
@@ -87,8 +90,16 @@ export default async function PartnersPage() {
       </section>
       </div>
 
+      {/* Spacer to fade to white before Reach Out Section */}
+      <div 
+        className="w-full h-24 sm:h-32 md:h-40"
+        style={{ background: 'linear-gradient(180deg, #DAC6AE 0%, #FFFFFF 100%)' }}
+      />
+
       {/* Reach Out Section */}
-      <ReachOutSection data={reachOut} />
+      <div className="w-full bg-white">
+        <ReachOutSection data={reachOut} />
+      </div>
 
       {/* Footer */}
       <Footer />

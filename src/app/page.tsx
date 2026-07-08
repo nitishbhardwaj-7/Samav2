@@ -26,7 +26,9 @@ export default async function Home() {
       <ClientsSection data={clients} />
 
       {/* Section 5: Reach Out Section */}
-      <ReachOutSection data={reachOut} />
+      <div className="w-full bg-white">
+        <ReachOutSection data={reachOut} />
+      </div>
 
       {/* Section 6: Footer */}
       <Footer />

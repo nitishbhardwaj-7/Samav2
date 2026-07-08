@@ -242,10 +242,10 @@ export default function HeroSection({ heroData }: HeroAnimationProps) {
   return (
     <div
       ref={sectionRef}
-      className="relative w-full h-screen pt-16 sm:pt-20 md:pt-24 pb-2 sm:pb-4 md:pb-6 lg:pb-8 flex flex-col items-center justify-center overflow-hidden"
+      className="relative w-full h-screen pt-[96px] sm:pt-[120px] md:pt-[120px] pb-2 sm:pb-4 md:pb-6 lg:pb-8 flex flex-col items-center justify-center overflow-hidden bg-[rgba(119,128,101,1)]"
     >
       {/* Framed Hero Card */}
-      <main ref={cardRef} className="group relative flex-1 w-full max-w-[92%] sm:max-w-[88%] md:max-w-[85%] h-full overflow-hidden rounded-2xl bg-[#2b2a22] isolate transform translate-z-0">
+      <main ref={cardRef} className="group relative flex-1 w-full max-w-[92%] sm:max-w-[88%] md:max-w-[85%] h-full overflow-hidden rounded-2xl bg-[rgba(119,128,101,1)] isolate transform translate-z-0">
         {/* Background Image with Olive/Dark Overlay */}
         <div className="absolute inset-0 select-none overflow-hidden">
           <img

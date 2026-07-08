@@ -136,7 +136,11 @@ export default function ClientsSection({ data }: ClientsSectionProps) {
   }, [logos.length]);
 
   return (
-    <section ref={sectionRef} className="relative w-full bg-white py-16 sm:py-24 px-6 sm:px-10 md:px-14 lg:px-16 flex flex-col items-center justify-center overflow-hidden">
+    <section 
+      ref={sectionRef} 
+      className="relative w-full py-16 sm:py-24 px-6 sm:px-10 md:px-14 lg:px-16 flex flex-col items-center justify-center overflow-hidden"
+      style={{ background: 'linear-gradient(180deg, #DAC6AE 0%, #FFFFFF 100%)' }}
+    >
       <div className="w-full max-w-[92%] sm:max-w-[88%] md:max-w-[85%] mx-auto flex flex-col items-center justify-center gap-12 md:gap-16 text-center z-10">
         
         {/* Title & Description */}
@@ -150,10 +154,14 @@ export default function ClientsSection({ data }: ClientsSectionProps) {
         </div>
 
         {/* Logos Marquee (Constrained width) */}
-        <div ref={marqueeRef} className="w-full overflow-hidden relative py-4">
-          {/* Elegant Fade Gradients */}
-          <div className="pointer-events-none absolute inset-y-0 left-0 w-12 sm:w-16 md:w-20 bg-gradient-to-r from-white to-transparent z-10" />
-          <div className="pointer-events-none absolute inset-y-0 right-0 w-12 sm:w-16 md:w-20 bg-gradient-to-l from-white to-transparent z-10" />
+        <div 
+          ref={marqueeRef} 
+          className="w-full overflow-hidden relative py-4"
+          style={{ 
+            maskImage: 'linear-gradient(to right, transparent, black 80px, black calc(100% - 80px), transparent)',
+            WebkitMaskImage: 'linear-gradient(to right, transparent, black 80px, black calc(100% - 80px), transparent)'
+          }}
+        >
           
           <div className="flex w-max animate-marquee">
             {/* First Copy */}

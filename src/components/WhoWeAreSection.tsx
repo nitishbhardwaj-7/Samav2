@@ -12,7 +12,7 @@ interface WhoWeAreSectionProps {
 
 export default function WhoWeAreSection({ data }: WhoWeAreSectionProps) {
   return (
-    <section className="relative w-full py-20 sm:py-24 md:py-32 px-6 sm:px-10 md:px-14 lg:px-16 flex flex-col items-center justify-center overflow-hidden bg-gradient-to-b from-[#523225] to-[#AC8872]">
+    <section className="relative w-full py-20 sm:py-24 md:py-32 px-6 sm:px-10 md:px-14 lg:px-16 flex flex-col items-center justify-center overflow-hidden">
       <div className="w-full max-w-[92%] sm:max-w-[88%] md:max-w-[85%] mx-auto flex flex-col items-center gap-12 sm:gap-16 z-10 text-[#F2EAE0]">
 
         {/* Section Title */}

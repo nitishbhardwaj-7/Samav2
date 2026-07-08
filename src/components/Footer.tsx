@@ -3,6 +3,7 @@
 import { useEffect, useRef } from "react";
 import Image from "next/image";
 import Link from "next/link";
+import TransitionLink from "./TransitionLink";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 
@@ -95,11 +96,11 @@ export default function Footer() {
           {/* Middle Column: Nav Links */}
           <div className="flex items-start justify-start w-full lg:w-[40%] pt-8 lg:pt-2">
             <nav className="flex flex-wrap items-center justify-start gap-6 sm:gap-8 font-ivymode text-sm sm:text-base text-white">
-              <Link href="/" className="hover:text-white/80 transition-colors duration-300">Home</Link>
-              <Link href="/about-us" className="hover:text-white/80 transition-colors duration-300">About Us</Link>
-              <Link href="/projects" className="hover:text-white/80 transition-colors duration-300">Projects</Link>
-              <Link href="/partners" className="hover:text-white/80 transition-colors duration-300">Our Clients</Link>
-              <Link href="/#contact" className="hover:text-white/80 transition-colors duration-300">Contact Us</Link>
+              <TransitionLink href="/" className="hover:text-white/80 transition-colors duration-300">Home</TransitionLink>
+              <TransitionLink href="/about-us" className="hover:text-white/80 transition-colors duration-300">About Us</TransitionLink>
+              <TransitionLink href="/projects" className="hover:text-white/80 transition-colors duration-300">Projects</TransitionLink>
+              <TransitionLink href="/partners" className="hover:text-white/80 transition-colors duration-300">Our Clients</TransitionLink>
+              <TransitionLink href="/#contact" className="hover:text-white/80 transition-colors duration-300">Contact Us</TransitionLink>
             </nav>
           </div>
 

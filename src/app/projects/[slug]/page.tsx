@@ -2,7 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import ReachOutSection from "../../../components/ReachOutSection";
 import Footer from "../../../components/Footer";
-import GalleryScrollButton from "../../../components/GalleryScrollButton";
+import ProjectGallery from "../../../components/ProjectGallery";
 import {
   getInteriorProjects,
   getExhibitionProjects,
@@ -73,7 +73,10 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
           
           {/* ─── HERO IMAGE ─── */}
           {project.featuredImage && (
-            <div className="w-full relative aspect-[21/9] sm:aspect-[2/1] md:aspect-[2.4/1] rounded-2xl sm:rounded-3xl overflow-hidden shadow-2xl mb-8">
+            <div 
+              data-project-hero-wrap
+              className="w-full relative aspect-[21/9] sm:aspect-[2/1] md:aspect-[2.4/1] rounded-2xl sm:rounded-3xl overflow-hidden shadow-2xl mb-8"
+            >
               <Image
                 src={project.featuredImage}
                 alt={project.title}
@@ -148,48 +151,8 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
               </div>
             </div>
 
-            {/* COLUMN 3: GALLERY (Vertical CSS Slider without visible scrollbar) */}
-            <div 
-              data-lenis-prevent
-              className="gallery-container flex flex-col gap-6 w-full overflow-y-auto snap-y snap-mandatory relative [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]"
-              style={{ aspectRatio: '1 / 1.7' }}
-            >
-              {gallery.map((mediaUrl, i) => {
-                const isVideo = mediaUrl.toLowerCase().endsWith('.mp4') || mediaUrl.toLowerCase().endsWith('.webm');
-                
-                return (
-                  <div 
-                    key={i} 
-                    className="relative w-full shrink-0 aspect-[4/3] rounded-xl overflow-hidden shadow-lg border border-[#E5D9C4]/10 group snap-start bg-black/10"
-                  >
-                    {isVideo ? (
-                      <video
-                        src={mediaUrl}
-                        autoPlay
-                        loop
-                        muted
-                        playsInline
-                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-out"
-                      />
-                    ) : (
-                      <Image
-                        src={mediaUrl}
-                        alt={`${project.title} gallery ${i}`}
-                        fill
-                        priority={i === 0}
-                        sizes="(max-width: 768px) 100vw, 33vw"
-                        className="object-cover group-hover:scale-105 transition-transform duration-700 ease-out"
-                      />
-                    )}
-                  </div>
-                );
-              })}
-              
-              {/* Scroll indicator overlay pinned to the bottom of the container */}
-              {gallery.length > 1 && (
-                <GalleryScrollButton />
-              )}
-            </div>
+            {/* COLUMN 3: GALLERY */}
+            <ProjectGallery gallery={gallery} projectTitle={project.title} />
 
           </div>
         </div>

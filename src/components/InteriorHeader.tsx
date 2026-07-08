@@ -15,15 +15,15 @@ export default function InteriorHeader({ title, description, breadcrumbLabel }: 
   const [showContent, setShowContent] = useState(false);
 
   useEffect(() => {
-    // 1. After 3 seconds, fade out the SAMA logo
+    // 1. After 1 second, fade out the SAMA logo
     const logoOutTimer = setTimeout(() => {
       setShowLogo(false);
-    }, 3000);
+    }, 1000);
 
-    // 2. After 3.4 seconds, fade in the page header text and breadcrumbs
+    // 2. After 1.4 seconds, fade in the page header text and breadcrumbs
     const contentInTimer = setTimeout(() => {
       setShowContent(true);
-    }, 3400);
+    }, 1400);
 
     return () => {
       clearTimeout(logoOutTimer);

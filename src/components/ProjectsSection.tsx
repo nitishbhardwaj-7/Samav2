@@ -3,6 +3,8 @@
 import { useEffect, useRef } from "react";
 import Image from "next/image";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
+import TransitionLink from "./TransitionLink";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 
@@ -27,6 +29,7 @@ interface ProjectsSectionProps {
 }
 
 export default function ProjectsSection({ data }: ProjectsSectionProps) {
+  const pathname = usePathname();
   const title = data?.title || "Projects";
   const subtitle = data?.subtitle || "Spaces Brought to Life";
   const description = data?.description || "A curated selection of interiors that reflect our design philosophy, attention to detail, and regional expertise.";
@@ -185,7 +188,15 @@ export default function ProjectsSection({ data }: ProjectsSectionProps) {
   }, [items.length]);
 
   return (
-    <section ref={sectionRef} className="relative w-full bg-gradient-to-b from-[#7C8C70] via-[#563320] to-white pt-16 pb-16 sm:pt-24 sm:pb-24 flex flex-col items-center justify-center overflow-hidden">
+    <section 
+      ref={sectionRef} 
+      className="relative w-full pt-16 pb-16 sm:pt-24 sm:pb-24 flex flex-col items-center justify-center overflow-hidden"
+      style={{ 
+        background: pathname === '/projects' 
+          ? 'linear-gradient(180deg, #778065 0%, #778065 10%, #496449 47.5%, #496449 52.5%, #DAC6AE 100%)'
+          : 'linear-gradient(180deg, #496449 0%, #714230 50%, #8B6759 80%, #DAC6AE 100%)' 
+      }}
+    >
       <div className="w-full flex flex-col gap-20 sm:gap-28 z-10">
         
         {/* Header Block */}
@@ -224,17 +235,22 @@ export default function ProjectsSection({ data }: ProjectsSectionProps) {
               <div 
                 key={index}
                 ref={(el) => { projectRefs.current[index] = el; }}
-                className={`w-full flex flex-col group items-stretch gap-0 ${
+                className={`w-full flex flex-col group items-stretch gap-0 px-4 sm:px-6 md:px-0 ${
                   isReverse ? "md:flex-row-reverse" : "md:flex-row"
                 }`}
               >
                 {/* Image Column */}
                 <div
                   data-image-wrap
-                  className="w-full md:w-[60%] group-hover:md:w-[66%] relative h-[50vh] md:h-[65vh] min-h-[350px] overflow-hidden shadow-xl"
+                  className="w-full md:w-[60%] group-hover:md:w-[66%] relative h-[50vh] md:h-[65vh] min-h-[350px] overflow-hidden shadow-xl rounded-2xl md:rounded-none"
                   style={{ transition: "width 2.2s cubic-bezier(0.16, 1, 0.3, 1)" }}
                 >
-                  <Link href={item.link} className="block w-full h-full relative outline-none focus:outline-none cursor-pointer">
+                  <TransitionLink 
+                    href={item.link} 
+                    sharedImageSrc={item.image}
+                    sharedImageBorderRadius={typeof window !== "undefined" && window.innerWidth >= 768 ? "0px" : "16px"}
+                    className="block w-full h-full relative outline-none focus:outline-none cursor-pointer"
+                  >
                     <div data-image-inner className="absolute inset-0">
                       <Image
                         src={item.image}
@@ -252,14 +268,14 @@ export default function ProjectsSection({ data }: ProjectsSectionProps) {
                         Know More
                       </span>
                     </div>
-                  </Link>
+                  </TransitionLink>
                 </div>
 
                 {/* Info Column */}
                 <div className={`w-full flex-1 flex flex-col justify-center py-6 md:py-0 ${
                   isReverse 
-                    ? "pl-[4vw] sm:pl-[6vw] md:pl-[7.5vw] pr-6 sm:pr-10 md:pr-16" 
-                    : "pr-[4vw] sm:pr-[6vw] md:pr-[7.5vw] pl-6 sm:pl-10 md:pl-16"
+                    ? "pl-2 sm:pl-4 md:pl-[7.5vw] pr-2 sm:pr-4 md:pr-16" 
+                    : "pr-2 sm:pr-4 md:pr-[7.5vw] pl-2 sm:pl-4 md:pl-16"
                 } ${alignmentClass}`}>
                   {/* Number Box */}
                   <div data-info-item className={`border px-3 py-1.5 font-ivymode text-sm tracking-wider select-none ${

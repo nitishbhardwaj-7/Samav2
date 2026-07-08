@@ -17,7 +17,10 @@ export default function CertificationsSection({ data }: CertificationsSectionPro
   const items = data?.items || [];
 
   return (
-    <section className="relative w-full py-20 sm:py-24 md:py-32 px-6 sm:px-10 md:px-14 lg:px-16 flex flex-col items-center justify-center overflow-hidden bg-gradient-to-b from-[#AC8872] to-white">
+    <section 
+      className="relative w-full py-20 sm:py-24 md:py-32 px-6 sm:px-10 md:px-14 lg:px-16 flex flex-col items-center justify-center overflow-hidden"
+      style={{ background: 'linear-gradient(180deg, #DAC6AE 0%, #DAC6AE 80%, #FFFFFF 100%)' }}
+    >
       <div className="w-full max-w-[96%] xl:max-w-[90%] mx-auto flex flex-col items-center gap-12 sm:gap-16 z-10 text-[#F2EAE0]">
         
         {/* Section Title */}

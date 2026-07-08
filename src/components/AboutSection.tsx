@@ -4,6 +4,7 @@ import { useEffect, useRef } from "react";
 import Image from "next/image";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import TransitionLink from "./TransitionLink";
 
 if (typeof window !== "undefined") {
   gsap.registerPlugin(ScrollTrigger);
@@ -132,7 +133,11 @@ export default function AboutSection({ data }: { data?: { sectionName: string; t
   }, []);
 
   return (
-    <section ref={sectionRef} className="relative w-full min-h-screen bg-[#7C8C70] p-6 sm:p-10 md:p-14 lg:p-16 flex items-center justify-center overflow-hidden">
+    <section 
+      ref={sectionRef} 
+      className="relative w-full min-h-screen p-6 sm:p-10 md:p-14 lg:p-16 flex items-center justify-center overflow-hidden"
+      style={{ background: 'linear-gradient(180deg, #778065 0%, #496449 100%)' }}
+    >
       <div className="w-full max-w-[92%] sm:max-w-[90%] md:max-w-[60%] mx-auto flex flex-col sm:flex-row items-center justify-center gap-8 sm:gap-0 py-12">
         
         {/* Left Content Side */}
@@ -160,9 +165,9 @@ export default function AboutSection({ data }: { data?: { sectionName: string; t
 
           {/* Know More Button */}
           <div ref={btnRef}>
-            <a 
-              href="#about"
-              className="group/btn inline-flex items-center gap-3 border border-[#E5D9C4]/40 hover:border-white px-6 py-2.5 rounded-full font-ivymode text-xs sm:text-sm text-[#E5D9C4] hover:text-white uppercase tracking-widest transition-all duration-300 bg-transparent hover:bg-white/5"
+            <TransitionLink 
+              href="/about-us"
+              className="group/btn inline-flex items-center gap-3 border border-[#E5D9C4]/40 hover:border-white px-6 py-2.5 rounded-full font-ivymode text-xs sm:text-sm text-[#E5D9C4] hover:text-white uppercase tracking-widest transition-all duration-300 bg-transparent hover:bg-white/5 no-underline"
             >
               <span>Know More</span>
               <span className="inline-flex items-center justify-center border border-[#E5D9C4]/40 group-hover/btn:border-white rounded-full w-5 h-5 transition-all duration-300">
@@ -183,7 +188,7 @@ export default function AboutSection({ data }: { data?: { sectionName: string; t
                   />
                 </svg>
               </span>
-            </a>
+            </TransitionLink>
           </div>
           
         </div>

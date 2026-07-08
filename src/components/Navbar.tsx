@@ -5,10 +5,12 @@ import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import gsap from "gsap";
+import { usePageTransition } from "./PageTransition";
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
   const pathname = usePathname();
+  const { navigateTo } = usePageTransition();
 
   const headerRef = useRef<HTMLElement>(null);
   const logoRef = useRef<HTMLAnchorElement>(null);
@@ -114,7 +116,7 @@ export default function Navbar() {
         <div className="w-full max-w-[92%] sm:max-w-[88%] md:max-w-[85%] mx-auto py-6 sm:py-8 flex items-center justify-between pointer-events-auto">
           
           {/* Logo */}
-          <Link ref={logoRef} href="/" className="relative w-28 h-10 sm:w-32 sm:h-12 select-none">
+          <Link ref={logoRef} href="/" onClick={(e) => { e.preventDefault(); navigateTo("/"); }} className="relative w-28 h-10 sm:w-32 sm:h-12 select-none">
             <Image
               src="/uploads/2026/02/sama-logo.png"
               alt="SAMA Production"
@@ -188,7 +190,7 @@ export default function Navbar() {
               >
                 <Link
                   href={link.href}
-                  onClick={() => setIsOpen(false)}
+                  onClick={(e) => { e.preventDefault(); setIsOpen(false); setTimeout(() => navigateTo(link.href), 400); }}
                   className={`block py-5 font-ivymode text-3xl sm:text-4xl text-right transition-colors duration-300 tracking-wide group/link relative ${
                     isActive ? "text-[#E5D9C4]" : "text-white hover:text-white/70"
                   }`}
