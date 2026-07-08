@@ -199,7 +199,7 @@ export default function HeroSection({ heroData }: HeroAnimationProps) {
 
         const handleMouseEnter = () => {
           gsap.to(subtitle, {
-            letterSpacing: "0.22em",
+            letterSpacing: "0.29em",
             duration: 1.5,
             ease: "power3.out",
           });

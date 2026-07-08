@@ -22,7 +22,7 @@ export default function Navbar() {
     { name: "About Us", href: "/about-us" },
     { name: "Projects", href: "/projects" },
     { name: "Our Clients", href: "/partners" },
-    { name: "Contact Us", href: "#contact" },
+    { name: "Contact Us", href: "/#contact" },
   ];
 
   // Navbar entrance animation (delayed to play after preloader)

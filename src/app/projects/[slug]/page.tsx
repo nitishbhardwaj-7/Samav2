@@ -150,6 +150,7 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
 
             {/* COLUMN 3: GALLERY (Vertical CSS Slider without visible scrollbar) */}
             <div 
+              data-lenis-prevent
               className="gallery-container flex flex-col gap-6 w-full overflow-y-auto snap-y snap-mandatory relative [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]"
               style={{ aspectRatio: '1 / 1.7' }}
             >

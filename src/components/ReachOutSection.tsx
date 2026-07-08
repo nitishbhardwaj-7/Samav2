@@ -138,7 +138,7 @@ export default function ReachOutSection({ data }: ReachOutSectionProps) {
   }, []);
 
   return (
-    <section ref={sectionRef} className="relative w-full bg-white py-16 sm:py-24 px-6 sm:px-10 md:px-14 lg:px-16 flex flex-col items-center justify-center overflow-hidden">
+    <section id="contact" ref={sectionRef} className="relative w-full bg-white py-16 sm:py-24 px-6 sm:px-10 md:px-14 lg:px-16 flex flex-col items-center justify-center overflow-hidden">
       <div className="w-full max-w-[92%] sm:max-w-[88%] md:max-w-[75%] mx-auto flex flex-col md:flex-row items-center md:items-start justify-center gap-12 md:gap-20 z-10">
         
         {/* Left Column: Image */}

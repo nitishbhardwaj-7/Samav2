@@ -231,7 +231,8 @@ export default function ProjectsSection({ data }: ProjectsSectionProps) {
                 {/* Image Column */}
                 <div
                   data-image-wrap
-                  className="w-full md:w-[60%] relative h-[50vh] md:h-[65vh] min-h-[350px] overflow-hidden shadow-xl"
+                  className="w-full md:w-[60%] group-hover:md:w-[66%] relative h-[50vh] md:h-[65vh] min-h-[350px] overflow-hidden shadow-xl"
+                  style={{ transition: "width 2.2s cubic-bezier(0.16, 1, 0.3, 1)" }}
                 >
                   <Link href={item.link} className="block w-full h-full relative outline-none focus:outline-none cursor-pointer">
                     <div data-image-inner className="absolute inset-0">
@@ -241,12 +242,12 @@ export default function ProjectsSection({ data }: ProjectsSectionProps) {
                         fill
                         priority={index === 0}
                         sizes="(max-width: 1024px) 100vw, 70vw"
-                        className="object-cover object-center group-hover:scale-[1.03] transition-transform duration-[1500ms] ease-out"
+                        className="object-cover object-center group-hover:scale-[1.05] transition-transform duration-[2200ms] ease-out"
                       />
                     </div>
                     
                     {/* Know More button */}
-                    <div className="absolute bottom-6 left-6 sm:bottom-10 sm:left-10 opacity-0 translate-y-4 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-500 ease-out z-20">
+                    <div className={`absolute bottom-6 sm:bottom-10 opacity-0 translate-y-4 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-500 ease-out z-20 ${isReverse ? "left-6 sm:left-10" : "right-6 sm:right-10"}`}>
                       <span className="inline-flex items-center justify-center bg-black/40 backdrop-blur-sm border border-white/40 text-white hover:bg-white hover:text-[#563320] font-ivymode px-6 py-2 sm:px-8 sm:py-3 text-sm tracking-widest uppercase transition-colors duration-300">
                         Know More
                       </span>

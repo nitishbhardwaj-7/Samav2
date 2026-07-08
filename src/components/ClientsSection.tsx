@@ -37,7 +37,7 @@ export default function ClientsSection({ data }: ClientsSectionProps) {
   const sectionRef = useRef<HTMLElement>(null);
   const titleRef = useRef<HTMLHeadingElement>(null);
   const descRef = useRef<HTMLParagraphElement>(null);
-  const logoRefs = useRef<(HTMLDivElement | null)[]>([]);
+  const marqueeRef = useRef<HTMLDivElement>(null);
   const btnRef = useRef<HTMLDivElement>(null);
 
   const getLogoWidth = (src: string) => {
@@ -48,6 +48,10 @@ export default function ClientsSection({ data }: ClientsSectionProps) {
     if (src.includes("Vector.png") || src.includes("DHL")) return "w-28 sm:w-32 md:w-36";
     return "w-24 sm:w-28 md:w-32";
   };
+
+  // Repeat the logos so they span a large screen width without gaps
+  const repeatCount = Math.max(4, Math.ceil(15 / logos.length));
+  const marqueeLogos = Array(repeatCount).fill(logos).flat();
 
   useEffect(() => {
     const prefersReducedMotion = window.matchMedia(
@@ -107,13 +111,12 @@ export default function ClientsSection({ data }: ClientsSectionProps) {
         }, 0.3);
       }
 
-      // Logos stagger reveal
-      const validLogos = logoRefs.current.filter(Boolean) as HTMLDivElement[];
-      if (validLogos.length) {
-        tl.from(validLogos, {
+      // Marquee reveal
+      if (marqueeRef.current) {
+        tl.from(marqueeRef.current, {
           y: 40,
-          duration: 0.8,
-          stagger: 0.1,
+          opacity: 0,
+          duration: 1,
           ease: "power4.out",
         }, 0.5);
       }
@@ -146,25 +149,52 @@ export default function ClientsSection({ data }: ClientsSectionProps) {
           </p>
         </div>
 
-        {/* Logos Grid */}
-        <div className="w-full flex flex-wrap items-center justify-center gap-8 sm:gap-12 md:gap-16 lg:gap-20 py-4">
-          {logos.map((logo, index) => (
-            <div 
-              key={index}
-              ref={(el) => { logoRefs.current[index] = el; }}
-              className={`relative h-10 sm:h-12 md:h-14 ${getLogoWidth(logo.src)} flex items-center justify-center opacity-60 hover:opacity-100 transition-all duration-300`}
-              style={{ filter: 'brightness(0)' }}
-            >
-              <Image
-                src={logo.src}
-                alt={logo.alt}
-                fill
-                priority
-                sizes="(max-w-768px) 150px, 200px"
-                className="object-contain object-center"
-              />
+        {/* Logos Marquee (Constrained width) */}
+        <div ref={marqueeRef} className="w-full overflow-hidden relative py-4">
+          {/* Elegant Fade Gradients */}
+          <div className="pointer-events-none absolute inset-y-0 left-0 w-12 sm:w-16 md:w-20 bg-gradient-to-r from-white to-transparent z-10" />
+          <div className="pointer-events-none absolute inset-y-0 right-0 w-12 sm:w-16 md:w-20 bg-gradient-to-l from-white to-transparent z-10" />
+          
+          <div className="flex w-max animate-marquee">
+            {/* First Copy */}
+            <div className="flex items-center gap-16 sm:gap-20 md:gap-24 lg:gap-28 px-8 sm:px-10 md:px-12">
+              {marqueeLogos.map((logo, index) => (
+                <div 
+                  key={`first-${index}`}
+                  className={`relative h-10 sm:h-12 md:h-14 ${getLogoWidth(logo.src)} flex items-center justify-center opacity-60 hover:opacity-100 transition-all duration-300`}
+                  style={{ filter: 'brightness(0)' }}
+                >
+                  <Image
+                    src={logo.src}
+                    alt={logo.alt}
+                    fill
+                    priority
+                    sizes="(max-w-768px) 150px, 200px"
+                    className="object-contain object-center"
+                  />
+                </div>
+              ))}
             </div>
-          ))}
+            {/* Second Copy (Identical for seamless looping) */}
+            <div className="flex items-center gap-16 sm:gap-20 md:gap-24 lg:gap-28 px-8 sm:px-10 md:px-12" aria-hidden="true">
+              {marqueeLogos.map((logo, index) => (
+                <div 
+                  key={`second-${index}`}
+                  className={`relative h-10 sm:h-12 md:h-14 ${getLogoWidth(logo.src)} flex items-center justify-center opacity-60 hover:opacity-100 transition-all duration-300`}
+                  style={{ filter: 'brightness(0)' }}
+                >
+                  <Image
+                    src={logo.src}
+                    alt={logo.alt}
+                    fill
+                    priority
+                    sizes="(max-w-768px) 150px, 200px"
+                    className="object-contain object-center"
+                  />
+                </div>
+              ))}
+            </div>
+          </div>
         </div>
 
         {/* Explore More Button */}

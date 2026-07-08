@@ -99,7 +99,7 @@ export default function Footer() {
               <Link href="/about-us" className="hover:text-white/80 transition-colors duration-300">About Us</Link>
               <Link href="/projects" className="hover:text-white/80 transition-colors duration-300">Projects</Link>
               <Link href="/partners" className="hover:text-white/80 transition-colors duration-300">Our Clients</Link>
-              <Link href="#contact" className="hover:text-white/80 transition-colors duration-300">Contact Us</Link>
+              <Link href="/#contact" className="hover:text-white/80 transition-colors duration-300">Contact Us</Link>
             </nav>
           </div>
 
@@ -153,7 +153,7 @@ export default function Footer() {
                 <span>|</span>
                 <a href="#" className="hover:text-white/80 transition-colors duration-300">Terms & Conditions</a>
                 <span>|</span>
-                <a href="#" className="hover:text-white/80 transition-colors duration-300">Contact</a>
+                <Link href="/#contact" className="hover:text-white/80 transition-colors duration-300">Contact</Link>
               </div>
             </div>
           </div>

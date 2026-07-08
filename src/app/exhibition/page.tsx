@@ -2,6 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import ReachOutSection from "../../components/ReachOutSection";
 import Footer from "../../components/Footer";
+import InteriorHeader from "../../components/InteriorHeader";
 import { getExhibitionProjects, getHomepageData, getExhibitionPageData } from "../../lib/wordpress";
 
 export const revalidate = 3600;
@@ -21,40 +22,10 @@ export default async function ExhibitionPage() {
   const { title, description } = pageData;
   const { reachOut } = homepageData;
 
-  const renderTitle = (text: string) => {
-    if (text.includes("&")) {
-      const parts = text.split("&");
-      return (
-        <>
-          {parts[0]} <span className="italic font-light">&</span> {parts[1]}
-        </>
-      );
-    }
-    return text;
-  };
-
   return (
     <div className="relative w-full min-h-screen bg-[#8A6450]">
       {/* ─── HEADER ───────────────────────────────────────────── */}
-      <div className="w-full pt-32 sm:pt-40 pb-8 px-4 flex flex-col items-center text-center max-w-[92%] sm:max-w-[88%] md:max-w-[85%] mx-auto">
-        <h1 className="font-ivymode font-normal text-[3.5rem] sm:text-[5rem] md:text-[6.5rem] lg:text-[7.5rem] text-white leading-[1.1] select-none whitespace-normal md:whitespace-nowrap">
-          {renderTitle(title)}
-        </h1>
-
-        <p className="font-ivymode text-sm sm:text-base md:text-lg text-white mt-4 sm:mt-6 leading-relaxed tracking-wide max-w-4xl mx-auto">
-          {description}
-        </p>
-
-        <div className="mt-8 flex items-center justify-center gap-2 font-ivymode text-sm sm:text-base text-white select-none">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="opacity-90">
-            <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
-            <polyline points="9 22 9 12 15 12 15 22"></polyline>
-          </svg>
-          <Link href="/" className="hover:text-white/80 transition-colors no-underline">Home</Link>
-          <span className="mx-1 opacity-70">/</span>
-          <span className="underline decoration-white/60 underline-offset-4">Exhibition Design Build</span>
-        </div>
-      </div>
+      <InteriorHeader title={title} description={description} breadcrumbLabel="Exhibition Design Build" />
 
       {/* Separator */}
       <div className="w-full max-w-[92%] sm:max-w-[88%] md:max-w-[85%] mx-auto h-[1px] bg-white/30 my-4 sm:my-8" />
@@ -72,7 +43,7 @@ export default async function ExhibitionPage() {
                   key={project.id}
                   className="flex flex-col items-center text-center group"
                   style={{
-                    animationDelay: `${index * 150}ms`,
+                    animationDelay: `${3600 + index * 150}ms`,
                     animationFillMode: "both",
                     animationName: "fadeInUp",
                     animationDuration: "0.8s"
