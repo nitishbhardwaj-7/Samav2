@@ -43,13 +43,59 @@ export const RevealText = ({
   useEffect(() => {
     let ctx = gsap.context(() => {
       if (elRef.current) {
-        createTextReveal(elRef.current, { type, duration, stagger, delay, ease, y, scrollTrigger: {} });
+        const spans = elRef.current.querySelectorAll('.reveal-inner');
+        gsap.fromTo(spans, 
+          { yPercent: y, opacity: 0 },
+          { 
+            yPercent: 0, 
+            opacity: 1, 
+            duration, 
+            stagger, 
+            delay, 
+            ease,
+            scrollTrigger: {
+              trigger: elRef.current,
+              start: "top 85%",
+              toggleActions: "play none none none"
+            }
+          }
+        );
       }
     }, elRef);
     return () => ctx.revert();
-  }, [type, duration, stagger, delay, ease, y]);
+  }, [y, duration, stagger, delay, ease]);
 
-  return <Component ref={elRef} className={className}>{children}</Component>;
+  const text = typeof children === 'string' ? children : String(children || '');
+  
+  let content;
+  if (type === "words") {
+    content = text.split(/\s+/).map((word, i, arr) => (
+      <React.Fragment key={i}>
+        <span style={{ display: 'inline-block', overflow: 'hidden', verticalAlign: 'bottom' }}>
+          <span className="reveal-inner" style={{ display: 'inline-block', willChange: 'transform, opacity' }}>
+            {word}
+          </span>
+        </span>
+        {i < arr.length - 1 ? '\u00A0' : ''}
+      </React.Fragment>
+    ));
+  } else if (type === "chars") {
+    content = text.split('').map((char, i) => (
+      <span key={i} className="reveal-inner" style={{ display: 'inline-block', willChange: 'transform, opacity' }}>
+        {char === ' ' ? '\u00A0' : char}
+      </span>
+    ));
+  } else {
+    content = (
+      <span style={{ display: 'inline-block', overflow: 'hidden', verticalAlign: 'bottom' }}>
+        <span className="reveal-inner" style={{ display: 'inline-block', willChange: 'transform, opacity' }}>
+          {text}
+        </span>
+      </span>
+    );
+  }
+
+  return <Component ref={elRef} className={className}>{content}</Component>;
 };
 
 interface RevealImageProps {

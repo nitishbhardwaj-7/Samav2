@@ -28,7 +28,16 @@ export default function TransitionLink({
     
     if (sharedImageSrc && linkRef.current) {
       e.preventDefault();
-      const imgElement = linkRef.current.querySelector('img');
+      let imgElement = linkRef.current.querySelector('img');
+      
+      // Fallback: If the link is a button/text, find the image in the parent card container
+      if (!imgElement) {
+        const container = linkRef.current.closest('article') || linkRef.current.closest('.group');
+        if (container) {
+          imgElement = container.querySelector('img');
+        }
+      }
+
       if (imgElement) {
         navigateToProject(href, imgElement, sharedImageSrc);
       } else {

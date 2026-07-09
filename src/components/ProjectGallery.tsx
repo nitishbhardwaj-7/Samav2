@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState, useEffect, useCallback } from "react";
+import { createPortal } from "react-dom";
 import Image from "next/image";
 import GalleryScrollButton from "./GalleryScrollButton";
 
@@ -11,6 +12,27 @@ interface ProjectGalleryProps {
 
 export default function ProjectGallery({ gallery, projectTitle }: ProjectGalleryProps) {
   const [activeIndex, setActiveIndex] = useState<number | null>(null);
+  const [mounted, setMounted] = useState(false);
+  const [scale, setScale] = useState(1);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  // Reset scale when image changes
+  useEffect(() => {
+    setScale(1);
+  }, [activeIndex]);
+
+  const handleZoomIn = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    setScale(prev => Math.min(prev + 0.5, 3));
+  };
+
+  const handleZoomOut = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    setScale(prev => Math.max(prev - 0.5, 0.5));
+  };
 
   // Close lightbox
   const closeLightbox = useCallback(() => {
@@ -97,12 +119,12 @@ export default function ProjectGallery({ gallery, projectTitle }: ProjectGallery
         )}
       </div>
 
-       {/* LIGHTBOX OVERLAY */}
-      {activeIndex !== null && (
+        {/* LIGHTBOX OVERLAY */}
+      {mounted && activeIndex !== null && createPortal(
         <div 
           data-lenis-prevent
           onClick={closeLightbox}
-          className="fixed inset-0 z-[999999] bg-[#12190e]/75 backdrop-blur-xl flex items-center justify-center transition-all duration-300 animate-fadeIn"
+          className="fixed inset-0 z-[999999] bg-black/40 backdrop-blur-2xl flex items-center justify-center transition-all duration-300 animate-fadeIn"
         >
           {/* Top panel: Close Button */}
           <div className="absolute top-0 left-0 right-0 p-6 flex justify-end items-center z-50">
@@ -131,7 +153,11 @@ export default function ProjectGallery({ gallery, projectTitle }: ProjectGallery
           {/* Center Content Container */}
           <div 
             onClick={(e) => e.stopPropagation()} 
-            className="relative max-w-[90vw] max-h-[75vh] sm:max-h-[80vh] flex items-center justify-center select-none"
+            onDoubleClick={(e) => {
+              e.stopPropagation();
+              setScale(prev => prev === 1 ? 2 : 1);
+            }}
+            className="relative w-full h-full max-w-[90vw] max-h-[85vh] sm:max-h-[90vh] flex items-center justify-center select-none mx-auto overflow-hidden"
           >
             {(() => {
               const currentMedia = gallery[activeIndex];
@@ -144,14 +170,19 @@ export default function ProjectGallery({ gallery, projectTitle }: ProjectGallery
                   autoPlay
                   loop
                   playsInline
-                  className="max-w-full max-h-[75vh] sm:max-h-[80vh] object-contain rounded-2xl shadow-2xl border border-white/10"
+                  className="max-w-full max-h-full object-contain rounded-2xl shadow-2xl border border-white/10"
                 />
               ) : (
-                <img
-                  src={currentMedia}
-                  alt={`${projectTitle} fullscreen view`}
-                  className="max-w-full max-h-[75vh] sm:max-h-[80vh] object-contain rounded-2xl shadow-2xl border border-white/10"
-                />
+                <div 
+                  className="transition-transform duration-300 ease-out flex items-center justify-center"
+                  style={{ transform: `scale(${scale})` }}
+                >
+                  <img
+                    src={currentMedia}
+                    alt={`${projectTitle} fullscreen view`}
+                    className="max-w-full max-h-[85vh] sm:max-h-[90vh] object-contain rounded-2xl shadow-2xl border border-white/10"
+                  />
+                </div>
               );
             })()}
           </div>
@@ -167,13 +198,39 @@ export default function ProjectGallery({ gallery, projectTitle }: ProjectGallery
             </svg>
           </button>
 
-          {/* Bottom Panel: Counter */}
-          <div className="absolute bottom-6 left-0 right-0 flex justify-center text-white/70 font-ivymode tracking-widest text-sm z-50 select-none">
-            <span className="bg-black/40 px-4 py-1.5 rounded-full border border-white/10">
-              {activeIndex + 1} / {gallery.length}
-            </span>
+          {/* Bottom Panel: Zoom & Counter */}
+          <div className="absolute bottom-6 left-0 right-0 flex flex-col items-center gap-4 z-50 select-none">
+            {/* Zoom Controls */}
+            <div className="flex gap-2 bg-white/10 px-1.5 py-1.5 rounded-full border border-white/20 backdrop-blur-md shadow-lg">
+              <button 
+                onClick={handleZoomOut}
+                className="w-10 h-10 rounded-full border border-transparent hover:border-white/30 hover:bg-white/20 flex items-center justify-center transition-all duration-300 cursor-pointer text-white/80 hover:text-white"
+                aria-label="Zoom out"
+              >
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M20 12H4" />
+                </svg>
+              </button>
+              <div className="w-[1px] h-6 bg-white/10 self-center mx-1"></div>
+              <button 
+                onClick={handleZoomIn}
+                className="w-10 h-10 rounded-full border border-transparent hover:border-white/30 hover:bg-white/20 flex items-center justify-center transition-all duration-300 cursor-pointer text-white/80 hover:text-white"
+                aria-label="Zoom in"
+              >
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M12 4v16m8-8H4" />
+                </svg>
+              </button>
+            </div>
+
+            <div className="text-white/70 font-ivymode tracking-widest text-sm">
+              <span className="bg-black/40 px-4 py-1.5 rounded-full border border-white/10 shadow-lg">
+                {activeIndex + 1} / {gallery.length}
+              </span>
+            </div>
           </div>
-        </div>
+        </div>,
+        document.body
       )}
     </>
   );

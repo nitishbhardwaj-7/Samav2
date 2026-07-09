@@ -93,20 +93,10 @@ export default function Footer() {
             </p>
           </div>
 
-          {/* Middle Column: Nav Links */}
-          <div className="flex items-start justify-start w-full lg:w-[40%] pt-8 lg:pt-2">
-            <nav className="flex flex-wrap items-center justify-start gap-6 sm:gap-8 font-ivymode text-sm sm:text-base text-white">
-              <TransitionLink href="/" className="hover:text-white/80 transition-colors duration-300">Home</TransitionLink>
-              <TransitionLink href="/about-us" className="hover:text-white/80 transition-colors duration-300">About Us</TransitionLink>
-              <TransitionLink href="/projects" className="hover:text-white/80 transition-colors duration-300">Projects</TransitionLink>
-              <TransitionLink href="/partners" className="hover:text-white/80 transition-colors duration-300">Our Clients</TransitionLink>
-              <TransitionLink href="/#contact" className="hover:text-white/80 transition-colors duration-300">Contact Us</TransitionLink>
-            </nav>
-          </div>
 
           {/* Right Column: Address / Location */}
           <div className="flex flex-col w-full lg:w-[30%] h-full lg:items-end">
-            <div className="flex flex-col gap-6 w-fit h-full font-ivymode text-xs sm:text-sm text-white leading-relaxed">
+            <div className="flex flex-col gap-6 w-fit h-full font-ivymode text-[10px] sm:text-xs text-white leading-relaxed">
               {/* Location 1 */}
               <div className="flex items-start gap-3">
                 <svg
