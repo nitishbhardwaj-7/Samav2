@@ -15,6 +15,18 @@ if (typeof window !== "undefined") {
   gsap.registerPlugin(ScrollTrigger);
 }
 
+interface RevealTextProps {
+  children: React.ReactNode;
+  type?: "words" | "chars" | "lines";
+  duration?: number;
+  stagger?: number;
+  delay?: number;
+  ease?: string;
+  y?: number;
+  as?: React.ElementType;
+  className?: string;
+}
+
 export const RevealText = ({
   children,
   type = "words",
@@ -25,7 +37,7 @@ export const RevealText = ({
   y = 100,
   as: Component = "div",
   className = "",
-}: any) => {
+}: RevealTextProps) => {
   const elRef = useRef<HTMLElement>(null);
 
   useEffect(() => {
@@ -40,6 +52,16 @@ export const RevealText = ({
   return <Component ref={elRef} className={className}>{children}</Component>;
 };
 
+interface RevealImageProps {
+  children: React.ReactNode;
+  direction?: "up" | "down" | "left" | "right";
+  duration?: number;
+  delay?: number;
+  ease?: string;
+  imageScale?: number;
+  className?: string;
+}
+
 export const RevealImage = ({
   children,
   direction = "up",
@@ -48,7 +70,7 @@ export const RevealImage = ({
   ease = "expo.out",
   imageScale = 1.15, // updated default scale for luxury feel
   className = "",
-}: any) => {
+}: RevealImageProps) => {
   const elRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -67,6 +89,17 @@ export const RevealImage = ({
   );
 };
 
+interface FadeUpProps {
+  children: React.ReactNode;
+  y?: number;
+  duration?: number;
+  delay?: number;
+  stagger?: number;
+  ease?: string;
+  as?: React.ElementType;
+  className?: string;
+}
+
 export const FadeUp = ({
   children,
   y = 60,
@@ -76,7 +109,7 @@ export const FadeUp = ({
   ease = "power4.out",
   as: Component = "div",
   className = "",
-}: any) => {
+}: FadeUpProps) => {
   const elRef = useRef<HTMLElement>(null);
 
   useEffect(() => {
@@ -91,12 +124,19 @@ export const FadeUp = ({
   return <Component ref={elRef} className={className}>{children}</Component>;
 };
 
+interface ParallaxSectionProps {
+  children: React.ReactNode;
+  speed?: number;
+  direction?: "vertical" | "horizontal";
+  className?: string;
+}
+
 export const ParallaxSection = ({
   children,
   speed = 30,
   direction = "vertical",
   className = "",
-}: any) => {
+}: ParallaxSectionProps) => {
   const elRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -115,6 +155,15 @@ export const ParallaxSection = ({
   );
 };
 
+interface StaggerRevealProps {
+  children: React.ReactNode;
+  y?: number;
+  duration?: number;
+  stagger?: number;
+  ease?: string;
+  className?: string;
+}
+
 export const StaggerReveal = ({
   children,
   y = 80,
@@ -122,7 +171,7 @@ export const StaggerReveal = ({
   stagger = 0.15,
   ease = "power4.out",
   className = "",
-}: any) => {
+}: StaggerRevealProps) => {
   const elRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
