@@ -4,6 +4,7 @@ import { useEffect, useRef } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import TransitionLink from "./TransitionLink";
+import { usePathname, useRouter } from "next/navigation";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 
@@ -12,6 +13,8 @@ if (typeof window !== "undefined") {
 }
 
 export default function Footer() {
+  const pathname = usePathname();
+  const router = useRouter();
   const footerRef = useRef<HTMLElement>(null);
   const contentRef = useRef<HTMLDivElement>(null);
 
@@ -140,11 +143,29 @@ export default function Footer() {
 
               {/* Privacy Policies */}
               <div className="flex flex-wrap items-center gap-4 mt-auto pt-8 font-ivymode text-[10px] sm:text-xs text-white ml-[28px]">
-                <a href="#" className="hover:text-white/80 transition-colors duration-300">Privacy Policy</a>
+                <TransitionLink href="/privacy-policy" className="hover:text-white/80 transition-colors duration-300">Privacy Policy</TransitionLink>
                 <span>|</span>
-                <a href="#" className="hover:text-white/80 transition-colors duration-300">Terms & Conditions</a>
+                <TransitionLink href="/terms-and-conditions" className="hover:text-white/80 transition-colors duration-300">Terms & Conditions</TransitionLink>
                 <span>|</span>
-                <Link href="/#contact" className="hover:text-white/80 transition-colors duration-300">Contact</Link>
+                <Link
+                  href="/#contact"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    const hash = "contact";
+                    sessionStorage.setItem('scrollToHash', hash);
+                    const targetPath = '/';
+                    if (pathname === targetPath) {
+                      const el = document.getElementById(hash);
+                      if (el) el.scrollIntoView({ behavior: 'smooth' });
+                      sessionStorage.removeItem('scrollToHash');
+                    } else {
+                      router.push(targetPath);
+                    }
+                  }}
+                  className="hover:text-white/80 transition-colors duration-300"
+                >
+                  Contact
+                </Link>
               </div>
             </div>
           </div>

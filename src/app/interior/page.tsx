@@ -36,17 +36,21 @@ export default async function InteriorPage() {
         {/* ─── PROJECT GRID ───────────────────────────────────────────── */}
         <section className="relative w-full py-12 sm:py-16 px-4 sm:px-8 md:px-12 lg:px-16 flex-grow">
           <div className="w-full max-w-[92%] sm:max-w-[88%] md:max-w-[85%] mx-auto">
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 md:gap-10 lg:gap-12">
+            <div className="flex flex-wrap justify-center -mx-3 md:-mx-4 lg:-mx-5">
               {projects.map((project, index) => {
-                const isLastRow = index >= projects.length - (projects.length % 3 === 0 ? 3 : projects.length % 3);
+                // Calculate if it's the last row based on 4 items per row (desktop layout)
+                const isLastRow = index >= projects.length - (projects.length % 4 === 0 ? 4 : projects.length % 4);
                 const titleColorClass = isLastRow ? "text-[#563320] hover:text-[#563320]/80" : "text-white hover:text-white/80";
+                
+                // Calculate stagger delay based on column index (4 items per row on desktop)
+                const staggerIndex = index % 4;
 
                 return (
                   <article
                     key={project.id}
-                    className="flex flex-col items-center text-center group"
+                    className="flex flex-col items-center text-center group w-full sm:w-1/2 md:w-1/3 lg:w-1/4 px-3 md:px-4 lg:px-5 mb-10 md:mb-12"
                   >
-                    <RevealImage delay={index * 0.1} duration={1.6} className="w-full">
+                    <RevealImage delay={staggerIndex * 0.15} duration={1.6} className="w-full">
                       <TransitionLink
                         href={`/projects/${project.slug}`}
                         sharedImageSrc={project.featuredImage || "/uploads/2026/06/Frame-146-3-1.png"}
@@ -65,8 +69,8 @@ export default async function InteriorPage() {
                       </TransitionLink>
                     </RevealImage>
 
-                    <FadeUp delay={0.2 + index * 0.1}>
-                      <h3 className={`font-ivymode font-normal text-xl sm:text-2xl md:text-[28px] mt-5 sm:mt-6 transition-transform duration-300 group-hover:-translate-y-1 ${titleColorClass}`}>
+                    <FadeUp delay={0.15 + staggerIndex * 0.15}>
+                      <h3 className={`font-ivymode font-normal text-lg sm:text-xl md:text-2xl mt-4 transition-transform duration-300 group-hover:-translate-y-1 ${titleColorClass}`}>
                         <TransitionLink
                           href={`/projects/${project.slug}`}
                           sharedImageSrc={project.featuredImage || "/uploads/2026/06/Frame-146-3-1.png"}

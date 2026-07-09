@@ -27,12 +27,35 @@ export default function SmoothScroll({
   const lenisRef = useRef<Lenis | null>(null);
   const pathname = usePathname();
 
-  // Reset scroll to top on page navigation
+  // Reset scroll on page navigation, but respect hash anchors
   useEffect(() => {
-    if (lenisRef.current) {
-      lenisRef.current.scrollTo(0, { immediate: true });
+    const scrollTarget = sessionStorage.getItem('scrollToHash');
+    if (scrollTarget) {
+      sessionStorage.removeItem('scrollToHash');
+      // Start at the top, then smoothly scroll down to the target
+      if (lenisRef.current) {
+        lenisRef.current.scrollTo(0, { immediate: true });
+      } else {
+        window.scrollTo(0, 0);
+      }
+      // Wait for the page to fully render, then smooth scroll to the section
+      const timer = setTimeout(() => {
+        const el = document.getElementById(scrollTarget);
+        if (el) {
+          if (lenisRef.current) {
+            lenisRef.current.scrollTo(el as HTMLElement, { duration: 1.5, easing: (t: number) => 1 - Math.pow(1 - t, 4) });
+          } else {
+            el.scrollIntoView({ behavior: 'smooth' });
+          }
+        }
+      }, 600);
+      return () => clearTimeout(timer);
     } else {
-      window.scrollTo(0, 0);
+      if (lenisRef.current) {
+        lenisRef.current.scrollTo(0, { immediate: true });
+      } else {
+        window.scrollTo(0, 0);
+      }
     }
   }, [pathname]);
 

@@ -967,3 +967,22 @@ export async function getPartnersPageData(): Promise<PartnersPageData> {
   }
 }
 
+export async function getPageBySlug(slug: string): Promise<{ title: string; content: string } | null> {
+  const url = `https://samaproductionme.com/wp-json/wp/v2/pages?slug=${slug}`;
+  try {
+    const res = await fetch(url, {
+      next: { revalidate: REVALIDATE_VAL },
+    });
+    if (!res.ok) return null;
+    const pages = await res.json();
+    if (pages.length === 0) return null;
+    return {
+      title: decodeHtmlEntities(pages[0].title?.rendered || ""),
+      content: pages[0].content?.rendered || "",
+    };
+  } catch (err) {
+    console.error(`Error fetching page by slug ${slug}:`, err);
+    return null;
+  }
+}
+

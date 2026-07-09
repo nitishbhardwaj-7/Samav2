@@ -23,7 +23,7 @@ export default async function AboutUsPage() {
       <HeroSection heroData={hero} />
 
       {/* Section 2: About Section */}
-      <AboutSection data={about} />
+      <AboutSection data={about} hideKnowMore={true} />
 
       {/* Shared Gradient Wrapper for Design and Who We Are */}
       <div 

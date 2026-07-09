@@ -10,7 +10,7 @@ if (typeof window !== "undefined") {
   gsap.registerPlugin(ScrollTrigger);
 }
 
-export default function AboutSection({ data }: { data?: { sectionName: string; title: string; description: string; image: string } }) {
+export default function AboutSection({ data, hideKnowMore = false }: { data?: { sectionName: string; title: string; description: string; image: string }, hideKnowMore?: boolean }) {
   const sectionName = data?.sectionName || "about us";
   const title = data?.title || "SAMA";
   const description = data?.description || "SAMA Production is a multidisciplinary design and build studio known for crafting refined, high-impact environments across interiors, exhibitions, and brand activations. Defined by precision, material sophistication, and architectural clarity, each project is meticulously executed to embody brand identity at the highest level.";
@@ -53,24 +53,7 @@ export default function AboutSection({ data }: { data?: { sectionName: string; t
 
       // Heading: character by character reveal
       if (headingRef.current) {
-        const text = headingRef.current.textContent || "";
-        headingRef.current.innerHTML = "";
-
-        const chars = text.split("").map((char) => {
-          const wrapper = document.createElement("span");
-          wrapper.style.display = "inline-block";
-          wrapper.style.overflow = "hidden";
-          wrapper.style.verticalAlign = "bottom";
-
-          const inner = document.createElement("span");
-          inner.style.display = "inline-block";
-          inner.style.willChange = "transform";
-          inner.textContent = char === " " ? "\u00A0" : char;
-          wrapper.appendChild(inner);
-          headingRef.current!.appendChild(wrapper);
-          return inner;
-        });
-
+        const chars = headingRef.current.querySelectorAll('.about-char');
         tl.from(chars, {
           yPercent: 120,
           duration: 1.4,
@@ -152,7 +135,13 @@ export default function AboutSection({ data }: { data?: { sectionName: string; t
 
           {/* SAMA Heading - overlaps the right image with z-20 */}
           <h2 ref={headingRef} className="font-ivymode font-normal text-[5.5rem] sm:text-[7.5rem] md:text-[9rem] lg:text-[10.5rem] xl:text-[12.5rem] text-[#E5D9C4] leading-[0.8] select-none z-20 whitespace-nowrap drop-shadow-[0_2px_10px_rgba(0,0,0,0.1)] mb-6 sm:mb-8">
-            {title}
+            {title.split("").map((char, i) => (
+              <span key={i} style={{ display: "inline-block", overflow: "hidden", verticalAlign: "bottom" }}>
+                <span className="about-char" style={{ display: "inline-block", willChange: "transform" }}>
+                  {char === " " ? "\u00A0" : char}
+                </span>
+              </span>
+            ))}
           </h2>
 
           {/* Left Vertical Divider Line */}
@@ -164,32 +153,34 @@ export default function AboutSection({ data }: { data?: { sectionName: string; t
           </p>
 
           {/* Know More Button */}
-          <div ref={btnRef}>
-            <TransitionLink 
-              href="/about-us"
-              className="group/btn inline-flex items-center gap-3 border border-[#E5D9C4]/40 hover:border-white px-6 py-2.5 rounded-full font-ivymode text-xs sm:text-sm text-[#E5D9C4] hover:text-white uppercase tracking-widest transition-all duration-300 bg-transparent hover:bg-white/5 no-underline"
-            >
-              <span>Know More</span>
-              <span className="inline-flex items-center justify-center border border-[#E5D9C4]/40 group-hover/btn:border-white rounded-full w-5 h-5 transition-all duration-300">
-                <svg 
-                  width="8" 
-                  height="8" 
-                  viewBox="0 0 8 8" 
-                  fill="none" 
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="transform group-hover/btn:translate-x-0.5 group-hover/btn:-translate-y-0.5 transition-transform duration-300"
-                >
-                  <path 
-                    d="M1 7L7 1M7 1H2.5M7 1V5.5" 
-                    stroke="currentColor" 
-                    strokeWidth="1.2" 
-                    strokeLinecap="round" 
-                    strokeLinejoin="round"
-                  />
-                </svg>
-              </span>
-            </TransitionLink>
-          </div>
+          {!hideKnowMore && (
+            <div ref={btnRef}>
+              <TransitionLink 
+                href="/about-us"
+                className="group/btn inline-flex items-center gap-3 border border-[#E5D9C4]/40 hover:border-white px-6 py-2.5 rounded-full font-ivymode text-xs sm:text-sm text-[#E5D9C4] hover:text-white uppercase tracking-widest transition-all duration-300 bg-transparent hover:bg-white/5 no-underline"
+              >
+                <span>Know More</span>
+                <span className="inline-flex items-center justify-center border border-[#E5D9C4]/40 group-hover/btn:border-white rounded-full w-5 h-5 transition-all duration-300">
+                  <svg 
+                    width="8" 
+                    height="8" 
+                    viewBox="0 0 8 8" 
+                    fill="none" 
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="transform group-hover/btn:translate-x-0.5 group-hover/btn:-translate-y-0.5 transition-transform duration-300"
+                  >
+                    <path 
+                      d="M1 7L7 1M7 1H2.5M7 1V5.5" 
+                      stroke="currentColor" 
+                      strokeWidth="1.2" 
+                      strokeLinecap="round" 
+                      strokeLinejoin="round"
+                    />
+                  </svg>
+                </span>
+              </TransitionLink>
+            </div>
+          )}
           
         </div>
 

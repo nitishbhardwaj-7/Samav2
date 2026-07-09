@@ -15,7 +15,7 @@ export default function DesignSection({ data }: DesignSectionProps) {
   return (
     <section className="relative w-full py-12 sm:py-16 md:py-20 px-4 sm:px-8 md:px-12 lg:px-16 flex flex-col items-center justify-center overflow-hidden">
       {/* Framed Card Wrapper */}
-      <RevealImage className="group relative w-full max-w-[92%] sm:max-w-[88%] md:max-w-[85%] aspect-[16/9] md:aspect-[21/9] lg:aspect-[2.3/1] overflow-hidden rounded-2xl sm:rounded-3xl shadow-2xl bg-[#2b2a22]">
+      <RevealImage className="group relative w-full max-w-[92%] sm:max-w-[88%] md:max-w-[85%] aspect-[4/3] min-h-[320px] sm:min-h-0 sm:aspect-[16/9] md:aspect-[21/9] lg:aspect-[2.3/1] overflow-hidden rounded-2xl sm:rounded-3xl shadow-2xl bg-[#2b2a22]">
 
         {/* Background Image with hover zoom */}
         <div className="absolute inset-0 select-none overflow-hidden">

@@ -26,6 +26,28 @@ export default function TransitionLink({
   const handleClick = (e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
     if (onClick) onClick(e);
     
+    // Handle same-page hash navigation smoothly
+    if (href.includes('#')) {
+      const parts = href.split('#');
+      const targetPath = parts[0];
+      const targetId = parts[1];
+      const isCurrentPage = window.location.pathname === targetPath || (!targetPath && href.startsWith('#'));
+      
+      if (isCurrentPage && targetId) {
+        e.preventDefault();
+        const element = document.getElementById(targetId);
+        if (element) {
+          element.scrollIntoView({ behavior: 'smooth' });
+        }
+      } else if (targetId) {
+        // Cross-page hash navigation: use native browser routing to ensure GSAP ScrollTrigger 
+        // properly calculates layout before scrolling to the hash.
+        e.preventDefault();
+        window.location.href = href;
+      }
+      return; // Prevent standard Next.js Link behavior for hash links
+    }
+
     if (sharedImageSrc && linkRef.current) {
       e.preventDefault();
       let imgElement = linkRef.current.querySelector('img');
@@ -47,7 +69,7 @@ export default function TransitionLink({
   };
 
   return (
-    <Link ref={linkRef} href={href} onClick={handleClick} scroll={false} {...rest}>
+    <Link ref={linkRef} href={href} onClick={handleClick} scroll={href.includes('#')} {...rest}>
       {children}
     </Link>
   );

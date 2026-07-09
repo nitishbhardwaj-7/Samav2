@@ -189,7 +189,28 @@ export default function Navbar() {
               >
                 <Link
                   href={link.href}
-                  onClick={(e) => { e.preventDefault(); setIsOpen(false); setTimeout(() => router.push(link.href), 400); }}
+                  onClick={(e) => { 
+                    e.preventDefault(); 
+                    setIsOpen(false); 
+                    setTimeout(() => {
+                      if (link.href.includes('#')) {
+                        const [path, hash] = link.href.split('#');
+                        // Store the scroll target so SmoothScroll can animate to it after page load
+                        sessionStorage.setItem('scrollToHash', hash);
+                        const targetPath = path || '/';
+                        if (pathname === targetPath) {
+                          // Already on the right page, just smooth scroll
+                          const el = document.getElementById(hash);
+                          if (el) el.scrollIntoView({ behavior: 'smooth' });
+                          sessionStorage.removeItem('scrollToHash');
+                        } else {
+                          router.push(targetPath);
+                        }
+                      } else {
+                        router.push(link.href);
+                      }
+                    }, 400); 
+                  }}
                   className={`block py-5 font-ivymode text-3xl sm:text-4xl text-right transition-colors duration-300 tracking-wide group/link relative ${
                     isActive ? "text-[#E5D9C4]" : "text-white hover:text-white/70"
                   }`}
