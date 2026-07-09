@@ -472,6 +472,9 @@ export interface InteriorProject {
   content: string;
   featuredImage: string;
   gallery: string[];
+  client?: string;
+  size?: string;
+  location?: string;
 }
 
 export interface InteriorPageData {
@@ -621,7 +624,10 @@ export async function getInteriorProjects(): Promise<InteriorProject[]> {
         title: decodeHtmlEntities(p.title?.rendered || ""),
         content: p.content?.rendered || "",
         featuredImage,
-        gallery
+        gallery,
+        client: p.client || p.meta?.client || p.acf?.client || "",
+        size: p.size || p.meta?.size || p.acf?.size || "",
+        location: p.location || p.meta?.location || p.acf?.location || "",
       });
     }
 
@@ -670,7 +676,10 @@ export async function getProjectBySlug(slug: string): Promise<InteriorProject | 
       title: decodeHtmlEntities(p.title?.rendered || ""),
       content: p.content?.rendered || "",
       featuredImage,
-      gallery
+      gallery,
+      client: p.client || p.meta?.client || p.acf?.client || "",
+      size: p.size || p.meta?.size || p.acf?.size || "",
+      location: p.location || p.meta?.location || p.acf?.location || "",
     };
   } catch (err) {
     console.error(`Error fetching project by slug ${slug}:`, err);
@@ -716,7 +725,10 @@ export async function getExhibitionProjects(): Promise<InteriorProject[]> {
         title: decodeHtmlEntities(p.title?.rendered || ""),
         content: p.content?.rendered || "",
         featuredImage,
-        gallery
+        gallery,
+        client: p.client || p.meta?.client || p.acf?.client || "",
+        size: p.size || p.meta?.size || p.acf?.size || "",
+        location: p.location || p.meta?.location || p.acf?.location || "",
       });
     }
 
@@ -765,7 +777,10 @@ export async function getEventsProjects(): Promise<InteriorProject[]> {
         title: decodeHtmlEntities(p.title?.rendered || ""),
         content: p.content?.rendered || "",
         featuredImage,
-        gallery
+        gallery,
+        client: p.client || p.meta?.client || p.acf?.client || "",
+        size: p.size || p.meta?.size || p.acf?.size || "",
+        location: p.location || p.meta?.location || p.acf?.location || "",
       });
     }
 
@@ -814,7 +829,10 @@ export async function getMallActivationProjects(): Promise<InteriorProject[]> {
         title: decodeHtmlEntities(p.title?.rendered || ""),
         content: p.content?.rendered || "",
         featuredImage,
-        gallery
+        gallery,
+        client: p.client || p.meta?.client || p.acf?.client || "",
+        size: p.size || p.meta?.size || p.acf?.size || "",
+        location: p.location || p.meta?.location || p.acf?.location || "",
       });
     }
 

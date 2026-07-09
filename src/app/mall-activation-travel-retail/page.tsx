@@ -4,6 +4,7 @@ import TransitionLink from "../../components/TransitionLink";
 import ReachOutSection from "../../components/ReachOutSection";
 import Footer from "../../components/Footer";
 import InteriorHeader from "../../components/InteriorHeader";
+import { RevealImage, FadeUp } from "../../components/animations";
 import { getMallActivationProjects, getHomepageData, getMallActivationPageData } from "../../lib/wordpress";
 
 export const revalidate = 3600;
@@ -44,54 +45,52 @@ export default async function MallActivationPage() {
                   <article
                     key={project.id}
                     className="flex flex-col items-center text-center group"
-                    style={{
-                      animationDelay: `${1600 + index * 150}ms`,
-                      animationFillMode: "both",
-                      animationName: "fadeInUp",
-                      animationDuration: "0.8s"
-                    }}
                   >
-                    <TransitionLink
-                      href={`/projects/${project.slug}`}
-                      sharedImageSrc={project.featuredImage || "/uploads/2026/06/Frame-146-3-1.png"}
-                      sharedImageBorderRadius="24px"
-                      className="w-full block relative aspect-[4/3] rounded-[24px] overflow-hidden shadow-lg shadow-black/20 hover:shadow-black/40 transition-shadow duration-500"
-                      tabIndex={0}
-                      aria-label={`View project: ${project.title}`}
-                    >
-                      <Image
-                        src={project.featuredImage || "/uploads/2026/06/Frame-146-3-1.png"}
-                        alt={project.title}
-                        fill
-                        sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
-                        className="object-cover group-hover:scale-105 transition-transform duration-700 ease-out"
-                      />
-                    </TransitionLink>
-
-                    <h3 className={`font-ivymode font-normal text-xl sm:text-2xl md:text-[28px] mt-5 sm:mt-6 transition-transform duration-300 group-hover:-translate-y-1 ${titleColorClass}`}>
+                    <RevealImage delay={index * 0.1} duration={1.6} className="w-full">
                       <TransitionLink
                         href={`/projects/${project.slug}`}
-                        className="transition-colors duration-300 no-underline"
+                        sharedImageSrc={project.featuredImage || "/uploads/2026/06/Frame-146-3-1.png"}
+                        sharedImageBorderRadius="24px"
+                        className="w-full block relative aspect-[4/3] rounded-[24px] overflow-hidden shadow-lg shadow-black/20 hover:shadow-black/40 transition-shadow duration-500"
+                        tabIndex={0}
+                        aria-label={`View project: ${project.title}`}
                       >
-                        {project.title}
+                        <Image
+                          src={project.featuredImage || "/uploads/2026/06/Frame-146-3-1.png"}
+                          alt={project.title}
+                          fill
+                          sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                          className="object-cover group-hover:scale-105 transition-transform duration-700 ease-out"
+                        />
                       </TransitionLink>
-                    </h3>
+                    </RevealImage>
 
-                    <div className="mt-2 opacity-0 invisible translate-y-2 group-hover:opacity-100 group-hover:visible group-hover:translate-y-0 transition-all duration-300 h-[38px]">
-                      <TransitionLink
-                        href={`/projects/${project.slug}`}
-                        className="inline-block px-6 py-1.5 border border-[#563320]/30 rounded-full text-[#E5D9C4] uppercase tracking-wider font-ivymode bg-[#714230] hover:bg-[#563320] hover:text-white transition-colors duration-300 no-underline text-xs sm:text-sm shadow-sm"
-                      >
-                        View Project
-                      </TransitionLink>
-                    </div>
+                    <FadeUp delay={0.2 + index * 0.1}>
+                      <h3 className={`font-ivymode font-normal text-xl sm:text-2xl md:text-[28px] mt-5 sm:mt-6 transition-transform duration-300 group-hover:-translate-y-1 ${titleColorClass}`}>
+                        <TransitionLink
+                          href={`/projects/${project.slug}`}
+                          className="transition-colors duration-300 no-underline"
+                        >
+                          {project.title}
+                        </TransitionLink>
+                      </h3>
+
+                      <div className="mt-2 opacity-0 invisible translate-y-2 group-hover:opacity-100 group-hover:visible group-hover:translate-y-0 transition-all duration-300 h-[38px]">
+                        <TransitionLink
+                          href={`/projects/${project.slug}`}
+                          className="inline-block px-6 py-1.5 border border-[#563320]/30 rounded-full text-[#E5D9C4] uppercase tracking-wider font-ivymode bg-[#714230] hover:bg-[#563320] hover:text-white transition-colors duration-300 no-underline text-xs sm:text-sm shadow-sm"
+                        >
+                          View Project
+                        </TransitionLink>
+                      </div>
+                    </FadeUp>
                   </article>
                 );
               })}
             </div>
 
             {/* Call To Action Block */}
-            <div className="w-full flex flex-col items-center justify-center gap-6 mt-16 text-center px-4">
+            <FadeUp delay={0.3} className="w-full flex flex-col items-center justify-center gap-6 mt-16 text-center px-4">
               <p className="font-ivymode text-xl sm:text-2xl md:text-[28px] text-[#563320] tracking-wide max-w-none whitespace-nowrap">
                 Take a closer look at our projects and capabilities.
               </p>
@@ -115,7 +114,7 @@ export default async function MallActivationPage() {
                   <path d="M12 5v14M19 12l-7 7-7-7" />
                 </svg>
               </a>
-            </div>
+            </FadeUp>
           </div>
         </section>
       </div>

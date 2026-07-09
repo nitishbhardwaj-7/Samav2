@@ -1,7 +1,8 @@
 "use client";
 
-import { type AnchorHTMLAttributes } from "react";
+import { type AnchorHTMLAttributes, useRef } from "react";
 import Link from "next/link";
+import { usePageTransition } from "./PageTransition";
 
 interface TransitionLinkProps
   extends Omit<AnchorHTMLAttributes<HTMLAnchorElement>, "href"> {
@@ -11,11 +12,6 @@ interface TransitionLinkProps
   sharedImageBorderRadius?: string;
 }
 
-/**
- * TransitionLink
- * 
- * Restored to standard native Next.js Link routing.
- */
 export default function TransitionLink({
   href,
   children,
@@ -24,8 +20,25 @@ export default function TransitionLink({
   onClick,
   ...rest
 }: TransitionLinkProps) {
+  const { navigateToProject } = usePageTransition();
+  const linkRef = useRef<HTMLAnchorElement>(null);
+
+  const handleClick = (e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
+    if (onClick) onClick(e);
+    
+    if (sharedImageSrc && linkRef.current) {
+      e.preventDefault();
+      const imgElement = linkRef.current.querySelector('img');
+      if (imgElement) {
+        navigateToProject(href, imgElement, sharedImageSrc);
+      } else {
+        window.location.href = href;
+      }
+    }
+  };
+
   return (
-    <Link href={href} onClick={onClick} {...rest}>
+    <Link ref={linkRef} href={href} onClick={handleClick} scroll={false} {...rest}>
       {children}
     </Link>
   );

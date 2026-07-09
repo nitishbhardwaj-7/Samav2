@@ -3,6 +3,7 @@ import Link from "next/link";
 import ReachOutSection from "../../../components/ReachOutSection";
 import Footer from "../../../components/Footer";
 import ProjectGallery from "../../../components/ProjectGallery";
+import { RevealText, FadeUp } from "../../../components/animations";
 import {
   getInteriorProjects,
   getExhibitionProjects,
@@ -89,7 +90,7 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
           )}
 
           {/* ─── BREADCRUMB ─── */}
-          <div className="flex items-center gap-2 mb-4">
+          <FadeUp delay={0.1} className="flex items-center gap-2 mb-4">
             <svg className="w-4 h-4 text-[#E5D9C4]" fill="currentColor" viewBox="0 0 20 20">
               <path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z" />
             </svg>
@@ -98,15 +99,20 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
               <span className="mx-2">/</span>
               <Link href="/projects" className="hover:text-white transition-colors">Interior</Link>
             </p>
-          </div>
+          </FadeUp>
 
           {/* ─── TITLE ─── */}
-          <h1 className="font-ivymode text-[3rem] sm:text-[4rem] md:text-[5rem] lg:text-[5.5rem] text-[#E5D9C4] leading-[1] font-normal mb-10 sm:mb-14">
+          <RevealText 
+            as="h1"
+            type="words"
+            delay={0.2}
+            className="font-ivymode text-[3rem] sm:text-[4rem] md:text-[5rem] lg:text-[5.5rem] text-[#E5D9C4] leading-[1] font-normal mb-10 sm:mb-14"
+          >
             {project.title}
-          </h1>
+          </RevealText>
 
           {/* ─── 3-COLUMN GRID ─── */}
-          <div className="grid grid-cols-1 md:grid-cols-[1fr_1.5fr_1.5fr] gap-10 md:gap-8 lg:gap-16">
+          <FadeUp delay={0.4} className="grid grid-cols-1 md:grid-cols-[1fr_1.5fr_1.5fr] gap-10 md:gap-8 lg:gap-16">
             
             {/* LEFT WRAPPER (Meta & Desc) */}
             <div className="md:col-span-2 grid grid-cols-1 md:grid-cols-[1fr_1.5fr] border-t border-[#E5D9C4]/40 pt-8">
@@ -115,15 +121,15 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
               <div className="flex flex-col border-b md:border-b-0 border-[#E5D9C4]/20 md:border-r md:border-[#E5D9C4]/20 pr-0 md:pr-6 pb-6 md:pb-0 mb-6 md:mb-0 gap-8">
                 <div className="flex flex-col">
                   <span className="font-ivymode text-[1.75rem] text-[#E5D9C4] mb-1">Client</span>
-                  <span className="font-ivymode text-sm md:text-base text-white tracking-wider uppercase">{project.title}</span>
+                  <span className="font-ivymode text-sm md:text-base text-white tracking-wider uppercase">{project.client || project.title}</span>
                 </div>
                 <div className="flex flex-col">
                   <span className="font-ivymode text-[1.75rem] text-[#E5D9C4] mb-1">Size</span>
-                  <span className="font-ivymode text-sm md:text-base text-white tracking-wider">140 Sqm</span>
+                  <span className="font-ivymode text-sm md:text-base text-white tracking-wider">{project.size || "N/A"}</span>
                 </div>
                 <div className="flex flex-col">
                   <span className="font-ivymode text-[1.75rem] text-[#E5D9C4] mb-1">Location</span>
-                  <span className="font-ivymode text-sm md:text-base text-white tracking-wider uppercase">DIFC</span>
+                  <span className="font-ivymode text-sm md:text-base text-white tracking-wider uppercase">{project.location || "N/A"}</span>
                 </div>
               </div>
 
@@ -154,12 +160,14 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
             {/* COLUMN 3: GALLERY */}
             <ProjectGallery gallery={gallery} projectTitle={project.title} />
 
-          </div>
+          </FadeUp>
         </div>
       </div>
 
       {/* ─── REACH OUT & FOOTER ─── */}
-      <ReachOutSection data={reachOut} />
+      <div className="w-full bg-white">
+        <ReachOutSection data={reachOut} />
+      </div>
       <Footer />
     </div>
   );

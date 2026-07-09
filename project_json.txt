@@ -1,0 +1,225 @@
+{
+  "id": 2981,
+  "date": "2026-06-25T09:28:02",
+  "date_gmt": "2026-06-25T09:28:02",
+  "guid": {
+    "rendered": "https://samaproductionme.com/?post_type=project&#038;p=2981"
+  },
+  "modified": "2026-07-08T13:28:32",
+  "modified_gmt": "2026-07-08T13:28:32",
+  "slug": "hsbc-menat-future-forum",
+  "status": "publish",
+  "type": "project",
+  "link": "https://samaproductionme.com/projects/hsbc-menat-future-forum/",
+  "title": {
+    "rendered": "HSBC MENAT Future Forum"
+  },
+  "content": {
+    "rendered": "<p>A bold outdoor event setup for HSBC, defined by striking geometric forms and a strong brand-led color palette.</p>\n<p>Modular structures and elevated staging elements create clear focal points and guide visitor engagement. Clean execution and impactful detailing deliver a confident, high-visibility presence within the urban setting.</p>\n",
+    "protected": false
+  },
+  "featured_media": 2982,
+  "template": "",
+  "project_category": [
+    13
+  ],
+  "class_list": [
+    "post-2981",
+    "project",
+    "type-project",
+    "status-publish",
+    "has-post-thumbnail",
+    "hentry",
+    "project_category-events"
+  ],
+  "acf": [],
+  "yoast_head": "<!-- This site is optimized with the Yoast SEO plugin v27.8 - https://yoast.com/product/yoast-seo-wordpress/ -->\n<title>HSBC MENAT Future Forum - SAMA - Production</title>\n<meta name=\"robots\" content=\"index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1\" />\n<link rel=\"canonical\" href=\"https://samaproductionme.com/projects/hsbc-menat-future-forum/\" />\n<meta property=\"og:locale\" content=\"en_US\" />\n<meta property=\"og:type\" content=\"article\" />\n<meta property=\"og:title\" content=\"HSBC MENAT Future Forum - SAMA - Production\" />\n<meta property=\"og:description\" content=\"A bold outdoor event setup for HSBC, defined by striking geometric forms and a strong brand-led color palette. Modular structures and elevated staging elements create clear focal points and guide visitor engagement. Clean execution and impactful detailing deliver a confident, high-visibility presence within the urban setting.\" />\n<meta property=\"og:url\" content=\"https://samaproductionme.com/projects/hsbc-menat-future-forum/\" />\n<meta property=\"og:site_name\" content=\"SAMA - Production\" />\n<meta property=\"article:modified_time\" content=\"2026-07-08T13:28:32+00:00\" />\n<meta property=\"og:image\" content=\"https://samaproductionme.com/wp-content/uploads/2026/06/Frame-146-3-1.png\" />\n\t<meta property=\"og:image:width\" content=\"1700\" />\n\t<meta property=\"og:image:height\" content=\"509\" />\n\t<meta property=\"og:image:type\" content=\"image/png\" />\n<meta name=\"twitter:card\" content=\"summary_large_image\" />\n<meta name=\"twitter:label1\" content=\"Est. reading time\" />\n\t<meta name=\"twitter:data1\" content=\"1 minute\" />\n<script type=\"application/ld+json\" class=\"yoast-schema-graph\">{\"@context\":\"https:\\/\\/schema.org\",\"@graph\":[{\"@type\":\"WebPage\",\"@id\":\"https:\\/\\/samaproductionme.com\\/projects\\/hsbc-menat-future-forum\\/\",\"url\":\"https:\\/\\/samaproductionme.com\\/projects\\/hsbc-menat-future-forum\\/\",\"name\":\"HSBC MENAT Future Forum - SAMA - Production\",\"isPartOf\":{\"@id\":\"https:\\/\\/samaproductionme.com\\/#website\"},\"primaryImageOfPage\":{\"@id\":\"https:\\/\\/samaproductionme.com\\/projects\\/hsbc-menat-future-forum\\/#primaryimage\"},\"image\":{\"@id\":\"https:\\/\\/samaproductionme.com\\/projects\\/hsbc-menat-future-forum\\/#primaryimage\"},\"thumbnailUrl\":\"https:\\/\\/samaproductionme.com\\/wp-content\\/uploads\\/2026\\/06\\/Frame-146-3-1.png\",\"datePublished\":\"2026-06-25T09:28:02+00:00\",\"dateModified\":\"2026-07-08T13:28:32+00:00\",\"breadcrumb\":{\"@id\":\"https:\\/\\/samaproductionme.com\\/projects\\/hsbc-menat-future-forum\\/#breadcrumb\"},\"inLanguage\":\"en-US\",\"potentialAction\":[{\"@type\":\"ReadAction\",\"target\":[\"https:\\/\\/samaproductionme.com\\/projects\\/hsbc-menat-future-forum\\/\"]}]},{\"@type\":\"ImageObject\",\"inLanguage\":\"en-US\",\"@id\":\"https:\\/\\/samaproductionme.com\\/projects\\/hsbc-menat-future-forum\\/#primaryimage\",\"url\":\"https:\\/\\/samaproductionme.com\\/wp-content\\/uploads\\/2026\\/06\\/Frame-146-3-1.png\",\"contentUrl\":\"https:\\/\\/samaproductionme.com\\/wp-content\\/uploads\\/2026\\/06\\/Frame-146-3-1.png\",\"width\":1700,\"height\":509},{\"@type\":\"BreadcrumbList\",\"@id\":\"https:\\/\\/samaproductionme.com\\/projects\\/hsbc-menat-future-forum\\/#breadcrumb\",\"itemListElement\":[{\"@type\":\"ListItem\",\"position\":1,\"name\":\"Home\",\"item\":\"https:\\/\\/samaproductionme.com\\/\"},{\"@type\":\"ListItem\",\"position\":2,\"name\":\"Projects\",\"item\":\"https:\\/\\/samaproductionme.com\\/projects\\/\"},{\"@type\":\"ListItem\",\"position\":3,\"name\":\"HSBC MENAT Future Forum\"}]},{\"@type\":\"WebSite\",\"@id\":\"https:\\/\\/samaproductionme.com\\/#website\",\"url\":\"https:\\/\\/samaproductionme.com\\/\",\"name\":\"SAMA - Production\",\"description\":\"\",\"publisher\":{\"@id\":\"https:\\/\\/samaproductionme.com\\/#organization\"},\"potentialAction\":[{\"@type\":\"SearchAction\",\"target\":{\"@type\":\"EntryPoint\",\"urlTemplate\":\"https:\\/\\/samaproductionme.com\\/?s={search_term_string}\"},\"query-input\":{\"@type\":\"PropertyValueSpecification\",\"valueRequired\":true,\"valueName\":\"search_term_string\"}}],\"inLanguage\":\"en-US\"},{\"@type\":\"Organization\",\"@id\":\"https:\\/\\/samaproductionme.com\\/#organization\",\"name\":\"SAMA - Production\",\"url\":\"https:\\/\\/samaproductionme.com\\/\",\"logo\":{\"@type\":\"ImageObject\",\"inLanguage\":\"en-US\",\"@id\":\"https:\\/\\/samaproductionme.com\\/#\\/schema\\/logo\\/image\\/\",\"url\":\"https:\\/\\/samaproductionme.com\\/wp-content\\/uploads\\/2026\\/02\\/sama-logo.png\",\"contentUrl\":\"https:\\/\\/samaproductionme.com\\/wp-content\\/uploads\\/2026\\/02\\/sama-logo.png\",\"width\":107,\"height\":50,\"caption\":\"SAMA - Production\"},\"image\":{\"@id\":\"https:\\/\\/samaproductionme.com\\/#\\/schema\\/logo\\/image\\/\"}}]}</script>\n<!-- / Yoast SEO plugin. -->",
+  "yoast_head_json": {
+    "title": "HSBC MENAT Future Forum - SAMA - Production",
+    "robots": {
+      "index": "index",
+      "follow": "follow",
+      "max-snippet": "max-snippet:-1",
+      "max-image-preview": "max-image-preview:large",
+      "max-video-preview": "max-video-preview:-1"
+    },
+    "canonical": "https://samaproductionme.com/projects/hsbc-menat-future-forum/",
+    "og_locale": "en_US",
+    "og_type": "article",
+    "og_title": "HSBC MENAT Future Forum - SAMA - Production",
+    "og_description": "A bold outdoor event setup for HSBC, defined by striking geometric forms and a strong brand-led color palette. Modular structures and elevated staging elements create clear focal points and guide visitor engagement. Clean execution and impactful detailing deliver a confident, high-visibility presence within the urban setting.",
+    "og_url": "https://samaproductionme.com/projects/hsbc-menat-future-forum/",
+    "og_site_name": "SAMA - Production",
+    "article_modified_time": "2026-07-08T13:28:32+00:00",
+    "og_image": [
+      {
+        "width": 1700,
+        "height": 509,
+        "url": "https://samaproductionme.com/wp-content/uploads/2026/06/Frame-146-3-1.png",
+        "type": "image/png"
+      }
+    ],
+    "twitter_card": "summary_large_image",
+    "twitter_misc": {
+      "Est. reading time": "1 minute"
+    },
+    "schema": {
+      "@context": "https://schema.org",
+      "@graph": [
+        {
+          "@type": "WebPage",
+          "@id": "https://samaproductionme.com/projects/hsbc-menat-future-forum/",
+          "url": "https://samaproductionme.com/projects/hsbc-menat-future-forum/",
+          "name": "HSBC MENAT Future Forum - SAMA - Production",
+          "isPartOf": {
+            "@id": "https://samaproductionme.com/#website"
+          },
+          "primaryImageOfPage": {
+            "@id": "https://samaproductionme.com/projects/hsbc-menat-future-forum/#primaryimage"
+          },
+          "image": {
+            "@id": "https://samaproductionme.com/projects/hsbc-menat-future-forum/#primaryimage"
+          },
+          "thumbnailUrl": "https://samaproductionme.com/wp-content/uploads/2026/06/Frame-146-3-1.png",
+          "datePublished": "2026-06-25T09:28:02+00:00",
+          "dateModified": "2026-07-08T13:28:32+00:00",
+          "breadcrumb": {
+            "@id": "https://samaproductionme.com/projects/hsbc-menat-future-forum/#breadcrumb"
+          },
+          "inLanguage": "en-US",
+          "potentialAction": [
+            {
+              "@type": "ReadAction",
+              "target": [
+                "https://samaproductionme.com/projects/hsbc-menat-future-forum/"
+              ]
+            }
+          ]
+        },
+        {
+          "@type": "ImageObject",
+          "inLanguage": "en-US",
+          "@id": "https://samaproductionme.com/projects/hsbc-menat-future-forum/#primaryimage",
+          "url": "https://samaproductionme.com/wp-content/uploads/2026/06/Frame-146-3-1.png",
+          "contentUrl": "https://samaproductionme.com/wp-content/uploads/2026/06/Frame-146-3-1.png",
+          "width": 1700,
+          "height": 509
+        },
+        {
+          "@type": "BreadcrumbList",
+          "@id": "https://samaproductionme.com/projects/hsbc-menat-future-forum/#breadcrumb",
+          "itemListElement": [
+            {
+              "@type": "ListItem",
+              "position": 1,
+              "name": "Home",
+              "item": "https://samaproductionme.com/"
+            },
+            {
+              "@type": "ListItem",
+              "position": 2,
+              "name": "Projects",
+              "item": "https://samaproductionme.com/projects/"
+            },
+            {
+              "@type": "ListItem",
+              "position": 3,
+              "name": "HSBC MENAT Future Forum"
+            }
+          ]
+        },
+        {
+          "@type": "WebSite",
+          "@id": "https://samaproductionme.com/#website",
+          "url": "https://samaproductionme.com/",
+          "name": "SAMA - Production",
+          "description": "",
+          "publisher": {
+            "@id": "https://samaproductionme.com/#organization"
+          },
+          "potentialAction": [
+            {
+              "@type": "SearchAction",
+              "target": {
+                "@type": "EntryPoint",
+                "urlTemplate": "https://samaproductionme.com/?s={search_term_string}"
+              },
+              "query-input": {
+                "@type": "PropertyValueSpecification",
+                "valueRequired": true,
+                "valueName": "search_term_string"
+              }
+            }
+          ],
+          "inLanguage": "en-US"
+        },
+        {
+          "@type": "Organization",
+          "@id": "https://samaproductionme.com/#organization",
+          "name": "SAMA - Production",
+          "url": "https://samaproductionme.com/",
+          "logo": {
+            "@type": "ImageObject",
+            "inLanguage": "en-US",
+            "@id": "https://samaproductionme.com/#/schema/logo/image/",
+            "url": "https://samaproductionme.com/wp-content/uploads/2026/02/sama-logo.png",
+            "contentUrl": "https://samaproductionme.com/wp-content/uploads/2026/02/sama-logo.png",
+            "width": 107,
+            "height": 50,
+            "caption": "SAMA - Production"
+          },
+          "image": {
+            "@id": "https://samaproductionme.com/#/schema/logo/image/"
+          }
+        }
+      ]
+    }
+  },
+  "_links": {
+    "self": [
+      {
+        "href": "https://samaproductionme.com/wp-json/wp/v2/project/2981",
+        "targetHints": {
+          "allow": [
+            "GET"
+          ]
+        }
+      }
+    ],
+    "collection": [
+      {
+        "href": "https://samaproductionme.com/wp-json/wp/v2/project"
+      }
+    ],
+    "about": [
+      {
+        "href": "https://samaproductionme.com/wp-json/wp/v2/types/project"
+      }
+    ],
+    "wp:featuredmedia": [
+      {
+        "embeddable": true,
+        "href": "https://samaproductionme.com/wp-json/wp/v2/media/2982"
+      }
+    ],
+    "wp:attachment": [
+      {
+        "href": "https://samaproductionme.com/wp-json/wp/v2/media?parent=2981"
+      }
+    ],
+    "wp:term": [
+      {
+        "taxonomy": "project_category",
+        "embeddable": true,
+        "href": "https://samaproductionme.com/wp-json/wp/v2/project_category?post=2981"
+      }
+    ],
+    "curies": [
+      {
+        "name": "wp",
+        "href": "https://api.w.org/{rel}",
+        "templated": true
+      }
+    ]
+  }
+}
