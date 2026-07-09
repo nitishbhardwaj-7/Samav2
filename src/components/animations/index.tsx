@@ -90,7 +90,7 @@ export const RevealImage = ({
 };
 
 interface FadeUpProps {
-  children: React.ReactNode;
+  children?: React.ReactNode;
   y?: number;
   duration?: number;
   delay?: number;
