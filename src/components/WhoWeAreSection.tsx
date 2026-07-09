@@ -1,3 +1,5 @@
+import { RevealText, StaggerReveal } from "./animations";
+
 interface Pillar {
   title: string;
   description: string;
@@ -17,13 +19,13 @@ export default function WhoWeAreSection({ data }: WhoWeAreSectionProps) {
 
         {/* Section Title */}
         <div className="text-center">
-          <h2 className="font-ivymode font-normal text-3xl sm:text-4xl md:text-[3.25rem] text-[#F2EAE0] tracking-wide leading-tight select-none">
+          <RevealText delay={0.2} as="h2" className="font-ivymode font-normal text-3xl sm:text-4xl md:text-[3.25rem] text-[#F2EAE0] tracking-wide leading-tight select-none">
             {data.title}
-          </h2>
+          </RevealText>
         </div>
 
         {/* Pillars Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8 lg:gap-10 w-full items-stretch">
+        <StaggerReveal y={50} stagger={0.15} className="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8 lg:gap-10 w-full items-stretch">
           {data.pillars.map((pillar, index) => {
             // Safe ampersand replacement for display compatibility
             const displayTitle = pillar.title.replace(/&amp;/g, "&");
@@ -45,7 +47,7 @@ export default function WhoWeAreSection({ data }: WhoWeAreSectionProps) {
               </div>
             );
           })}
-        </div>
+        </StaggerReveal>
 
       </div>
     </section>

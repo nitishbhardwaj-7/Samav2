@@ -2,6 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import ReachOutSection from "../../components/ReachOutSection";
 import Footer from "../../components/Footer";
+import { RevealText, FadeUp, StaggerReveal } from "../../components/animations";
 import { getPartnersPageData, getHomepageData } from "../../lib/wordpress";
 
 export const revalidate = 3600;
@@ -29,17 +30,17 @@ export default async function PartnersPage() {
       <div className="w-full max-w-[92%] sm:max-w-[88%] md:max-w-[85%] mx-auto flex flex-col items-center text-center pb-10">
         
         {/* Title */}
-        <h1 className="font-ivymode font-normal text-5xl sm:text-6xl md:text-7xl lg:text-8xl text-white leading-tight mb-6 tracking-wide select-none">
+        <RevealText as="h1" delay={0.2} type="words" className="font-ivymode font-normal text-5xl sm:text-6xl md:text-7xl lg:text-8xl text-white leading-tight mb-6 tracking-wide select-none">
           {title}
-        </h1>
+        </RevealText>
         
         {/* Description */}
-        <p className="font-ivymode text-sm sm:text-base md:text-lg text-white/90 max-w-3xl leading-relaxed tracking-wide mb-8">
+        <FadeUp as="p" delay={0.4} className="font-ivymode text-sm sm:text-base md:text-lg text-white/90 max-w-3xl leading-relaxed tracking-wide mb-8">
           {description}
-        </p>
+        </FadeUp>
         
         {/* Breadcrumb with Home Icon */}
-        <div className="select-none flex items-center justify-center gap-2 font-ivymode text-xs sm:text-sm text-[#DAC6AE] tracking-widest uppercase mb-10">
+        <FadeUp delay={0.6} className="select-none flex items-center justify-center gap-2 font-ivymode text-xs sm:text-sm text-[#DAC6AE] tracking-widest uppercase mb-10">
           <Link href="/" className="hover:text-white transition-colors duration-300 flex items-center gap-1.5 no-underline">
             <svg 
               width="14" 
@@ -59,16 +60,16 @@ export default async function PartnersPage() {
           </Link>
           <span className="text-white/40">/</span>
           <span className="text-[#DAC6AE] underline underline-offset-4 decoration-[#DAC6AE]/30">Partners</span>
-        </div>
+        </FadeUp>
 
         {/* Thin Divider Line */}
-        <div className="w-full h-[1px] bg-white/20" />
+        <FadeUp delay={0.8} className="w-full h-[1px] bg-white/20" />
       </div>
 
       {/* Logos Grid Section */}
       <section className="w-full pb-20 px-4 sm:px-8 md:px-12 lg:px-16 flex-grow">
         <div className="w-full max-w-[92%] sm:max-w-[88%] md:max-w-[85%] mx-auto">
-          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3 sm:gap-4 md:gap-5">
+          <StaggerReveal y={40} stagger={0.06} className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3 sm:gap-4 md:gap-5">
             {logos.map((logo, index) => (
               <div 
                 key={index}
@@ -85,7 +86,7 @@ export default async function PartnersPage() {
                 </div>
               </div>
             ))}
-          </div>
+          </StaggerReveal>
         </div>
       </section>
       </div>

@@ -1,4 +1,5 @@
 import Image from "next/image";
+import { RevealText, StaggerReveal } from "./animations";
 
 interface CertItem {
   image: string;
@@ -25,13 +26,13 @@ export default function CertificationsSection({ data }: CertificationsSectionPro
         
         {/* Section Title */}
         <div className="text-center">
-          <h2 className="font-ivymode font-normal text-3xl sm:text-4xl md:text-[3.25rem] text-[#F2EAE0] tracking-wide leading-tight select-none">
+          <RevealText delay={0.2} as="h2" className="font-ivymode font-normal text-3xl sm:text-4xl md:text-[3.25rem] text-[#F2EAE0] tracking-wide leading-tight select-none">
             {title}
-          </h2>
+          </RevealText>
         </div>
 
         {/* Certifications Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-4 lg:gap-6 w-full items-stretch">
+        <StaggerReveal y={60} stagger={0.1} className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-4 lg:gap-6 w-full items-stretch">
           {items.map((item, index) => (
             <div key={index} className="flex flex-col items-center justify-start gap-6 group">
               {/* Certificate Image Frame - Increased max-width to 420px */}
@@ -51,7 +52,7 @@ export default function CertificationsSection({ data }: CertificationsSectionPro
               </h3>
             </div>
           ))}
-        </div>
+        </StaggerReveal>
 
       </div>
     </section>

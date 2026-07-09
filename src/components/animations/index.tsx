@@ -43,7 +43,7 @@ export const RevealText = ({
   useEffect(() => {
     let ctx = gsap.context(() => {
       if (elRef.current) {
-        createTextReveal(elRef.current, { type, duration, stagger, delay, ease, y });
+        createTextReveal(elRef.current, { type, duration, stagger, delay, ease, y, scrollTrigger: {} });
       }
     }, elRef);
     return () => ctx.revert();
@@ -76,7 +76,7 @@ export const RevealImage = ({
   useEffect(() => {
     let ctx = gsap.context(() => {
       if (elRef.current) {
-        createImageReveal(elRef.current, { direction, duration, delay, ease, imageScale });
+        createImageReveal(elRef.current, { direction, duration, delay, ease, imageScale, scrollTrigger: {} });
       }
     }, elRef);
     return () => ctx.revert();
@@ -115,7 +115,7 @@ export const FadeUp = ({
   useEffect(() => {
     let ctx = gsap.context(() => {
       if (elRef.current) {
-        createFadeUp(elRef.current, { y, duration, delay, stagger, ease });
+        createFadeUp(elRef.current, { y, duration, delay, stagger, ease, scrollTrigger: {} });
       }
     }, elRef);
     return () => ctx.revert();
@@ -179,7 +179,7 @@ export const StaggerReveal = ({
       if (elRef.current) {
         const elements = Array.from(elRef.current.children) as HTMLElement[];
         if (elements.length > 0) {
-          createStaggerReveal(elements, { y, duration, stagger, ease });
+          createStaggerReveal(elements, { y, duration, stagger, ease, scrollTrigger: {} });
         }
       }
     }, elRef);

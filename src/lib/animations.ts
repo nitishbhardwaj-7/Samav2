@@ -118,14 +118,20 @@ export function createTextReveal(
       : undefined,
   });
 
-  tl.from(spans, {
-    yPercent: y,
-    opacity: 0,
-    duration,
-    stagger,
-    delay,
-    ease,
-  });
+  tl.fromTo(spans,
+    {
+      yPercent: y,
+      opacity: 0,
+    },
+    {
+      yPercent: 0,
+      opacity: 1,
+      duration,
+      stagger,
+      delay,
+      ease,
+    }
+  );
 
   return tl;
 }
@@ -253,22 +259,29 @@ export function createFadeUp(
     scrollTrigger,
   } = options;
 
-  return gsap.from(element, {
-    y,
-    opacity: 0,
-    duration,
-    delay,
-    stagger,
-    ease,
-    scrollTrigger: scrollTrigger
-      ? {
-          trigger: Array.isArray(element) ? element[0] : element,
-          start: "top 85%",
-          toggleActions: "play none none none",
-          ...scrollTrigger,
-        }
-      : undefined,
-  });
+  return gsap.fromTo(
+    element,
+    {
+      y,
+      opacity: 0,
+    },
+    {
+      y: 0,
+      opacity: 1,
+      duration,
+      delay,
+      stagger,
+      ease,
+      scrollTrigger: scrollTrigger
+        ? {
+            trigger: Array.isArray(element) ? element[0] : element,
+            start: "top 85%",
+            toggleActions: "play none none none",
+            ...scrollTrigger,
+          }
+        : undefined,
+    }
+  );
 }
 
 /* ─── Stagger Reveal for Cards / Grid Items ──────────────────── */
@@ -291,21 +304,28 @@ export function createStaggerReveal(
     scrollTrigger,
   } = options;
 
-  return gsap.from(elements, {
-    y,
-    opacity: 0,
-    duration,
-    stagger,
-    ease,
-    scrollTrigger: scrollTrigger
-      ? {
-          trigger: elements[0]?.parentElement || elements[0],
-          start: "top 80%",
-          toggleActions: "play none none none",
-          ...scrollTrigger,
-        }
-      : undefined,
-  });
+  return gsap.fromTo(
+    elements,
+    {
+      y,
+      opacity: 0,
+    },
+    {
+      y: 0,
+      opacity: 1,
+      duration,
+      stagger,
+      ease,
+      scrollTrigger: scrollTrigger
+        ? {
+            trigger: elements[0]?.parentElement || elements[0],
+            start: "top 80%",
+            toggleActions: "play none none none",
+            ...scrollTrigger,
+          }
+        : undefined,
+    }
+  );
 }
 
 /* ─── Line Draw Animation ────────────────────────────────────── */
