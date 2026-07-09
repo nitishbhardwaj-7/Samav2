@@ -142,7 +142,7 @@ export default function ReachOutSection({ data }: ReachOutSectionProps) {
       <div className="w-full max-w-[92%] sm:max-w-[88%] md:max-w-[75%] mx-auto flex flex-col md:flex-row items-center md:items-start justify-center gap-12 md:gap-20 z-10">
         
         {/* Left Column: Image */}
-        <div className="hidden md:flex w-full md:w-[35%] justify-center">
+        <div className="w-full md:w-[35%] flex justify-center">
           <div ref={imageWrapRef} className="relative w-full max-w-[280px] aspect-[1/2] overflow-hidden rounded-2xl bg-[#2b2a22] isolate transform translate-z-0">
             <div ref={imageInnerRef} className="absolute inset-0">
               <Image
