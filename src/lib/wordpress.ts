@@ -475,6 +475,7 @@ export interface InteriorProject {
   client?: string;
   size?: string;
   location?: string;
+  downloadUrl?: string;
 }
 
 export interface InteriorPageData {
@@ -625,9 +626,10 @@ export async function getInteriorProjects(): Promise<InteriorProject[]> {
         content: p.content?.rendered || "",
         featuredImage,
         gallery,
-        client: p.client || p.meta?.client || p.acf?.client || "",
-        size: p.size || p.meta?.size || p.acf?.size || "",
-        location: p.location || p.meta?.location || p.acf?.location || "",
+        client: p.meta?.project_date || p.client || p.acf?.client || "",
+        size: p.meta?.project_size || p.size || p.acf?.size || "",
+        location: p.meta?.project_location || p.location || p.acf?.location || "",
+        downloadUrl: p.meta?.project_download_url || p.downloadUrl || p.acf?.downloadUrl || "",
       });
     }
 
@@ -677,9 +679,10 @@ export async function getProjectBySlug(slug: string): Promise<InteriorProject | 
       content: p.content?.rendered || "",
       featuredImage,
       gallery,
-      client: p.client || p.meta?.client || p.acf?.client || "",
-      size: p.size || p.meta?.size || p.acf?.size || "",
-      location: p.location || p.meta?.location || p.acf?.location || "",
+      client: p.project_date || p.meta?.project_date || p.client || p.acf?.client || "",
+      size: p.project_size || p.meta?.project_size || p.size || p.acf?.size || "",
+      location: p.project_location || p.meta?.project_location || p.location || p.acf?.location || "",
+      downloadUrl: p.project_download_url || p.meta?.project_download_url || p.downloadUrl || p.acf?.downloadUrl || "",
     };
   } catch (err) {
     console.error(`Error fetching project by slug ${slug}:`, err);
@@ -726,9 +729,10 @@ export async function getExhibitionProjects(): Promise<InteriorProject[]> {
         content: p.content?.rendered || "",
         featuredImage,
         gallery,
-        client: p.client || p.meta?.client || p.acf?.client || "",
-        size: p.size || p.meta?.size || p.acf?.size || "",
-        location: p.location || p.meta?.location || p.acf?.location || "",
+        client: p.meta?.project_date || p.client || p.acf?.client || "",
+        size: p.meta?.project_size || p.size || p.acf?.size || "",
+        location: p.meta?.project_location || p.location || p.acf?.location || "",
+        downloadUrl: p.meta?.project_download_url || p.downloadUrl || p.acf?.downloadUrl || "",
       });
     }
 
@@ -778,9 +782,10 @@ export async function getEventsProjects(): Promise<InteriorProject[]> {
         content: p.content?.rendered || "",
         featuredImage,
         gallery,
-        client: p.client || p.meta?.client || p.acf?.client || "",
-        size: p.size || p.meta?.size || p.acf?.size || "",
-        location: p.location || p.meta?.location || p.acf?.location || "",
+        client: p.meta?.project_date || p.client || p.acf?.client || "",
+        size: p.meta?.project_size || p.size || p.acf?.size || "",
+        location: p.meta?.project_location || p.location || p.acf?.location || "",
+        downloadUrl: p.meta?.project_download_url || p.downloadUrl || p.acf?.downloadUrl || "",
       });
     }
 
@@ -830,9 +835,10 @@ export async function getMallActivationProjects(): Promise<InteriorProject[]> {
         content: p.content?.rendered || "",
         featuredImage,
         gallery,
-        client: p.client || p.meta?.client || p.acf?.client || "",
-        size: p.size || p.meta?.size || p.acf?.size || "",
-        location: p.location || p.meta?.location || p.acf?.location || "",
+        client: p.meta?.project_date || p.client || p.acf?.client || "",
+        size: p.meta?.project_size || p.size || p.acf?.size || "",
+        location: p.meta?.project_location || p.location || p.acf?.location || "",
+        downloadUrl: p.meta?.project_download_url || p.downloadUrl || p.acf?.downloadUrl || "",
       });
     }
 
