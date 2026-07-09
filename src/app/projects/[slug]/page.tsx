@@ -90,7 +90,7 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
           )}
 
           {/* ─── BREADCRUMB ─── */}
-          <FadeUp delay={0.1} className="flex items-center gap-2 mb-4">
+          <FadeUp delay={1.4} className="flex items-center gap-2 mb-4">
             <svg className="w-4 h-4 text-[#E5D9C4]" fill="currentColor" viewBox="0 0 20 20">
               <path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z" />
             </svg>
@@ -105,14 +105,14 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
           <RevealText 
             as="h1"
             type="words"
-            delay={0.2}
+            delay={1.5}
             className="font-ivymode text-[3rem] sm:text-[4rem] md:text-[5rem] lg:text-[5.5rem] text-[#E5D9C4] leading-[1] font-normal mb-10 sm:mb-14"
           >
             {project.title}
           </RevealText>
 
           {/* ─── 3-COLUMN GRID ─── */}
-          <FadeUp delay={0.4} className="grid grid-cols-1 md:grid-cols-[1fr_1.5fr_1.5fr] gap-10 md:gap-8 lg:gap-16">
+          <FadeUp delay={1.6} className="grid grid-cols-1 md:grid-cols-[1fr_1.5fr_1.5fr] gap-10 md:gap-8 lg:gap-16">
             
             {/* LEFT WRAPPER (Meta & Desc) */}
             <div className="md:col-span-2 grid grid-cols-1 md:grid-cols-[1fr_1.5fr] border-t border-[#E5D9C4]/40 pt-8">

@@ -247,8 +247,6 @@ export default function ProjectsSection({ data }: ProjectsSectionProps) {
                 >
                   <TransitionLink 
                     href={item.link} 
-                    sharedImageSrc={item.image}
-                    sharedImageBorderRadius={typeof window !== "undefined" && window.innerWidth >= 768 ? "0px" : "16px"}
                     className="block w-full h-full relative outline-none focus:outline-none cursor-pointer"
                   >
                     <div data-image-inner className="absolute inset-0">

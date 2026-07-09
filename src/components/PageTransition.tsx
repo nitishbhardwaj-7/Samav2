@@ -36,19 +36,10 @@ export default function PageTransition({ children }: { children: ReactNode }) {
     setTimeout(() => {
       if (!cloneRef.current || !overlayRef.current) return;
 
-      const tl = gsap.timeline({
-        onComplete: () => {
-          router.push(href, { scroll: true });
-          // Let the new page load and its entrance animations play
-          setTimeout(() => {
-             setTransitionData(null);
-             document.body.style.overflow = "";
-          }, 1000);
-        }
-      });
+      const tl = gsap.timeline();
 
-      // Hide other elements with the luxury project page background color
-      tl.to(overlayRef.current, { opacity: 1, duration: 0.5, ease: "power2.inOut" }, 0.3);
+      // 0s: Overlay fades in (hides old page, matches new page background)
+      tl.to(overlayRef.current, { opacity: 1, duration: 0.8, ease: "power2.inOut" }, 0);
 
       const isMobile = window.innerWidth < 640;
       const isMd = window.innerWidth >= 768;
@@ -64,23 +55,33 @@ export default function PageTransition({ children }: { children: ReactNode }) {
       const targetLeft = (window.innerWidth - targetWidth) / 2;
       const targetTop = isMobile ? 96 : 128; // matches pt-24 / pt-32
 
-      // Slight scale-up bump before settling
-      tl.to(cloneRef.current, {
-        scale: 1.08,
-        duration: 0.5,
-        ease: "power2.out",
-      }, 0.1);
-
+      // 0.2s: Image expands seamlessly
       tl.to(cloneRef.current, {
         top: targetTop,
         left: targetLeft,
         width: targetWidth,
         height: targetHeight,
-        scale: 1,
         borderRadius: isMobile ? "16px" : "24px",
         duration: 1.2,
         ease: "expo.inOut",
-      }, 0.4);
+      }, 0.2);
+
+      // 1.0s: Secretly change route
+      tl.add(() => {
+        router.push(href, { scroll: true });
+      }, 1.0);
+
+      // 1.4s: Fade out overlay to reveal new page background
+      tl.to(overlayRef.current, { opacity: 0, duration: 0.8, ease: "power2.inOut" }, 1.4);
+
+      // 1.8s: Crossfade clone out to reveal the actual mounted hero image
+      tl.to(cloneRef.current, { opacity: 0, duration: 0.4, ease: "power2.inOut" }, 1.8);
+
+      // 2.2s: Cleanup
+      tl.add(() => {
+        setTransitionData(null);
+        document.body.style.overflow = "";
+      }, 2.2);
 
     }, 10);
   };
