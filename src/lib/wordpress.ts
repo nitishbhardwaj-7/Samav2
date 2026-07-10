@@ -253,6 +253,13 @@ export async function getHomepageData(): Promise<HomepageData> {
         .trim();
     }
 
+    // 1b. Parse Hero Background Image (from Elementor CSS background)
+    // Homepage uses element 89447ba for the Hero background image
+    const heroBgImage = await fetchElementorBgImage("https://samaproductionme.com/", ["89447ba"], 7);
+    if (heroBgImage) {
+      data.hero.backgroundImage = heroBgImage;
+    }
+
     // 2b. Parse About Section Image (from Elementor CSS background)
     // Homepage uses element c4b6a00 for the About section background image
     const aboutImage = await fetchElementorBgImage("https://samaproductionme.com/", ["c4b6a00"], 7);
@@ -504,6 +511,13 @@ export async function getAboutPageData(): Promise<AboutPageData> {
         .trim();
     }
 
+    // 1b. Extract Hero Background Image (from Elementor CSS background)
+    // About-us page uses element eb24edb for the Hero background image
+    const heroBgImage = await fetchElementorBgImage("https://samaproductionme.com/about-us/", ["eb24edb"], 1822);
+    if (heroBgImage) {
+      data.hero.backgroundImage = heroBgImage;
+    }
+
     // 3b. Extract About Section Image (from Elementor CSS background)
     // About-us page uses element a08f130 for the About section background image
     const aboutImage = await fetchElementorBgImage("https://samaproductionme.com/about-us/", ["a08f130"], 1822);
@@ -524,6 +538,12 @@ export async function getAboutPageData(): Promise<AboutPageData> {
     const designImgMatch = html.match(/class="[^"]*elementor-element-7fc50ff[^"]*"[\s\S]*?<img[^>]+src="([^"]+)"/i);
     if (designImgMatch) {
       data.designSection.image = designImgMatch[1].trim();
+    } else {
+      // Fallback: Try fetching as Elementor background image if not an inline img tag
+      const designBgImage = await fetchElementorBgImage("https://samaproductionme.com/about-us/", ["7fc50ff"], 1822);
+      if (designBgImage) {
+        data.designSection.image = designBgImage;
+      }
     }
 
     // 6. Extract Who We Are Pillars (from Elementor containers 5362fc1, f6f0b1a, 39d30e4)
