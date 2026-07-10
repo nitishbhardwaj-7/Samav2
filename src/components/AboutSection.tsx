@@ -14,7 +14,7 @@ export default function AboutSection({ data, hideKnowMore = false }: { data?: { 
   const sectionName = data?.sectionName || "about us";
   const title = data?.title || "SAMA";
   const description = data?.description || "SAMA Production is a multidisciplinary design and build studio known for crafting refined, high-impact environments across interiors, exhibitions, and brand activations. Defined by precision, material sophistication, and architectural clarity, each project is meticulously executed to embody brand identity at the highest level.";
-  const image = data?.image || "/uploads/2026/05/about_us_video.png";
+  const image = data?.image || "https://samaproductionme.com/wp-content/uploads/2026/06/Frame-139.png";
 
   const sectionRef = useRef<HTMLElement>(null);
   const labelRef = useRef<HTMLSpanElement>(null);

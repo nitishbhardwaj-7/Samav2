@@ -55,7 +55,7 @@ const FALLBACK_DATA: HomepageData = {
     sectionName: "about us",
     title: "SAMA",
     description: "SAMA Production is a multidisciplinary design and build studio known for crafting refined, high-impact environments across interiors, exhibitions, and brand activations. Defined by precision, material sophistication, and architectural clarity, each project is meticulously executed to embody brand identity at the highest level.",
-    image: "https://samaproductionme.com/wp-content/uploads/2026/05/about_us_video.png",
+    image: "https://samaproductionme.com/wp-content/uploads/2026/06/Frame-139.png",
   },
   projects: {
     title: "Projects",
@@ -101,6 +101,96 @@ export function mapWpUrl(url: string): string {
   if (url.startsWith("/wp-content")) return `https://samaproductionme.com${url}`;
   return url;
 }
+
+/**
+ * Extracts a background image from WordPress Elementor CSS.
+ * Elementor stores certain images as CSS background-image on containers,
+ * not as inline <img> tags, so they're not in the REST API HTML.
+ * We fetch the live rendered page, find the CSS file, and extract the URL.
+ *
+ * @param pageUrl - The WordPress page URL to fetch CSS links from
+ * @param elementIds - Elementor element IDs to search for (e.g. "c4b6a00")
+ */
+async function fetchElementorBgImage(pageUrl: string, elementIds: string[], postId?: number): Promise<string | null> {
+  try {
+    // 1. Try direct Elementor CSS fetch first if postId is provided
+    if (postId) {
+      const directCssUrl = `https://samaproductionme.com/wp-content/uploads/elementor/css/post-${postId}.css`;
+      try {
+        const cssRes = await fetch(directCssUrl, {
+          cache: "no-store",
+          headers: { "User-Agent": "Mozilla/5.0" },
+        });
+        if (cssRes.ok) {
+          const css = await cssRes.text();
+          for (const elId of elementIds) {
+            if (css.includes(elId)) {
+              const re = new RegExp("elementor-element-" + elId + "[^}]*background-image:\\s*url\\(([^)]+)\\)", "i");
+              const bgMatch = css.match(re);
+              if (bgMatch) {
+                const imgUrl = bgMatch[1].replace(/['"]/g, "").trim();
+                console.log(`Successfully fetched Elementor background image from direct CSS for post ${postId}:`, imgUrl);
+                return imgUrl;
+              }
+            }
+          }
+        }
+      } catch (err) {
+        console.warn(`Direct CSS fetch failed for post ${postId}, falling back to page scraping:`, err);
+      }
+    }
+
+    // 2. Fallback to HTML page scraping with cache: "no-store"
+    const pageRes = await fetch(pageUrl, {
+      cache: "no-store",
+      headers: { "User-Agent": "Mozilla/5.0" },
+    });
+    if (!pageRes.ok) return null;
+    const pageHTML = await pageRes.text();
+
+    // Find all CSS file URLs from <link> tags
+    const linkMatches = pageHTML.match(/<link[^>]+href=['"]([^'"]+\.css[^'"]*)['"'][^>]*>/gi);
+    if (!linkMatches) return null;
+
+    const cssUrls: string[] = [];
+    for (const m of linkMatches) {
+      const hrefMatch = m.match(/href=['"]([^'"]+)['"]/);
+      if (hrefMatch) cssUrls.push(hrefMatch[1]);
+    }
+
+    // Search CSS files for matching element background-image with cache: "no-store"
+    for (const cssUrl of cssUrls) {
+      try {
+        const cssRes = await fetch(cssUrl, {
+          cache: "no-store",
+          headers: { "User-Agent": "Mozilla/5.0" },
+        });
+        if (!cssRes.ok) continue;
+        const css = await cssRes.text();
+
+        for (const elId of elementIds) {
+          if (css.includes(elId)) {
+            const re = new RegExp("elementor-element-" + elId + "[^}]*background-image:\\s*url\\(([^)]+)\\)", "i");
+            const bgMatch = css.match(re);
+            if (bgMatch) {
+              const imgUrl = bgMatch[1].replace(/['"]/g, "").trim();
+              console.log(`Successfully fetched Elementor background image from scraped CSS ${cssUrl}:`, imgUrl);
+              return imgUrl;
+            }
+          }
+        }
+      } catch {
+        // Skip CSS files that fail to load
+      }
+    }
+
+    return null;
+  } catch (err) {
+    console.warn("Failed to fetch Elementor background image from CSS:", err);
+    return null;
+  }
+}
+
 
 export function decodeHtmlEntities(str: string): string {
   if (!str) return "";
@@ -161,6 +251,13 @@ export async function getHomepageData(): Promise<HomepageData> {
         .replace(/<[^>]+>/g, "")
         .replace(/\s+/g, " ")
         .trim();
+    }
+
+    // 2b. Parse About Section Image (from Elementor CSS background)
+    // Homepage uses element c4b6a00 for the About section background image
+    const aboutImage = await fetchElementorBgImage("https://samaproductionme.com/", ["c4b6a00"], 7);
+    if (aboutImage) {
+      data.about.image = aboutImage;
     }
 
     // 3. Parse Projects
@@ -316,7 +413,7 @@ const FALLBACK_ABOUT_DATA: AboutPageData = {
     sectionName: "about us",
     title: "SAMA",
     description: "SAMA Production is a multidisciplinary design and build studio known for crafting refined, high-impact environments across interiors, exhibitions, and brand activations. Defined by precision, material sophistication, and architectural clarity, each project is meticulously executed to embody brand identity at the highest level.",
-    image: "https://samaproductionme.com/wp-content/uploads/2026/05/about_us_video.png",
+    image: "https://samaproductionme.com/wp-content/uploads/2026/06/Frame-139.png",
   },
   designSection: {
     image: "https://samaproductionme.com/wp-content/uploads/2026/06/Mask-group2.png",
@@ -405,6 +502,13 @@ export async function getAboutPageData(): Promise<AboutPageData> {
         .replace(/<[^>]+>/g, "")
         .replace(/\s+/g, " ")
         .trim();
+    }
+
+    // 3b. Extract About Section Image (from Elementor CSS background)
+    // About-us page uses element a08f130 for the About section background image
+    const aboutImage = await fetchElementorBgImage("https://samaproductionme.com/about-us/", ["a08f130"], 1822);
+    if (aboutImage) {
+      data.about.image = aboutImage;
     }
 
     // 4. Extract Design Section Quote (from Elementor container 5abb09a)
