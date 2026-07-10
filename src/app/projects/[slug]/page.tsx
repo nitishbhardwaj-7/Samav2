@@ -65,6 +65,12 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
     gallery.push(project.featuredImage);
   }
 
+  const isValidField = (val?: string | null) => {
+    if (!val) return false;
+    const lower = val.trim().toLowerCase();
+    return lower !== "" && lower !== "n/a";
+  };
+
   return (
     <div className="relative w-full min-h-screen bg-[#7C8C70] font-ivymode flex flex-col">
       
@@ -119,18 +125,43 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
               
               {/* COLUMN 1: META */}
               <div className="flex flex-col border-b md:border-b-0 border-[#E5D9C4]/20 md:border-r md:border-[#E5D9C4]/20 pr-0 md:pr-6 pb-6 md:pb-0 mb-6 md:mb-0 gap-8">
-                <div className="flex flex-col">
-                  <span className="font-ivymode text-[1.75rem] text-[#E5D9C4] mb-1">Client</span>
-                  <span className="font-ivymode text-sm md:text-base text-white tracking-wider uppercase">{project.client || project.title}</span>
-                </div>
-                <div className="flex flex-col">
-                  <span className="font-ivymode text-[1.75rem] text-[#E5D9C4] mb-1">Size</span>
-                  <span className="font-ivymode text-sm md:text-base text-white tracking-wider">{project.size || "N/A"}</span>
-                </div>
-                <div className="flex flex-col">
-                  <span className="font-ivymode text-[1.75rem] text-[#E5D9C4] mb-1">Location</span>
-                  <span className="font-ivymode text-sm md:text-base text-white tracking-wider uppercase">{project.location || "N/A"}</span>
-                </div>
+                {isValidField(project.client) && (
+                  <div className="flex flex-col">
+                    <span className="font-ivymode text-[1.75rem] text-[#E5D9C4] mb-1">Client</span>
+                    <span className="font-ivymode text-sm md:text-base text-white tracking-wider uppercase">{project.client}</span>
+                  </div>
+                )}
+                
+                {!project.isEvent ? (
+                  isValidField(project.size) && (
+                    <div className="flex flex-col">
+                      <span className="font-ivymode text-[1.75rem] text-[#E5D9C4] mb-1">Size</span>
+                      <span className="font-ivymode text-sm md:text-base text-white tracking-wider">{project.size}</span>
+                    </div>
+                  )
+                ) : (
+                  <>
+                    {isValidField(project.size) && (
+                      <div className="flex flex-col">
+                        <span className="font-ivymode text-[1.75rem] text-[#E5D9C4] mb-1">Date</span>
+                        <span className="font-ivymode text-sm md:text-base text-white tracking-wider">{project.size}</span>
+                      </div>
+                    )}
+                    {isValidField(project.customCategory) && (
+                      <div className="flex flex-col">
+                        <span className="font-ivymode text-[1.75rem] text-[#E5D9C4] mb-1">Category</span>
+                        <span className="font-ivymode text-sm md:text-base text-white tracking-wider">{project.customCategory}</span>
+                      </div>
+                    )}
+                  </>
+                )}
+
+                {isValidField(project.location) && (
+                  <div className="flex flex-col">
+                    <span className="font-ivymode text-[1.75rem] text-[#E5D9C4] mb-1">Location</span>
+                    <span className="font-ivymode text-sm md:text-base text-white tracking-wider uppercase">{project.location}</span>
+                  </div>
+                )}
               </div>
 
               {/* COLUMN 2: DESCRIPTION */}

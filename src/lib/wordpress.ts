@@ -476,6 +476,8 @@ export interface InteriorProject {
   size?: string;
   location?: string;
   downloadUrl?: string;
+  customCategory?: string;
+  isEvent?: boolean;
 }
 
 export interface InteriorPageData {
@@ -626,10 +628,12 @@ export async function getInteriorProjects(): Promise<InteriorProject[]> {
         content: p.content?.rendered || "",
         featuredImage,
         gallery,
-        client: p.meta?.project_date || p.client || p.acf?.client || "",
-        size: p.meta?.project_size || p.size || p.acf?.size || "",
-        location: p.meta?.project_location || p.location || p.acf?.location || "",
-        downloadUrl: p.meta?.project_download_url || p.downloadUrl || p.acf?.downloadUrl || "",
+        client: p.project_client || p.project_date || p.meta?.project_date || p.client || p.acf?.client || "",
+        size: p.project_size || p.meta?.project_size || p.size || p.acf?.size || "",
+        location: p.project_location || p.meta?.project_location || p.location || p.acf?.location || "",
+        downloadUrl: p.project_download_url || p.meta?.project_download_url || p.downloadUrl || p.acf?.downloadUrl || "",
+        customCategory: p.project_custom_category || p.meta?.project_custom_category || p.customCategory || p.acf?.customCategory || "",
+        isEvent: p.project_category?.includes(13) || false,
       });
     }
 
@@ -679,10 +683,12 @@ export async function getProjectBySlug(slug: string): Promise<InteriorProject | 
       content: p.content?.rendered || "",
       featuredImage,
       gallery,
-      client: p.project_date || p.meta?.project_date || p.client || p.acf?.client || "",
+      client: p.project_client || p.project_date || p.meta?.project_date || p.client || p.acf?.client || "",
       size: p.project_size || p.meta?.project_size || p.size || p.acf?.size || "",
       location: p.project_location || p.meta?.project_location || p.location || p.acf?.location || "",
       downloadUrl: p.project_download_url || p.meta?.project_download_url || p.downloadUrl || p.acf?.downloadUrl || "",
+      customCategory: p.project_custom_category || p.meta?.project_custom_category || p.customCategory || p.acf?.customCategory || "",
+      isEvent: p.project_category?.includes(13) || false,
     };
   } catch (err) {
     console.error(`Error fetching project by slug ${slug}:`, err);
@@ -729,10 +735,12 @@ export async function getExhibitionProjects(): Promise<InteriorProject[]> {
         content: p.content?.rendered || "",
         featuredImage,
         gallery,
-        client: p.meta?.project_date || p.client || p.acf?.client || "",
-        size: p.meta?.project_size || p.size || p.acf?.size || "",
-        location: p.meta?.project_location || p.location || p.acf?.location || "",
-        downloadUrl: p.meta?.project_download_url || p.downloadUrl || p.acf?.downloadUrl || "",
+        client: p.project_client || p.project_date || p.meta?.project_date || p.client || p.acf?.client || "",
+        size: p.project_size || p.meta?.project_size || p.size || p.acf?.size || "",
+        location: p.project_location || p.meta?.project_location || p.location || p.acf?.location || "",
+        downloadUrl: p.project_download_url || p.meta?.project_download_url || p.downloadUrl || p.acf?.downloadUrl || "",
+        customCategory: p.project_custom_category || p.meta?.project_custom_category || p.customCategory || p.acf?.customCategory || "",
+        isEvent: p.project_category?.includes(13) || false,
       });
     }
 
@@ -782,10 +790,12 @@ export async function getEventsProjects(): Promise<InteriorProject[]> {
         content: p.content?.rendered || "",
         featuredImage,
         gallery,
-        client: p.meta?.project_date || p.client || p.acf?.client || "",
-        size: p.meta?.project_size || p.size || p.acf?.size || "",
-        location: p.meta?.project_location || p.location || p.acf?.location || "",
-        downloadUrl: p.meta?.project_download_url || p.downloadUrl || p.acf?.downloadUrl || "",
+        client: p.project_client || p.project_date || p.meta?.project_date || p.client || p.acf?.client || "",
+        size: p.project_size || p.meta?.project_size || p.size || p.acf?.size || "",
+        location: p.project_location || p.meta?.project_location || p.location || p.acf?.location || "",
+        downloadUrl: p.project_download_url || p.meta?.project_download_url || p.downloadUrl || p.acf?.downloadUrl || "",
+        customCategory: p.project_custom_category || p.meta?.project_custom_category || p.customCategory || p.acf?.customCategory || "",
+        isEvent: true,
       });
     }
 
@@ -835,10 +845,12 @@ export async function getMallActivationProjects(): Promise<InteriorProject[]> {
         content: p.content?.rendered || "",
         featuredImage,
         gallery,
-        client: p.meta?.project_date || p.client || p.acf?.client || "",
-        size: p.meta?.project_size || p.size || p.acf?.size || "",
-        location: p.meta?.project_location || p.location || p.acf?.location || "",
-        downloadUrl: p.meta?.project_download_url || p.downloadUrl || p.acf?.downloadUrl || "",
+        client: p.project_client || p.project_date || p.meta?.project_date || p.client || p.acf?.client || "",
+        size: p.project_size || p.meta?.project_size || p.size || p.acf?.size || "",
+        location: p.project_location || p.meta?.project_location || p.location || p.acf?.location || "",
+        downloadUrl: p.project_download_url || p.meta?.project_download_url || p.downloadUrl || p.acf?.downloadUrl || "",
+        customCategory: p.project_custom_category || p.meta?.project_custom_category || p.customCategory || p.acf?.customCategory || "",
+        isEvent: p.project_category?.includes(13) || false,
       });
     }
 
