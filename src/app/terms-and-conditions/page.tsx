@@ -1,13 +1,17 @@
 import Link from "next/link";
 import Footer from "../../components/Footer";
-import { getPageBySlug } from "../../lib/wordpress";
+import { getPageBySlug, getPageMetadataBySlug } from "../../lib/wordpress";
 
 export const revalidate = 3600;
 
-export const metadata = {
-  title: "Terms & Conditions – SAMA Production",
-  description: "Read the Terms and Conditions for using SAMA Production's website and services.",
-};
+export async function generateMetadata() {
+  const yoast = await getPageMetadataBySlug("terms-and-conditions");
+  if (yoast.title) return yoast;
+  return {
+    title: "Terms & Conditions – SAMA Production",
+    description: "Read the Terms and Conditions for using SAMA Production's website and services.",
+  };
+}
 
 export default async function TermsAndConditionsPage() {
   const pageData = await getPageBySlug("terms-and-conditions");

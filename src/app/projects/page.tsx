@@ -1,13 +1,17 @@
 import Footer from "../../components/Footer";
 import ProjectsSection from "../../components/ProjectsSection";
-import { getHomepageData } from "../../lib/wordpress";
+import { getHomepageData, getPageMetadataBySlug } from "../../lib/wordpress";
 
 export const revalidate = 3600;
 
-export const metadata = {
-  title: "Projects – SAMA Production",
-  description: "A curated selection of interiors that reflect our design philosophy.",
-};
+export async function generateMetadata() {
+  const yoast = await getPageMetadataBySlug("projects");
+  if (yoast.title) return yoast;
+  return {
+    title: "Projects – SAMA Production",
+    description: "A curated selection of interiors that reflect our design philosophy.",
+  };
+}
 
 export default async function ProjectsPage() {
   const homepageData = await getHomepageData();

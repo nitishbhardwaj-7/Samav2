@@ -1,13 +1,17 @@
 import Link from "next/link";
 import Footer from "../../components/Footer";
-import { getPageBySlug } from "../../lib/wordpress";
+import { getPageBySlug, getPageMetadataBySlug } from "../../lib/wordpress";
 
 export const revalidate = 3600;
 
-export const metadata = {
-  title: "Privacy Policy – SAMA Production",
-  description: "Learn more about SAMA Production's privacy policies and how we protect your personal data.",
-};
+export async function generateMetadata() {
+  const yoast = await getPageMetadataBySlug("privacy-policy");
+  if (yoast.title) return yoast;
+  return {
+    title: "Privacy Policy – SAMA Production",
+    description: "Learn more about SAMA Production's privacy policies and how we protect your personal data.",
+  };
+}
 
 export default async function PrivacyPolicyPage() {
   const pageData = await getPageBySlug("privacy-policy");

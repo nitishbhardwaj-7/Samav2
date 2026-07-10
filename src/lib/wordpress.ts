@@ -118,7 +118,7 @@ async function fetchElementorBgImage(pageUrl: string, elementIds: string[], post
       const directCssUrl = `https://samaproductionme.com/wp-content/uploads/elementor/css/post-${postId}.css`;
       try {
         const cssRes = await fetch(directCssUrl, {
-          cache: "no-store",
+          next: { revalidate: REVALIDATE_VAL },
           headers: { "User-Agent": "Mozilla/5.0" },
         });
         if (cssRes.ok) {
@@ -140,9 +140,9 @@ async function fetchElementorBgImage(pageUrl: string, elementIds: string[], post
       }
     }
 
-    // 2. Fallback to HTML page scraping with cache: "no-store"
+    // 2. Fallback to HTML page scraping with next: { revalidate: REVALIDATE_VAL }
     const pageRes = await fetch(pageUrl, {
-      cache: "no-store",
+      next: { revalidate: REVALIDATE_VAL },
       headers: { "User-Agent": "Mozilla/5.0" },
     });
     if (!pageRes.ok) return null;
@@ -158,11 +158,11 @@ async function fetchElementorBgImage(pageUrl: string, elementIds: string[], post
       if (hrefMatch) cssUrls.push(hrefMatch[1]);
     }
 
-    // Search CSS files for matching element background-image with cache: "no-store"
+    // Search CSS files for matching element background-image with next: { revalidate: REVALIDATE_VAL }
     for (const cssUrl of cssUrls) {
       try {
         const cssRes = await fetch(cssUrl, {
-          cache: "no-store",
+          next: { revalidate: REVALIDATE_VAL },
           headers: { "User-Agent": "Mozilla/5.0" },
         });
         if (!cssRes.ok) continue;
@@ -602,6 +602,7 @@ export interface InteriorProject {
   downloadUrl?: string;
   customCategory?: string;
   isEvent?: boolean;
+  yoast_head_json?: any;
 }
 
 export interface InteriorPageData {
@@ -813,6 +814,7 @@ export async function getProjectBySlug(slug: string): Promise<InteriorProject | 
       downloadUrl: p.project_download_url || p.meta?.project_download_url || p.downloadUrl || p.acf?.downloadUrl || "",
       customCategory: p.project_custom_category || p.meta?.project_custom_category || p.customCategory || p.acf?.customCategory || "",
       isEvent: p.project_category?.includes(13) || false,
+      yoast_head_json: p.yoast_head_json || null,
     };
   } catch (err) {
     console.error(`Error fetching project by slug ${slug}:`, err);
@@ -1125,6 +1127,89 @@ export async function getPageBySlug(slug: string): Promise<{ title: string; cont
   } catch (err) {
     console.error(`Error fetching page by slug ${slug}:`, err);
     return null;
+  }
+}
+
+import type { Metadata } from "next";
+
+export function mapYoastToMetadata(yoastJson: any): Metadata {
+  if (!yoastJson) return {};
+
+  const openGraph: any = {};
+  if (yoastJson.og_title) openGraph.title = yoastJson.og_title;
+  if (yoastJson.og_description) openGraph.description = yoastJson.og_description;
+  if (yoastJson.og_url) openGraph.url = yoastJson.og_url;
+  if (yoastJson.og_site_name) openGraph.siteName = yoastJson.og_site_name;
+  if (yoastJson.og_type) openGraph.type = yoastJson.og_type;
+  if (yoastJson.og_locale) openGraph.locale = yoastJson.og_locale;
+  
+  if (yoastJson.og_image && Array.isArray(yoastJson.og_image)) {
+    openGraph.images = yoastJson.og_image.map((img: any) => ({
+      url: img.url,
+      width: img.width,
+      height: img.height,
+      alt: yoastJson.og_title || yoastJson.title,
+    }));
+  }
+
+  const robots: any = {};
+  if (yoastJson.robots) {
+    if (yoastJson.robots.index) {
+      robots.index = yoastJson.robots.index === "index";
+    }
+    if (yoastJson.robots.follow) {
+      robots.follow = yoastJson.robots.follow === "follow";
+    }
+  }
+
+  const twitter: any = {};
+  if (yoastJson.twitter_card) {
+    twitter.card = yoastJson.twitter_card;
+  }
+  if (yoastJson.og_title) twitter.title = yoastJson.og_title;
+  if (yoastJson.og_description) twitter.description = yoastJson.og_description;
+  if (yoastJson.og_image && Array.isArray(yoastJson.og_image) && yoastJson.og_image[0]) {
+    twitter.images = [yoastJson.og_image[0].url];
+  }
+
+  return {
+    title: yoastJson.title,
+    description: yoastJson.description || yoastJson.og_description,
+    alternates: yoastJson.canonical ? { canonical: yoastJson.canonical } : undefined,
+    openGraph: Object.keys(openGraph).length > 0 ? openGraph : undefined,
+    robots: Object.keys(robots).length > 0 ? robots : undefined,
+    twitter: Object.keys(twitter).length > 0 ? twitter : undefined,
+  };
+}
+
+export async function getPageMetadata(id: number): Promise<Metadata> {
+  const url = `https://samaproductionme.com/wp-json/wp/v2/pages/${id}`;
+  try {
+    const res = await fetch(url, {
+      next: { revalidate: REVALIDATE_VAL },
+    });
+    if (!res.ok) return {};
+    const page = await res.json();
+    return mapYoastToMetadata(page.yoast_head_json);
+  } catch (err) {
+    console.error(`Error fetching Yoast SEO metadata for page ${id}:`, err);
+    return {};
+  }
+}
+
+export async function getPageMetadataBySlug(slug: string): Promise<Metadata> {
+  const url = `https://samaproductionme.com/wp-json/wp/v2/pages?slug=${slug}`;
+  try {
+    const res = await fetch(url, {
+      next: { revalidate: REVALIDATE_VAL },
+    });
+    if (!res.ok) return {};
+    const pages = await res.json();
+    if (pages.length === 0) return {};
+    return mapYoastToMetadata(pages[0].yoast_head_json);
+  } catch (err) {
+    console.error(`Error fetching Yoast SEO metadata for page slug ${slug}:`, err);
+    return {};
   }
 }
 

@@ -6,7 +6,11 @@ import CertificationsSection from "../../components/CertificationsSection";
 import ReachOutSection from "../../components/ReachOutSection";
 import Footer from "../../components/Footer";
 import HeroSection from "../../components/HeroSection";
-import { getAboutPageData, getHomepageData } from "../../lib/wordpress";
+import { getAboutPageData, getHomepageData, getPageMetadata } from "../../lib/wordpress";
+
+export async function generateMetadata() {
+  return getPageMetadata(1822);
+}
 
 export default async function AboutUsPage() {
   const [aboutData, homepageData] = await Promise.all([

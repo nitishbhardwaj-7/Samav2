@@ -3,14 +3,13 @@ import Link from "next/link";
 import ReachOutSection from "../../components/ReachOutSection";
 import Footer from "../../components/Footer";
 import { RevealText, FadeUp, StaggerReveal } from "../../components/animations";
-import { getPartnersPageData, getHomepageData } from "../../lib/wordpress";
+import { getPartnersPageData, getHomepageData, getPageMetadata } from "../../lib/wordpress";
 
 export const revalidate = 3600;
 
-export const metadata = {
-  title: "Partners – SAMA Production",
-  description: "Our clients include leading global brands who trust us to deliver refined, high-quality environments.",
-};
+export async function generateMetadata() {
+  return getPageMetadata(1893);
+}
 
 export default async function PartnersPage() {
   const [pageData, homepageData] = await Promise.all([

@@ -5,14 +5,13 @@ import ReachOutSection from "../../components/ReachOutSection";
 import Footer from "../../components/Footer";
 import InteriorHeader from "../../components/InteriorHeader";
 import { RevealImage, FadeUp } from "../../components/animations";
-import { getExhibitionProjects, getHomepageData, getExhibitionPageData } from "../../lib/wordpress";
+import { getExhibitionProjects, getHomepageData, getExhibitionPageData, getPageMetadata } from "../../lib/wordpress";
 
 export const revalidate = 3600;
 
-export const metadata = {
-  title: "Exhibition Design & Build – SAMA Production",
-  description: "A curated collection of exhibition design & build projects by SAMA Production.",
-};
+export async function generateMetadata() {
+  return getPageMetadata(874);
+}
 
 export default async function ExhibitionPage() {
   const [pageData, projects, homepageData] = await Promise.all([

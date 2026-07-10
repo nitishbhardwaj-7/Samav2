@@ -4,7 +4,11 @@ import ClientsSection from "../components/ClientsSection";
 import ReachOutSection from "../components/ReachOutSection";
 import Footer from "../components/Footer";
 import HeroSection from "../components/HeroSection";
-import { getHomepageData } from "../lib/wordpress";
+import { getHomepageData, getPageMetadata } from "../lib/wordpress";
+
+export async function generateMetadata() {
+  return getPageMetadata(7);
+}
 
 export default async function Home() {
   const wpData = await getHomepageData();

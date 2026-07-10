@@ -5,14 +5,13 @@ import ReachOutSection from "../../components/ReachOutSection";
 import Footer from "../../components/Footer";
 import InteriorHeader from "../../components/InteriorHeader";
 import { RevealImage, FadeUp } from "../../components/animations";
-import { getMallActivationProjects, getHomepageData, getMallActivationPageData } from "../../lib/wordpress";
+import { getMallActivationProjects, getHomepageData, getMallActivationPageData, getPageMetadata } from "../../lib/wordpress";
 
 export const revalidate = 3600;
 
-export const metadata = {
-  title: "Mall Activation & Travel Retail – SAMA Production",
-  description: "A curated collection of mall activation & travel retail projects by SAMA Production.",
-};
+export async function generateMetadata() {
+  return getPageMetadata(1113);
+}
 
 export default async function MallActivationPage() {
   const [pageData, projects, homepageData] = await Promise.all([

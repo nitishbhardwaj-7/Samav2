@@ -11,6 +11,7 @@ import {
   getMallActivationProjects,
   getProjectBySlug,
   getHomepageData,
+  mapYoastToMetadata,
 } from "../../../lib/wordpress";
 import { notFound } from "next/navigation";
 
@@ -31,6 +32,10 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   const { slug } = await params;
   const project = await getProjectBySlug(slug);
   if (!project) return {};
+  if (project.yoast_head_json) {
+    const yoastMeta = mapYoastToMetadata(project.yoast_head_json);
+    if (yoastMeta.title) return yoastMeta;
+  }
   return {
     title: `${project.title} – Interior – SAMA Production`,
     description: project.content.replace(/<[^>]+>/g, "").slice(0, 155),

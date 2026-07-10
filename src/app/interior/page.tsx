@@ -5,14 +5,13 @@ import ReachOutSection from "../../components/ReachOutSection";
 import Footer from "../../components/Footer";
 import InteriorHeader from "../../components/InteriorHeader";
 import { RevealImage, FadeUp } from "../../components/animations";
-import { getInteriorPageData, getInteriorProjects, getHomepageData } from "../../lib/wordpress";
+import { getInteriorPageData, getInteriorProjects, getHomepageData, getPageMetadata } from "../../lib/wordpress";
 
 export const revalidate = 3600;
 
-export const metadata = {
-  title: "Interior – SAMA Production",
-  description: "A curated collection of interior design & build projects by SAMA Production.",
-};
+export async function generateMetadata() {
+  return getPageMetadata(472);
+}
 
 export default async function InteriorPage() {
   const [pageData, projects, homepageData] = await Promise.all([
