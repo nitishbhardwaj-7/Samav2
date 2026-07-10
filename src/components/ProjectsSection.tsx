@@ -301,7 +301,7 @@ export default function ProjectsSection({ data }: ProjectsSectionProps) {
             Take a closer look at our projects and capabilities.
           </p>
           <a
-            href="/portfolio.pdf"
+            href="/upload/SAMA-Production-Portfolio.pdf"
             download
             className="inline-flex items-center gap-2 bg-[#563320] hover:bg-[#402213] text-[#E5D9C4] font-ivymode text-xs sm:text-sm tracking-widest uppercase px-8 py-3.5 rounded-full shadow-[0_10px_30px_rgba(86,51,32,0.3)] transition-all duration-300 transform hover:translate-y-[-2px]"
           >
