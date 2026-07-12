@@ -20,7 +20,7 @@ export default async function EventsPage() {
     getHomepageData(),
   ]);
 
-  const { title, description } = pageData;
+  const { title, description, ctaTitle, ctaButtonText, ctaButtonUrl } = pageData;
   const { reachOut } = homepageData;
 
   return (
@@ -99,14 +99,14 @@ export default async function EventsPage() {
             {/* Call To Action Block */}
             <FadeUp delay={0.3} className="w-full flex flex-col items-center justify-center gap-6 mt-16 text-center px-4">
               <p className="font-ivymode text-xl sm:text-2xl md:text-[28px] text-[#563320] tracking-wide max-w-none whitespace-nowrap">
-                Take a closer look at our projects and capabilities.
+                {ctaTitle || "Take a closer look at our projects and capabilities."}
               </p>
               <a
-                href="/upload/SAMA-Production-Portfolio.pdf"
+                href={ctaButtonUrl || "/upload/SAMA-Production-Portfolio.pdf"}
                 download
                 className="inline-flex items-center gap-2 bg-[#563320] hover:bg-[#402213] text-[#E5D9C4] font-ivymode text-xs sm:text-sm tracking-widest uppercase px-8 py-3.5 rounded-full shadow-[0_10px_30px_rgba(86,51,32,0.3)] transition-all duration-300 transform hover:translate-y-[-2px] no-underline"
               >
-                <span>Download Portfolio</span>
+                <span>{ctaButtonText || "Download Portfolio"}</span>
                 <svg
                   width="14"
                   height="14"

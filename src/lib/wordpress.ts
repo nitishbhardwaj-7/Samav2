@@ -3,6 +3,7 @@ export interface ProjectItem {
   title: string;
   image: string;
   link: string;
+  btnText?: string;
 }
 
 export interface ClientLogo {
@@ -23,6 +24,8 @@ export interface HomepageData {
     title: string;
     description: string;
     image: string;
+    knowMoreText?: string;
+    knowMoreUrl?: string;
   };
   projects: {
     title: string;
@@ -56,16 +59,18 @@ const FALLBACK_DATA: HomepageData = {
     title: "SAMA",
     description: "SAMA Production is a multidisciplinary design and build studio known for crafting refined, high-impact environments across interiors, exhibitions, and brand activations. Defined by precision, material sophistication, and architectural clarity, each project is meticulously executed to embody brand identity at the highest level.",
     image: "https://samaproductionme.com/wp-content/uploads/2026/06/Frame-139.png",
+    knowMoreText: "Know More",
+    knowMoreUrl: "/about-us",
   },
   projects: {
     title: "Projects",
     subtitle: "Spaces Brought to Life",
     description: "A curated selection of interiors that reflect our design philosophy, attention to detail, and regional expertise.",
     items: [
-      { number: "01", title: "Interior", image: "https://samaproductionme.com/wp-content/uploads/2026/06/interior-1-1.png", link: "/interior" },
-      { number: "02", title: "Exhibition Design & Build", image: "https://samaproductionme.com/wp-content/uploads/2026/06/Exhibition-1-1.png", link: "/exhibition" },
-      { number: "03", title: "Events", image: "https://samaproductionme.com/wp-content/uploads/2026/06/events-1-1.png", link: "#" },
-      { number: "04", title: "Mall Activation & Travel Retail", image: "https://samaproductionme.com/wp-content/uploads/2026/06/Mall-Activation-1-1-2.png", link: "#" },
+      { number: "01", title: "Interior", image: "https://samaproductionme.com/wp-content/uploads/2026/06/interior-1-1.png", link: "/interior", btnText: "Know More" },
+      { number: "02", title: "Exhibition Design & Build", image: "https://samaproductionme.com/wp-content/uploads/2026/06/Exhibition-1-1.png", link: "/exhibition", btnText: "Know More" },
+      { number: "03", title: "Events", image: "https://samaproductionme.com/wp-content/uploads/2026/06/events-1-1.png", link: "#", btnText: "Know More" },
+      { number: "04", title: "Mall Activation & Travel Retail", image: "https://samaproductionme.com/wp-content/uploads/2026/06/Mall-Activation-1-1-2.png", link: "#", btnText: "Know More" },
     ],
   },
   clients: {
@@ -235,6 +240,37 @@ export async function getHomepageData(): Promise<HomepageData> {
 
     const data: HomepageData = JSON.parse(JSON.stringify(FALLBACK_DATA));
 
+    // Parse Hero Title parts (from Elementor containers a839d75, 869ec3a, 061c3d6)
+    const heroTitleMatch = html.match(/class="[^"]*elementor-element-a839d75[^"]*"[\s\S]*?<h1[^>]*>([\s\S]*?)<\/h1>/i);
+    const heroMiddleMatch = html.match(/class="[^"]*elementor-element-869ec3a[^"]*"[\s\S]*?<p[^>]*>([\s\S]*?)<\/p>/i);
+    const heroSubtitleMatch = html.match(/class="[^"]*elementor-element-061c3d6[^"]*"[\s\S]*?<h2[^>]*>([\s\S]*?)<\/h2>/i);
+
+    if (heroTitleMatch) data.hero.title = decodeHtmlEntities(heroTitleMatch[1].replace(/<[^>]+>/g, "").trim());
+    if (heroMiddleMatch) data.hero.middleText = decodeHtmlEntities(heroMiddleMatch[1].replace(/<[^>]+>/g, "").trim());
+    if (heroSubtitleMatch) data.hero.subtitle = decodeHtmlEntities(heroSubtitleMatch[1].replace(/<[^>]+>/g, "").trim());
+
+    // Parse About Section Name (from Elementor container f9d9fc6)
+    const aboutSectionNameMatch = html.match(/class="[^"]*elementor-element-f9d9fc6[^"]*"[\s\S]*?<p[^>]*>([\s\S]*?)<\/p>/i);
+    if (aboutSectionNameMatch) {
+      data.about.sectionName = decodeHtmlEntities(aboutSectionNameMatch[1].replace(/<[^>]+>/g, "").trim());
+    }
+
+    // Parse Projects Section Headers (from Elementor containers f3b5645, a2ebccf, 0764706)
+    const projectsTitleMatch = html.match(/class="[^"]*elementor-element-f3b5645[^"]*"[\s\S]*?<h1[^>]*>([\s\S]*?)<\/h1>/i);
+    const projectsSubtitleMatch = html.match(/class="[^"]*elementor-element-a2ebccf[^"]*"[\s\S]*?<h1[^>]*>([\s\S]*?)<\/h1>/i);
+    const projectsDescMatch = html.match(/class="[^"]*elementor-element-0764706[^"]*"[\s\S]*?<p[^>]*>([\s\S]*?)<\/p>/i);
+
+    if (projectsTitleMatch) data.projects.title = decodeHtmlEntities(projectsTitleMatch[1].replace(/<[^>]+>/g, "").trim());
+    if (projectsSubtitleMatch) data.projects.subtitle = decodeHtmlEntities(projectsSubtitleMatch[1].replace(/<[^>]+>/g, "").trim());
+    if (projectsDescMatch) data.projects.description = decodeHtmlEntities(projectsDescMatch[1].replace(/<[^>]+>/g, "").trim());
+
+    // Parse Clients Section Headers (from Elementor containers d806e58, aebbb9d)
+    const clientsTitleMatch = html.match(/class="[^"]*elementor-element-d806e58[^"]*"[\s\S]*?<h3[^>]*>([\s\S]*?)<\/h3>/i);
+    const clientsDescMatch = html.match(/class="[^"]*elementor-element-aebbb9d[^"]*"[\s\S]*?<p[^>]*>([\s\S]*?)<\/p>/i);
+
+    if (clientsTitleMatch) data.clients.title = decodeHtmlEntities(clientsTitleMatch[1].replace(/<[^>]+>/g, "").trim());
+    if (clientsDescMatch) data.clients.description = decodeHtmlEntities(clientsDescMatch[1].replace(/<[^>]+>/g, "").trim());
+
     // 1. Parse Hero Description & Quote (if found in content)
     const heroDescMatch = html.match(/class="[^"]*elementor-icon-box-description[^"]*"[^>]*>([\s\S]*?)<\/p>/i);
     if (heroDescMatch) {
@@ -267,6 +303,13 @@ export async function getHomepageData(): Promise<HomepageData> {
       data.about.image = aboutImage;
     }
 
+    // Parse About Section button (from Elementor container d47da7e)
+    const aboutBtnMatch = html.match(/class="[^"]*elementor-element-d47da7e[^"]*"[\s\S]*?<a[^>]+href="([^"]+)"[^>]*>(?:(?!<\/a>)[\s\S])*?<span class="elementor-button-text">([^<]*)<\/span>(?:(?!<\/a>)[\s\S])*?<\/a>/i);
+    if (aboutBtnMatch) {
+      data.about.knowMoreUrl = mapWpUrl(aboutBtnMatch[1].trim());
+      data.about.knowMoreText = decodeHtmlEntities(aboutBtnMatch[2].trim());
+    }
+
     // 3. Parse Projects
     const projectCards = html.split('<div class="proj-card');
     if (projectCards.length > 1) {
@@ -277,12 +320,14 @@ export async function getHomepageData(): Promise<HomepageData> {
         const numMatch = cardHtml.match(/class="proj-number-box">([^<]+)/);
         const titleMatch = cardHtml.match(/<h3><a[^>]*>([\s\S]*?)<\/a>/);
         const imgMatch = cardHtml.match(/<img[^>]+src="([^"]+)"/);
-        const linkMatch = cardHtml.match(/class="proj-btn"><a href="([^"]+)"/);
+        const linkMatch = cardHtml.match(/class="proj-btn"><a href="([^"]+)"[^>]*>([\s\S]*?)<\/a>/i);
 
         if (imgMatch) {
           let finalLink = "#";
+          let btnText = "Know More";
           if (linkMatch) {
             const rawLink = linkMatch[1].trim();
+            btnText = decodeHtmlEntities(linkMatch[2].replace(/<[^>]+>/g, "").trim()) || "Know More";
             if (rawLink.startsWith("http")) {
               try {
                 finalLink = new URL(rawLink).pathname;
@@ -314,6 +359,7 @@ export async function getHomepageData(): Promise<HomepageData> {
             title: parsedTitle,
             image: mapWpUrl(imgMatch[1].trim()),
             link: finalLink,
+            btnText: btnText,
           });
         }
       }
@@ -364,6 +410,12 @@ export async function getHomepageData(): Promise<HomepageData> {
       const phoneTextMatch = reachOutPart.match(/class="elementor-icon-list-text">([^<]+)/);
       if (phoneTextMatch) {
         data.reachOut.phone = phoneTextMatch[1].trim();
+      }
+
+      // Parse Reach Out Title (from Elementor container 12fc823)
+      const reachOutTitleMatch = reachOutPart.match(/class="[^"]*elementor-element-12fc823[^"]*"[\s\S]*?<h[1-6][^>]*>([\s\S]*?)<\/h[1-6]>/i);
+      if (reachOutTitleMatch) {
+        data.reachOut.title = decodeHtmlEntities(reachOutTitleMatch[1].replace(/<[^>]+>/g, "").trim());
       }
     }
 
@@ -525,6 +577,24 @@ export async function getAboutPageData(): Promise<AboutPageData> {
       data.about.image = aboutImage;
     }
 
+    // Extract About Section Name (from Elementor container 80dc148)
+    const aboutSectionNameMatch = html.match(/class="[^"]*elementor-element-80dc148[^"]*"[\s\S]*?<p[^>]*>([\s\S]*?)<\/p>/i);
+    if (aboutSectionNameMatch) {
+      data.about.sectionName = decodeHtmlEntities(aboutSectionNameMatch[1].replace(/<[^>]+>/g, "").trim());
+    }
+
+    // Extract Who We Are Title (from Elementor container 87d842d)
+    const whoWeAreTitleMatch = html.match(/class="[^"]*elementor-element-87d842d[^"]*"[\s\S]*?<h[1-6][^>]*>([\s\S]*?)<\/h[1-6]>/i);
+    if (whoWeAreTitleMatch) {
+      data.whoWeAre.title = decodeHtmlEntities(whoWeAreTitleMatch[1].replace(/<[^>]+>/g, "").trim());
+    }
+
+    // Extract Certifications Section Title (from Elementor container 264a05c)
+    const certsTitleMatch = html.match(/class="[^"]*elementor-element-264a05c[^"]*"[\s\S]*?<h[1-6][^>]*>([\s\S]*?)<\/h[1-6]>/i);
+    if (certsTitleMatch) {
+      data.certificationsSection.title = decodeHtmlEntities(certsTitleMatch[1].replace(/<[^>]+>/g, "").trim());
+    }
+
     // 4. Extract Design Section Quote (from Elementor container 5abb09a)
     const designQuoteMatch = html.match(/class="[^"]*elementor-element-5abb09a[^"]*"[\s\S]*?<h2[^>]*>([\s\S]*?)<\/h2>/i);
     if (designQuoteMatch) {
@@ -609,6 +679,9 @@ export interface InteriorPageData {
   title: string;
   description: string;
   backgroundImage: string;
+  ctaTitle?: string;
+  ctaButtonText?: string;
+  ctaButtonUrl?: string;
 }
 
 export type CategoryPageData = InteriorPageData;
@@ -629,6 +702,9 @@ export async function getGenericCategoryPageData(
         title: fallbackTitle,
         description: fallbackDesc,
         backgroundImage: fallbackBg,
+        ctaTitle: "Take a closer look at our projects and capabilities.",
+        ctaButtonText: "Download Portfolio",
+        ctaButtonUrl: "/upload/SAMA-Production-Portfolio.pdf",
       };
     }
     const page = await res.json();
@@ -660,10 +736,25 @@ export async function getGenericCategoryPageData(
       }
     }
 
+    // 4. CTA Title
+    const ctaTitleMatch = html.match(/<h[1-6][^>]*>([^<]*closer look[^<]*)<\/h[1-6]>/i) ||
+                          html.match(/<h[1-6][^>]*>([^<]*projects and capabilities[^<]*)<\/h[1-6]>/i);
+    const ctaTitle = ctaTitleMatch 
+      ? decodeHtmlEntities(ctaTitleMatch[1].replace(/<[^>]+>/g, "").trim())
+      : "Take a closer look at our projects and capabilities.";
+
+    // 5. CTA Button
+    const ctaLinkMatch = html.match(/<a[^>]+href="([^"]+)"[^>]*>(?:(?!<\/a>)[\s\S])*?<span class="elementor-button-text">([^<]*)<\/span>(?:(?!<\/a>)[\s\S])*?<\/a>/i);
+    const ctaButtonUrl = ctaLinkMatch ? mapWpUrl(ctaLinkMatch[1].trim()) : "/upload/SAMA-Production-Portfolio.pdf";
+    const ctaButtonText = ctaLinkMatch ? decodeHtmlEntities(ctaLinkMatch[2].trim()) : "Download Portfolio";
+
     return {
       title,
       description,
       backgroundImage,
+      ctaTitle,
+      ctaButtonText,
+      ctaButtonUrl,
     };
   } catch (err) {
     console.error(`Error fetching category page ${id} data:`, err);
@@ -671,6 +762,9 @@ export async function getGenericCategoryPageData(
       title: fallbackTitle,
       description: fallbackDesc,
       backgroundImage: fallbackBg,
+      ctaTitle: "Take a closer look at our projects and capabilities.",
+      ctaButtonText: "Download Portfolio",
+      ctaButtonUrl: "/upload/SAMA-Production-Portfolio.pdf",
     };
   }
 }

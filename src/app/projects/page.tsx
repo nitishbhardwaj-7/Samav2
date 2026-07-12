@@ -23,6 +23,7 @@ export default async function ProjectsPage() {
       <div className="pt-32 sm:pt-40">
         <ProjectsSection data={projects} />
       </div>
+      
 
       {/* Spacer to fade to white before the footer */}
       <div 

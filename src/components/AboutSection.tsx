@@ -10,11 +10,13 @@ if (typeof window !== "undefined") {
   gsap.registerPlugin(ScrollTrigger);
 }
 
-export default function AboutSection({ data, hideKnowMore = false }: { data?: { sectionName: string; title: string; description: string; image: string }, hideKnowMore?: boolean }) {
+export default function AboutSection({ data, hideKnowMore = false }: { data?: { sectionName: string; title: string; description: string; image: string; knowMoreText?: string; knowMoreUrl?: string }, hideKnowMore?: boolean }) {
   const sectionName = data?.sectionName || "about us";
   const title = data?.title || "SAMA";
   const description = data?.description || "SAMA Production is a multidisciplinary design and build studio known for crafting refined, high-impact environments across interiors, exhibitions, and brand activations. Defined by precision, material sophistication, and architectural clarity, each project is meticulously executed to embody brand identity at the highest level.";
   const image = data?.image || "https://samaproductionme.com/wp-content/uploads/2026/06/Frame-139.png";
+  const knowMoreText = data?.knowMoreText || "Know More";
+  const knowMoreUrl = data?.knowMoreUrl || "/about-us";
 
   const sectionRef = useRef<HTMLElement>(null);
   const labelRef = useRef<HTMLSpanElement>(null);
@@ -156,10 +158,10 @@ export default function AboutSection({ data, hideKnowMore = false }: { data?: { 
           {!hideKnowMore && (
             <div ref={btnRef}>
               <TransitionLink 
-                href="/about-us"
+                href={knowMoreUrl}
                 className="group/btn inline-flex items-center gap-3 border border-[#E5D9C4]/40 hover:border-white px-6 py-2.5 rounded-full font-ivymode text-xs sm:text-sm text-[#E5D9C4] hover:text-white uppercase tracking-widest transition-all duration-300 bg-transparent hover:bg-white/5 no-underline"
               >
-                <span>Know More</span>
+                <span>{knowMoreText}</span>
                 <span className="inline-flex items-center justify-center border border-[#E5D9C4]/40 group-hover/btn:border-white rounded-full w-5 h-5 transition-all duration-300">
                   <svg 
                     width="8" 

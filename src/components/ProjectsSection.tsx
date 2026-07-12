@@ -17,6 +17,7 @@ interface ProjectItem {
   title: string;
   image: string;
   link: string;
+  btnText?: string;
 }
 
 interface ProjectsSectionProps {
@@ -263,7 +264,7 @@ export default function ProjectsSection({ data }: ProjectsSectionProps) {
                     {/* Know More button */}
                     <div className={`absolute bottom-6 sm:bottom-10 opacity-0 translate-y-4 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-500 ease-out z-20 ${isReverse ? "left-6 sm:left-10" : "right-6 sm:right-10"}`}>
                       <span className="inline-flex items-center justify-center bg-black/40 backdrop-blur-sm border border-white/40 text-white hover:bg-white hover:text-[#563320] font-ivymode px-6 py-2 sm:px-8 sm:py-3 text-sm tracking-widest uppercase transition-colors duration-300">
-                        Know More
+                        {item.btnText || "Know More"}
                       </span>
                     </div>
                   </TransitionLink>
