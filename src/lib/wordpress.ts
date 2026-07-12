@@ -1307,3 +1307,40 @@ export async function getPageMetadataBySlug(slug: string): Promise<Metadata> {
   }
 }
 
+export interface FooterSocialLinks {
+  linkedin: string;
+  whatsapp: string;
+  facebook: string;
+}
+
+export async function getFooterSocialLinks(): Promise<FooterSocialLinks> {
+  const fallback = {
+    linkedin: "https://ae.linkedin.com/company/samaproductiondxb",
+    whatsapp: "https://wa.me/971561189670",
+    facebook: "https://www.facebook.com/share/1CkesXNZ5H/?mibextid=wwXIfr"
+  };
+
+  try {
+    const res = await fetch("https://samaproductionme.com/", {
+      next: { revalidate: REVALIDATE_VAL },
+      headers: { "User-Agent": "Mozilla/5.0" },
+    });
+    if (!res.ok) return fallback;
+    const html = await res.text();
+
+    const linkedinMatch = html.match(/href="([^"]*(?:linkedin\.com\/company\/)[^"]*)"/i);
+    const whatsappMatch = html.match(/href="([^"]*(?:wa\.me\/|api\.whatsapp\.com\/send)[^"]*)"/i);
+    const facebookMatch = html.match(/href="([^"]*(?:facebook\.com\/)[^"]*)"/i);
+
+    return {
+      linkedin: linkedinMatch ? linkedinMatch[1].trim() : fallback.linkedin,
+      whatsapp: whatsappMatch ? whatsappMatch[1].trim() : fallback.whatsapp,
+      facebook: facebookMatch ? facebookMatch[1].trim() : fallback.facebook,
+    };
+  } catch (err) {
+    console.error("Error fetching footer social links:", err);
+    return fallback;
+  }
+}
+
+

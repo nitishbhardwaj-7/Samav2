@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import TransitionLink from "./TransitionLink";
@@ -17,6 +17,23 @@ export default function Footer() {
   const router = useRouter();
   const footerRef = useRef<HTMLElement>(null);
   const contentRef = useRef<HTMLDivElement>(null);
+
+  const [socialLinks, setSocialLinks] = useState({
+    linkedin: "https://ae.linkedin.com/company/samaproductiondxb",
+    whatsapp: "https://wa.me/971561189670",
+    facebook: "https://www.facebook.com/share/1CkesXNZ5H/?mibextid=wwXIfr"
+  });
+
+  useEffect(() => {
+    fetch("/api/social-links")
+      .then((res) => res.json())
+      .then((data) => {
+        if (data) {
+          setSocialLinks(data);
+        }
+      })
+      .catch((err) => console.error("Failed to load footer social links dynamically:", err));
+  }, []);
 
   useEffect(() => {
     const prefersReducedMotion = window.matchMedia(
@@ -70,7 +87,7 @@ export default function Footer() {
             {/* Social Icons */}
             <div className="flex items-center gap-4 text-white">
               {/* LinkedIn */}
-              <a href="#" className="hover:text-white/80 transition-colors duration-300">
+              <a href={socialLinks.linkedin} target="_blank" rel="noopener noreferrer" className="hover:text-white/80 transition-colors duration-300">
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                   <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z" />
                   <rect x="2" y="9" width="4" height="12" />
@@ -78,13 +95,13 @@ export default function Footer() {
                 </svg>
               </a>
               {/* WhatsApp */}
-              <a href="#" className="hover:text-white/80 transition-colors duration-300">
+              <a href={socialLinks.whatsapp} target="_blank" rel="noopener noreferrer" className="hover:text-white/80 transition-colors duration-300">
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                  <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z" />
+                  <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z" />
                 </svg>
               </a>
               {/* Facebook */}
-              <a href="#" className="hover:text-white/80 transition-colors duration-300">
+              <a href={socialLinks.facebook} target="_blank" rel="noopener noreferrer" className="hover:text-white/80 transition-colors duration-300">
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                   <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z" />
                 </svg>
