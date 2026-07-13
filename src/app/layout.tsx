@@ -10,17 +10,20 @@ const ivyMode = localFont({
 
 import Navbar from "../components/Navbar";
 import AnimationProvider from "../components/AnimationProvider";
+import { getSiteTagline } from "../lib/wordpress";
 
 export const metadata: Metadata = {
   title: "Sama Production",
   description: "Spaces that speak for the brand",
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const tagline = await getSiteTagline();
+
   return (
     <html
       lang="en"
@@ -29,9 +32,10 @@ export default function RootLayout({
       <body className="min-h-full flex flex-col">
         <AnimationProvider>
           {children}
-          <Navbar />
+          <Navbar tagline={tagline} />
         </AnimationProvider>
       </body>
     </html>
   );
 }
+

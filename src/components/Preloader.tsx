@@ -16,8 +16,10 @@ import gsap from "gsap";
  * 5. Page content is revealed
  */
 export default function Preloader({
+  tagline = "Interior Design & Implementation",
   onComplete,
 }: {
+  tagline?: string;
   onComplete: () => void;
 }) {
   const overlayRef = useRef<HTMLDivElement>(null);
@@ -159,7 +161,7 @@ export default function Preloader({
             ref={taglineRef}
             className="font-ivymode text-sm sm:text-base tracking-[0.3em] text-white/70 uppercase select-none"
           >
-            Interior Design & Implementation
+            {tagline}
           </div>
         </div>
       </div>

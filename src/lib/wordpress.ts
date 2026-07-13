@@ -1354,4 +1354,57 @@ export async function getFooterSocialLinks(): Promise<FooterSocialLinks> {
   }
 }
 
+export async function getSiteTagline(): Promise<string> {
+  const FALLBACK_TAGLINE = "Interior Design & Implementation";
+  try {
+    // 1. Fetch homepage HTML to scrape the dynamic tagline from the Elementor Header widget (id b0677ca)
+    const res = await fetch("https://samaproductionme.com/", {
+      next: { revalidate: REVALIDATE_VAL },
+      headers: { "User-Agent": "Mozilla/5.0" },
+    });
+    if (res.ok) {
+      const html = await res.text();
+      // Match elementor-element-b0677ca container holding a heading tag with the tagline
+      const match = html.match(/elementor-element-b0677ca[^>]*>\s*<(p|h\d|span|div)[^>]*>([^<]+)<\/\1>/i);
+      if (match && match[2]) {
+        return decodeHtmlEntities(match[2].trim());
+      }
+    }
+
+    // 2. Fallback to homepage Yoast title split (e.g. "Sama Production | Tagline")
+    const url = "https://samaproductionme.com/wp-json/wp/v2/pages/7";
+    const pageRes = await fetch(url, {
+      next: { revalidate: REVALIDATE_VAL },
+    });
+    if (pageRes.ok) {
+      const page = await pageRes.json();
+      const title = page.yoast_head_json?.title || "";
+      if (title && title.includes("|")) {
+        const parts = title.split("|");
+        if (parts[1]) {
+          return decodeHtmlEntities(parts[1].trim());
+        }
+      }
+    }
+
+    // 3. Fallback to site settings description
+    const siteUrl = "https://samaproductionme.com/wp-json/";
+    const siteRes = await fetch(siteUrl, {
+      next: { revalidate: REVALIDATE_VAL },
+    });
+    if (siteRes.ok) {
+      const siteData = await siteRes.json();
+      if (siteData.description) {
+        return decodeHtmlEntities(siteData.description.trim());
+      }
+    }
+
+    return FALLBACK_TAGLINE;
+  } catch (err) {
+    console.error("Error fetching site tagline:", err);
+    return FALLBACK_TAGLINE;
+  }
+}
+
+
 

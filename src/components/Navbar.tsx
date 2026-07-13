@@ -6,7 +6,7 @@ import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import gsap from "gsap";
 
-export default function Navbar() {
+export default function Navbar({ tagline = "Interior Design & Implementation" }: { tagline?: string }) {
   const [isOpen, setIsOpen] = useState(false);
   const pathname = usePathname();
   const router = useRouter();
@@ -129,7 +129,7 @@ export default function Navbar() {
           {/* Right Area: Tagline & Hamburger */}
           <div className="flex items-center gap-6 sm:gap-8">
             <span ref={taglineRef} className="hidden md:inline-block font-ivymode text-sm sm:text-base text-white tracking-wider select-none">
-              Interior Design & Implementation
+              {tagline}
             </span>
 
             {/* Hamburger Icon */}
