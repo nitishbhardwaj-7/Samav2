@@ -196,7 +196,7 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
                 
                 <div>
                   <a 
-                    href="/upload/SAMA-Production-Portfolio.pdf" 
+                    href="/uploads/SAMA-Production-Portfolio.pdf" 
                     download
                     className="inline-flex items-center gap-2 bg-[#714230] hover:bg-[#5a3220] transition-colors text-white font-ivymode px-6 py-3 rounded-full text-sm sm:text-base tracking-wide shadow-lg border border-[#E5D9C4]/20"
                   >

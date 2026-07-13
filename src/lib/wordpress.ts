@@ -705,7 +705,7 @@ export async function getGenericCategoryPageData(
         backgroundImage: fallbackBg,
         ctaTitle: "Take a closer look at our projects and capabilities.",
         ctaButtonText: "Download Portfolio",
-        ctaButtonUrl: "/upload/SAMA-Production-Portfolio.pdf",
+        ctaButtonUrl: "/uploads/SAMA-Production-Portfolio.pdf",
       };
     }
     const page = await res.json();
@@ -746,8 +746,13 @@ export async function getGenericCategoryPageData(
 
     // 5. CTA Button
     const ctaLinkMatch = html.match(/<a[^>]+href="([^"]+)"[^>]*>(?:(?!<\/a>)[\s\S])*?<span class="elementor-button-text">([^<]*)<\/span>(?:(?!<\/a>)[\s\S])*?<\/a>/i);
-    const ctaButtonUrl = ctaLinkMatch ? mapWpUrl(ctaLinkMatch[1].trim()) : "/upload/SAMA-Production-Portfolio.pdf";
+    const parsedUrl = ctaLinkMatch ? mapWpUrl(ctaLinkMatch[1].trim()) : "/uploads/SAMA-Production-Portfolio.pdf";
     const ctaButtonText = ctaLinkMatch ? decodeHtmlEntities(ctaLinkMatch[2].trim()) : "Download Portfolio";
+
+    // Enforce that any "Download Portfolio" button downloads the local PDF in the uploads folder
+    const ctaButtonUrl = (ctaButtonText.toLowerCase().includes("download portfolio") || parsedUrl.toLowerCase().includes("portfolio"))
+      ? "/uploads/SAMA-Production-Portfolio.pdf"
+      : parsedUrl;
 
     return {
       title,
@@ -765,7 +770,7 @@ export async function getGenericCategoryPageData(
       backgroundImage: fallbackBg,
       ctaTitle: "Take a closer look at our projects and capabilities.",
       ctaButtonText: "Download Portfolio",
-      ctaButtonUrl: "/upload/SAMA-Production-Portfolio.pdf",
+      ctaButtonUrl: "/uploads/SAMA-Production-Portfolio.pdf",
     };
   }
 }
