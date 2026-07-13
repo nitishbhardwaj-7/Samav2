@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
@@ -31,6 +31,8 @@ export default function ReachOutSection({ data }: ReachOutSectionProps) {
   const formRef = useRef<HTMLFormElement>(null);
   const dividerRef = useRef<HTMLDivElement>(null);
   const phoneRef = useRef<HTMLAnchorElement>(null);
+
+  const [status, setStatus] = useState<"idle" | "submitting" | "success" | "error">("idle");
 
   useEffect(() => {
     const prefersReducedMotion = window.matchMedia(
@@ -137,6 +139,45 @@ export default function ReachOutSection({ data }: ReachOutSectionProps) {
     return () => ctx.revert();
   }, []);
 
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    if (!formRef.current) return;
+
+    setStatus("submitting");
+
+    const formData = new FormData(formRef.current);
+    const name = formData.get("name") as string;
+    const email = formData.get("email") as string;
+    const message = formData.get("message") as string;
+
+    const body = new URLSearchParams();
+    body.append("action", "elementor_pro_forms_send_form");
+    body.append("post_id", "7");
+    body.append("form_id", "ab6c72e");
+    body.append("referer_title", "SAMA - Production");
+    body.append("form_fields[name]", name);
+    body.append("form_fields[email]", email);
+    body.append("form_fields[message]", message);
+
+    try {
+      const res = await fetch("/api/contact", {
+        method: "POST",
+        body,
+      });
+
+      const data = await res.json();
+      if (data.success) {
+        setStatus("success");
+        formRef.current.reset();
+      } else {
+        setStatus("error");
+      }
+    } catch (err) {
+      console.error(err);
+      setStatus("error");
+    }
+  };
+
   return (
     <section id="contact" ref={sectionRef} className="relative w-full py-16 sm:py-24 px-6 sm:px-10 md:px-14 lg:px-16 flex flex-col items-center justify-center overflow-hidden">
       <div className="w-full max-w-[92%] sm:max-w-[88%] md:max-w-[75%] mx-auto flex flex-col md:flex-row items-center md:items-start justify-center gap-12 md:gap-20 z-10">
@@ -165,12 +206,14 @@ export default function ReachOutSection({ data }: ReachOutSectionProps) {
           </h2>
 
           {/* Form */}
-          <form ref={formRef} className="w-full flex flex-col items-start gap-6" onSubmit={(e) => e.preventDefault()}>
+          <form ref={formRef} className="w-full flex flex-col items-start gap-6" onSubmit={handleSubmit}>
             <div className="w-full flex flex-col sm:flex-row gap-6">
               {/* Name */}
               <div className="flex-1 flex flex-col gap-1">
                 <input 
                   type="text" 
+                  name="name"
+                  required
                   placeholder="Name" 
                   className="w-full bg-transparent border-b border-[#563320]/30 focus:border-[#563320] outline-none pb-2 font-ivymode text-sm text-[#563320] placeholder-[#563320]/50 transition-colors duration-300"
                 />
@@ -179,6 +222,8 @@ export default function ReachOutSection({ data }: ReachOutSectionProps) {
               <div className="flex-1 flex flex-col gap-1">
                 <input 
                   type="email" 
+                  name="email"
+                  required
                   placeholder="Email" 
                   className="w-full bg-transparent border-b border-[#563320]/30 focus:border-[#563320] outline-none pb-2 font-ivymode text-sm text-[#563320] placeholder-[#563320]/50 transition-colors duration-300"
                 />
@@ -187,18 +232,29 @@ export default function ReachOutSection({ data }: ReachOutSectionProps) {
             {/* Message */}
             <div className="w-full flex flex-col gap-1">
               <textarea 
+                name="message"
+                required
                 placeholder="Message" 
                 rows={3}
                 className="w-full bg-transparent border-b border-[#563320]/30 focus:border-[#563320] outline-none pb-2 font-ivymode text-sm text-[#563320] placeholder-[#563320]/50 transition-colors duration-300 resize-none"
               />
             </div>
 
+            {/* Form Status Messages */}
+            {status === "success" && (
+              <p className="font-ivymode text-sm text-green-700">Your submission was successful.</p>
+            )}
+            {status === "error" && (
+              <p className="font-ivymode text-sm text-red-600">Something went wrong. Please try again.</p>
+            )}
+
             {/* Submit Button */}
             <button 
               type="submit" 
-              className="bg-[#856555] hover:bg-[#563320] text-white font-ivymode text-sm tracking-widest uppercase px-12 py-3 transition-colors duration-300 select-none cursor-pointer"
+              disabled={status === "submitting"}
+              className="bg-[#856555] hover:bg-[#563320] disabled:opacity-50 disabled:cursor-not-allowed text-white font-ivymode text-sm tracking-widest uppercase px-12 py-3 transition-colors duration-300 select-none cursor-pointer"
             >
-              submit
+              {status === "submitting" ? "submitting..." : "submit"}
             </button>
           </form>
 
