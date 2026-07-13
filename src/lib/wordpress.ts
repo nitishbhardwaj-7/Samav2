@@ -672,6 +672,7 @@ export interface InteriorProject {
   downloadUrl?: string;
   customCategory?: string;
   isEvent?: boolean;
+  projectCategory?: number[];
   yoast_head_json?: any;
 }
 
@@ -853,6 +854,7 @@ export async function getInteriorProjects(): Promise<InteriorProject[]> {
         downloadUrl: p.project_download_url || p.meta?.project_download_url || p.downloadUrl || p.acf?.downloadUrl || "",
         customCategory: p.project_custom_category || p.meta?.project_custom_category || p.customCategory || p.acf?.customCategory || "",
         isEvent: p.project_category?.includes(13) || false,
+        projectCategory: p.project_category || [],
       });
     }
 
@@ -908,6 +910,7 @@ export async function getProjectBySlug(slug: string): Promise<InteriorProject | 
       downloadUrl: p.project_download_url || p.meta?.project_download_url || p.downloadUrl || p.acf?.downloadUrl || "",
       customCategory: p.project_custom_category || p.meta?.project_custom_category || p.customCategory || p.acf?.customCategory || "",
       isEvent: p.project_category?.includes(13) || false,
+      projectCategory: p.project_category || [],
       yoast_head_json: p.yoast_head_json || null,
     };
   } catch (err) {
@@ -961,6 +964,7 @@ export async function getExhibitionProjects(): Promise<InteriorProject[]> {
         downloadUrl: p.project_download_url || p.meta?.project_download_url || p.downloadUrl || p.acf?.downloadUrl || "",
         customCategory: p.project_custom_category || p.meta?.project_custom_category || p.customCategory || p.acf?.customCategory || "",
         isEvent: p.project_category?.includes(13) || false,
+        projectCategory: p.project_category || [],
       });
     }
 
@@ -1016,6 +1020,7 @@ export async function getEventsProjects(): Promise<InteriorProject[]> {
         downloadUrl: p.project_download_url || p.meta?.project_download_url || p.downloadUrl || p.acf?.downloadUrl || "",
         customCategory: p.project_custom_category || p.meta?.project_custom_category || p.customCategory || p.acf?.customCategory || "",
         isEvent: true,
+        projectCategory: p.project_category || [],
       });
     }
 
@@ -1071,6 +1076,7 @@ export async function getMallActivationProjects(): Promise<InteriorProject[]> {
         downloadUrl: p.project_download_url || p.meta?.project_download_url || p.downloadUrl || p.acf?.downloadUrl || "",
         customCategory: p.project_custom_category || p.meta?.project_custom_category || p.customCategory || p.acf?.customCategory || "",
         isEvent: p.project_category?.includes(13) || false,
+        projectCategory: p.project_category || [],
       });
     }
 

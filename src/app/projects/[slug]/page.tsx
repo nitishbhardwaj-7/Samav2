@@ -76,6 +76,23 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
     return lower !== "" && lower !== "n/a";
   };
 
+  let categoryName = "Interior";
+  let categoryLink = "/interior";
+
+  if (project.projectCategory?.includes(8)) {
+    categoryName = "Exhibition Design & Build";
+    categoryLink = "/exhibition";
+  } else if (project.projectCategory?.includes(13)) {
+    categoryName = "Events";
+    categoryLink = "/events";
+  } else if (project.projectCategory?.includes(14)) {
+    categoryName = "Mall Activation & Travel Retail";
+    categoryLink = "/mall-activation-travel-retail";
+  } else if (project.projectCategory?.includes(7)) {
+    categoryName = "Interior";
+    categoryLink = "/interior";
+  }
+
   return (
     <div className="relative w-full min-h-screen bg-[#7C8C70] font-ivymode flex flex-col">
       
@@ -108,7 +125,7 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
             <p className="font-ivymode text-sm text-[#E5D9C4] tracking-wider">
               <Link href="/" className="hover:text-white transition-colors">Home</Link>
               <span className="mx-2">/</span>
-              <Link href="/projects" className="hover:text-white transition-colors">Interior</Link>
+              <Link href={categoryLink} className="hover:text-white transition-colors">{categoryName}</Link>
             </p>
           </FadeUp>
 
