@@ -148,18 +148,12 @@ export default function Navbar({ tagline = "Interior Design & Implementation" }:
         </div>
       </header>
 
-      {/* Background Overlay */}
-      <div 
-        onClick={() => setIsOpen(false)}
-        className={`fixed inset-0 bg-black/40 backdrop-blur-sm z-[99998] transition-opacity duration-500 ease-in-out ${
-          isOpen ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none"
-        }`}
-      />
+
 
       {/* Slide-out Menu Drawer from Right */}
       <div 
         ref={drawerRef}
-        className="fixed top-0 right-0 h-full w-[85%] sm:w-[55%] md:w-[40%] max-w-md bg-[#7C8C70]/40 backdrop-blur-md z-[99999] border-l border-white/10 shadow-2xl flex flex-col"
+        className="fixed top-0 right-0 h-full w-[85%] sm:w-[55%] md:w-[40%] max-w-md bg-[#7C8C70]/5 backdrop-blur-xl z-[99999] border-l border-white/10 shadow-2xl flex flex-col"
         style={{ transform: "translateX(100%)" }}
       >
         {/* Drawer Header with close button X on the left and line */}
