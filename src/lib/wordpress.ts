@@ -108,6 +108,48 @@ export function mapWpUrl(url: string): string {
 }
 
 /**
+ * Maps an absolute WordPress page URL to a relative local path.
+ * Retains external domains and absolute media assets (wp-content).
+ */
+export function mapWpLinkToLocal(url: string): string {
+  if (!url) return "/";
+
+  // If it's a media asset/wp-content link, keep it pointing to WordPress
+  if (url.includes("/wp-content/")) {
+    if (url.startsWith("/")) {
+      return `https://samaproductionme.com${url}`;
+    }
+    return url;
+  }
+
+  // If it's an absolute link to our WordPress pages, map it to a local relative path
+  if (url.startsWith("https://samaproductionme.com") || url.startsWith("http://samaproductionme.com")) {
+    try {
+      const parsed = new URL(url);
+      let pathname = parsed.pathname;
+      if (pathname.length > 1 && pathname.endsWith("/")) {
+        pathname = pathname.slice(0, -1);
+      }
+      return pathname || "/";
+    } catch {
+      return url;
+    }
+  }
+
+  // Clean trailing slashes for relative links
+  if (url.startsWith("/")) {
+    let pathname = url;
+    if (pathname.length > 1 && pathname.endsWith("/")) {
+      pathname = pathname.slice(0, -1);
+    }
+    return pathname;
+  }
+
+  return url;
+}
+
+
+/**
  * Extracts a background image from WordPress Elementor CSS.
  * Elementor stores certain images as CSS background-image on containers,
  * not as inline <img> tags, so they're not in the REST API HTML.
@@ -306,7 +348,7 @@ export async function getHomepageData(): Promise<HomepageData> {
     // Parse About Section button (from Elementor container d47da7e)
     const aboutBtnMatch = html.match(/class="[^"]*elementor-element-d47da7e[^"]*"[\s\S]*?<a[^>]+href="([^"]+)"[^>]*>(?:(?!<\/a>)[\s\S])*?<span class="elementor-button-text">([^<]*)<\/span>(?:(?!<\/a>)[\s\S])*?<\/a>/i);
     if (aboutBtnMatch) {
-      data.about.knowMoreUrl = mapWpUrl(aboutBtnMatch[1].trim());
+      data.about.knowMoreUrl = mapWpLinkToLocal(aboutBtnMatch[1].trim());
       data.about.knowMoreText = decodeHtmlEntities(aboutBtnMatch[2].trim());
     }
 
@@ -746,7 +788,7 @@ export async function getGenericCategoryPageData(
 
     // 5. CTA Button
     const ctaLinkMatch = html.match(/<a[^>]+href="([^"]+)"[^>]*>(?:(?!<\/a>)[\s\S])*?<span class="elementor-button-text">([^<]*)<\/span>(?:(?!<\/a>)[\s\S])*?<\/a>/i);
-    const parsedUrl = ctaLinkMatch ? mapWpUrl(ctaLinkMatch[1].trim()) : "/uploads/SAMA-Production-Portfolio.pdf";
+    const parsedUrl = ctaLinkMatch ? mapWpLinkToLocal(ctaLinkMatch[1].trim()) : "/uploads/SAMA-Production-Portfolio.pdf";
     const ctaButtonText = ctaLinkMatch ? decodeHtmlEntities(ctaLinkMatch[2].trim()) : "Download Portfolio";
 
     // Enforce that any "Download Portfolio" button downloads the local PDF in the uploads folder
