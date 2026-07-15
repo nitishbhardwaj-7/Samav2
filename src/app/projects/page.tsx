@@ -23,10 +23,10 @@ export default async function ProjectsPage() {
       <div className="pt-32 sm:pt-40">
         <ProjectsSection data={projects} />
       </div>
-      
+
 
       {/* Spacer to fade to white before the footer */}
-      <div 
+      <div
         className="w-full h-24 sm:h-32 md:h-40"
         style={{ background: 'linear-gradient(180deg, #DAC6AE 0%, #FFFFFF 100%)' }}
       />

@@ -189,24 +189,24 @@ export default function ProjectsSection({ data }: ProjectsSectionProps) {
   }, [items.length]);
 
   return (
-    <section 
-      ref={sectionRef} 
+    <section
+      ref={sectionRef}
       className="relative w-full pt-16 pb-16 sm:pt-24 sm:pb-24 flex flex-col items-center justify-center overflow-hidden"
-      style={{ 
-        background: pathname === '/projects' 
+      style={{
+        background: pathname === '/projects'
           ? 'linear-gradient(180deg, #778065 0%, #778065 10%, #496449 47.5%, #496449 52.5%, #DAC6AE 100%)'
-          : 'linear-gradient(180deg, #496449 0%, #714230 50%, #8B6759 80%, #DAC6AE 100%)' 
+          : 'linear-gradient(180deg, #496449 0%, #714230 11%, #DAC6AE 100%)'
       }}
     >
       <div className="w-full flex flex-col gap-20 sm:gap-28 z-10">
-        
+
         {/* Header Block */}
         <div ref={headerRef} className="w-full max-w-[92%] sm:max-w-[88%] md:max-w-[85%] mx-auto flex flex-col md:flex-row justify-between items-start md:items-end gap-6 border-b border-white/10 pb-8 sm:pb-12">
           {/* Main Title */}
           <h2 ref={titleRef} className="font-ivymode font-normal text-[5.5rem] sm:text-[7.5rem] md:text-[9rem] lg:text-[10.5rem] xl:text-[12.5rem] text-[#E5D9C4] leading-[0.8] select-none whitespace-nowrap">
             {title}
           </h2>
-          
+
           {/* Subtext info */}
           <div className="max-w-xs sm:max-w-sm md:max-w-md flex flex-col items-start gap-3">
             <h3 ref={subtitleRef} className="font-ivymode text-lg sm:text-xl md:text-2xl text-[#E5D9C4] font-normal leading-tight">
@@ -223,22 +223,21 @@ export default function ProjectsSection({ data }: ProjectsSectionProps) {
           {items.map((item, index) => {
             const isReverse = index % 2 === 1;
             const isLastItem = index === items.length - 1;
-            
+
             // Apply dark brown text styling for the last project item that sits on the light background
             const textThemeClass = isLastItem ? "text-[#563320]" : "text-[#E5D9C4]";
-            const borderThemeClass = isLastItem 
-              ? "border-[#563320]/60 text-[#563320]" 
+            const borderThemeClass = isLastItem
+              ? "border-[#563320]/60 text-[#563320]"
               : "border-[#E5D9C4]/40 text-[#E5D9C4]";
             const lineThemeClass = isLastItem ? "bg-[#563320]/30" : "bg-white/20";
             const alignmentClass = isReverse ? "items-start md:items-end text-left md:text-right" : "items-start text-left";
 
             return (
-              <div 
+              <div
                 key={index}
                 ref={(el) => { projectRefs.current[index] = el; }}
-                className={`w-full flex flex-col group items-stretch gap-0 px-4 sm:px-6 md:px-0 ${
-                  isReverse ? "md:flex-row-reverse" : "md:flex-row"
-                }`}
+                className={`w-full flex flex-col group items-stretch gap-0 px-4 sm:px-6 md:px-0 ${isReverse ? "md:flex-row-reverse" : "md:flex-row"
+                  }`}
               >
                 {/* Image Column */}
                 <div
@@ -246,8 +245,8 @@ export default function ProjectsSection({ data }: ProjectsSectionProps) {
                   className="w-full md:w-[60%] group-hover:md:w-[66%] relative h-[50vh] md:h-[65vh] min-h-[350px] overflow-hidden shadow-xl rounded-2xl md:rounded-none"
                   style={{ transition: "width 2.2s cubic-bezier(0.16, 1, 0.3, 1)" }}
                 >
-                  <TransitionLink 
-                    href={item.link} 
+                  <TransitionLink
+                    href={item.link}
                     className="block w-full h-full relative outline-none focus:outline-none cursor-pointer"
                   >
                     <div data-image-inner className="absolute inset-0">
@@ -260,7 +259,7 @@ export default function ProjectsSection({ data }: ProjectsSectionProps) {
                         className="object-cover object-center group-hover:scale-[1.05] transition-transform duration-[2200ms] ease-out"
                       />
                     </div>
-                    
+
                     {/* Know More button */}
                     <div className={`absolute bottom-6 sm:bottom-10 opacity-0 translate-y-4 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-500 ease-out z-20 ${isReverse ? "left-6 sm:left-10" : "right-6 sm:right-10"}`}>
                       <span className="inline-flex items-center justify-center bg-black/40 backdrop-blur-sm border border-white/40 text-white hover:bg-white hover:text-[#563320] font-ivymode px-6 py-2 sm:px-8 sm:py-3 text-sm tracking-widest uppercase transition-colors duration-300">
@@ -271,21 +270,18 @@ export default function ProjectsSection({ data }: ProjectsSectionProps) {
                 </div>
 
                 {/* Info Column */}
-                <div className={`w-full flex-1 flex flex-col justify-center py-6 md:py-0 ${
-                  isReverse 
-                    ? "pl-2 sm:pl-4 md:pl-[7.5vw] pr-2 sm:pr-4 md:pr-16" 
+                <div className={`w-full flex-1 flex flex-col justify-center py-6 md:py-0 ${isReverse
+                    ? "pl-2 sm:pl-4 md:pl-[7.5vw] pr-2 sm:pr-4 md:pr-16"
                     : "pr-2 sm:pr-4 md:pr-[7.5vw] pl-2 sm:pl-4 md:pl-16"
-                } ${alignmentClass}`}>
+                  } ${alignmentClass}`}>
                   {/* Number Box */}
-                  <div data-info-item className={`border px-3 py-1.5 font-ivymode text-sm tracking-wider select-none ${
-                    isReverse ? "self-start md:self-end" : "self-start"
-                  } ${borderThemeClass}`}>
+                  <div data-info-item className={`border px-3 py-1.5 font-ivymode text-sm tracking-wider select-none ${isReverse ? "self-start md:self-end" : "self-start"
+                    } ${borderThemeClass}`}>
                     {item.number}
                   </div>
                   {/* Divider Line */}
-                  <div data-info-item className={`w-[1px] h-20 my-4 ${
-                    isReverse ? "ml-3 md:ml-0 md:mr-3" : "ml-3"
-                  } ${lineThemeClass}`} />
+                  <div data-info-item className={`w-[1px] h-20 my-4 ${isReverse ? "ml-3 md:ml-0 md:mr-3" : "ml-3"
+                    } ${lineThemeClass}`} />
                   {/* Title */}
                   <h4 data-info-item className={`font-ivymode text-2xl sm:text-3xl md:text-4xl font-normal leading-snug max-w-xs ${textThemeClass}`}>
                     {item.title}
@@ -307,14 +303,14 @@ export default function ProjectsSection({ data }: ProjectsSectionProps) {
             className="inline-flex items-center gap-2 bg-[#563320] hover:bg-[#402213] text-[#E5D9C4] font-ivymode text-xs sm:text-sm tracking-widest uppercase px-8 py-3.5 rounded-full shadow-[0_10px_30px_rgba(86,51,32,0.3)] transition-all duration-300 transform hover:translate-y-[-2px]"
           >
             <span>Download Portfolio</span>
-            <svg 
-              width="14" 
-              height="14" 
-              viewBox="0 0 24 24" 
-              fill="none" 
-              stroke="currentColor" 
-              strokeWidth="2.5" 
-              strokeLinecap="round" 
+            <svg
+              width="14"
+              height="14"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2.5"
+              strokeLinecap="round"
               strokeLinejoin="round"
             >
               <path d="M12 5v14M19 12l-7 7-7-7" />

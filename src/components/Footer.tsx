@@ -133,7 +133,10 @@ export default function Footer() {
                   <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
                   <circle cx="12" cy="10" r="3" />
                 </svg>
-                <span>77 St. Dubai Investment Park2, P.O.Box 449020, Dubai, UAE</span>
+                <div>
+                  <p>UAE</p>
+                  <p className="opacity-90">77 St. Dubai Investment Park2, P.O.Box 449020, Dubai</p>
+                </div>
               </div>
 
               {/* Location 2 */}
@@ -153,8 +156,8 @@ export default function Footer() {
                   <circle cx="12" cy="10" r="3" />
                 </svg>
                 <div>
-                  <p>7412 Aljawz, Ar Robie District</p>
-                  <p className="opacity-90">Riyadh 13316, Kingdom of Saudi Arabia (KSA)</p>
+                  <p>Kingdom of Saudi Arabia (KSA)</p>
+                  <p className="opacity-90">7412 Aljawz, Ar Robie District, Riyadh 13316</p>
                 </div>
               </div>
 
