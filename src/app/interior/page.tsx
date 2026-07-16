@@ -4,7 +4,7 @@ import TransitionLink from "../../components/TransitionLink";
 import ReachOutSection from "../../components/ReachOutSection";
 import Footer from "../../components/Footer";
 import InteriorHeader from "../../components/InteriorHeader";
-import { RevealImage, FadeUp } from "../../components/animations";
+import { FadeUp } from "../../components/animations";
 import { getInteriorPageData, getInteriorProjects, getHomepageData, getPageMetadata } from "../../lib/wordpress";
 
 export const revalidate = 3600;
@@ -49,48 +49,44 @@ export default async function InteriorPage() {
                     key={project.id}
                     className="flex flex-col items-center text-center group w-full sm:w-1/2 md:w-1/3 lg:w-1/4 px-3 md:px-4 lg:px-5 mb-10 md:mb-12"
                   >
-                    <RevealImage delay={staggerIndex * 0.15} duration={1.6} className="w-full">
+                    <TransitionLink
+                      href={`/projects/${project.slug}`}
+                      sharedImageSrc={project.featuredImage || "/uploads/2026/06/Frame-146-3-1.png"}
+                      sharedImageBorderRadius="24px"
+                      className="w-full block relative aspect-[4/3] rounded-[24px] overflow-hidden shadow-lg shadow-black/20 hover:shadow-black/40 transition-shadow duration-500"
+                      tabIndex={0}
+                      aria-label={`View project: ${project.title}`}
+                    >
+                      <Image
+                         src={project.featuredImage || "/uploads/2026/06/Frame-146-3-1.png"}
+                        alt={project.title}
+                        fill
+                        sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                        className="object-cover group-hover:scale-105 transition-transform duration-700 ease-out"
+                      />
+                    </TransitionLink>
+
+                    <h3 className={`font-ivymode font-normal text-lg sm:text-xl md:text-2xl mt-4 transition-transform duration-300 group-hover:-translate-y-1 ${titleColorClass}`}>
                       <TransitionLink
                         href={`/projects/${project.slug}`}
                         sharedImageSrc={project.featuredImage || "/uploads/2026/06/Frame-146-3-1.png"}
                         sharedImageBorderRadius="24px"
-                        className="w-full block relative aspect-[4/3] rounded-[24px] overflow-hidden shadow-lg shadow-black/20 hover:shadow-black/40 transition-shadow duration-500"
-                        tabIndex={0}
-                        aria-label={`View project: ${project.title}`}
+                        className="transition-colors duration-300 no-underline"
                       >
-                        <Image
-                           src={project.featuredImage || "/uploads/2026/06/Frame-146-3-1.png"}
-                          alt={project.title}
-                          fill
-                          sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
-                          className="object-cover group-hover:scale-105 transition-transform duration-700 ease-out"
-                        />
+                        {project.title}
                       </TransitionLink>
-                    </RevealImage>
+                    </h3>
 
-                    <FadeUp delay={0.15 + staggerIndex * 0.15}>
-                      <h3 className={`font-ivymode font-normal text-lg sm:text-xl md:text-2xl mt-4 transition-transform duration-300 group-hover:-translate-y-1 ${titleColorClass}`}>
-                        <TransitionLink
-                          href={`/projects/${project.slug}`}
-                          sharedImageSrc={project.featuredImage || "/uploads/2026/06/Frame-146-3-1.png"}
-                          sharedImageBorderRadius="24px"
-                          className="transition-colors duration-300 no-underline"
-                        >
-                          {project.title}
-                        </TransitionLink>
-                      </h3>
-
-                      <div className="mt-2 opacity-0 invisible translate-y-2 group-hover:opacity-100 group-hover:visible group-hover:translate-y-0 transition-all duration-300 h-[38px]">
-                        <TransitionLink
-                          href={`/projects/${project.slug}`}
-                          sharedImageSrc={project.featuredImage || "/uploads/2026/06/Frame-146-3-1.png"}
-                          sharedImageBorderRadius="24px"
-                          className="inline-block px-6 py-1.5 border border-[#563320]/30 rounded-full text-[#E5D9C4] uppercase tracking-wider font-ivymode bg-[#714230] hover:bg-[#563320] hover:text-white transition-colors duration-300 no-underline text-xs sm:text-sm shadow-sm"
-                        >
-                          View Project
-                        </TransitionLink>
-                      </div>
-                    </FadeUp>
+                    <div className="mt-2 opacity-0 invisible translate-y-2 group-hover:opacity-100 group-hover:visible group-hover:translate-y-0 transition-all duration-300 h-[38px]">
+                      <TransitionLink
+                        href={`/projects/${project.slug}`}
+                        sharedImageSrc={project.featuredImage || "/uploads/2026/06/Frame-146-3-1.png"}
+                        sharedImageBorderRadius="24px"
+                        className="inline-block px-6 py-1.5 border border-[#563320]/30 rounded-full text-[#E5D9C4] uppercase tracking-wider font-ivymode bg-[#714230] hover:bg-[#563320] hover:text-white transition-colors duration-300 no-underline text-xs sm:text-sm shadow-sm"
+                      >
+                        View Project
+                      </TransitionLink>
+                    </div>
                   </article>
                 );
               })}

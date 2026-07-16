@@ -80,7 +80,7 @@ export default function Footer() {
                 fill
                 priority
                 sizes="224px"
-                className="object-contain object-center"
+                className="object-contain object-center filter brightness-0 invert"
               />
             </div>
 
