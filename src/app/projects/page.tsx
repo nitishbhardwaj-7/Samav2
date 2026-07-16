@@ -18,7 +18,7 @@ export default async function ProjectsPage() {
   const { projects } = homepageData;
 
   return (
-    <div className="relative w-full min-h-screen bg-[#778065]">
+    <div className="relative w-full min-h-screen bg-[#496449]">
       {/* ─── HEADER padding so the Navbar doesn't overlap the title. Solid background blends seamlessly into the section's gradient ─── */}
       <div className="pt-32 sm:pt-40">
         <ProjectsSection data={projects} />

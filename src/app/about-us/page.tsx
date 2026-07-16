@@ -29,15 +29,19 @@ export default async function AboutUsPage() {
       {/* Section 2: About Section */}
       <AboutSection data={about} hideKnowMore={true} />
 
-      {/* Shared Gradient Wrapper for Design and Who We Are */}
+      {/* Section 3: Design Section */}
       <div 
         className="relative w-full"
-        style={{ background: 'linear-gradient(180deg, #496449 0%, #714230 50%, #8B6759 80%, #DAC6AE 100%)' }}
+        style={{ background: 'linear-gradient(180deg, #496449 0%, #714230 100%)' }}
       >
-        {/* Section 3: Design Section */}
         <DesignSection data={designSection} />
+      </div>
 
-        {/* Section 4: Who We Are Section */}
+      {/* Section 4: Who We Are Section */}
+      <div 
+        className="relative w-full"
+        style={{ background: 'linear-gradient(180deg, #714230 0%, #DAC6AE 100%)' }}
+      >
         <WhoWeAreSection data={whoWeAre} />
       </div>
 

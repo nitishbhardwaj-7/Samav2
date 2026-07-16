@@ -23,7 +23,7 @@ export default async function PartnersPage() {
     <div className="relative w-full min-h-screen flex flex-col">
       <div 
         className="flex flex-col pt-32 flex-grow"
-        style={{ background: 'linear-gradient(180deg, #778065 0%, #778065 10%, #496449 47.5%, #496449 52.5%, #DAC6AE 100%)' }}
+        style={{ background: 'linear-gradient(180deg, #778065 0%, #778065 80%, #DAC6AE 100%)' }}
       >
       {/* Header section (Centered) */}
       <div className="w-full max-w-[92%] sm:max-w-[88%] md:max-w-[85%] mx-auto flex flex-col items-center text-center pb-10">

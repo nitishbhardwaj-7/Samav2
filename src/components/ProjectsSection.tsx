@@ -194,8 +194,8 @@ export default function ProjectsSection({ data }: ProjectsSectionProps) {
       className="relative w-full pt-16 pb-16 sm:pt-24 sm:pb-24 flex flex-col items-center justify-center overflow-hidden"
       style={{
         background: pathname === '/projects'
-          ? 'linear-gradient(180deg, #778065 0%, #778065 10%, #496449 47.5%, #496449 52.5%, #DAC6AE 100%)'
-          : 'linear-gradient(180deg, #496449 0%, #714230 11%, #DAC6AE 100%)'
+          ? 'linear-gradient(180deg, #496449 0%, #778065 11%, #778065 42%, #DAC6AE 90%, #DAC6AE 100%)'
+          : 'linear-gradient(180deg, #496449 0%, #714230 11%, #714230 70%, #DAC6AE 90%, #DAC6AE 100%)'
       }}
     >
       <div className="w-full flex flex-col gap-20 sm:gap-28 z-10">
