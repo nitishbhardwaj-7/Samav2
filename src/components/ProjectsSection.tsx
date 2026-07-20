@@ -266,8 +266,8 @@ export default function ProjectsSection({ data, headerData, showArchiveHeader }:
             const isLastItem = index === items.length - 1;
 
             // On the /projects page, all items sit on the light background due to the rapid gradient.
-            // On other pages, only the last item sits on the light background.
-            const isLightBg = pathname === '/projects' || isLastItem;
+            // On the homepage, all items sit on the dark background.
+            const isLightBg = pathname === '/projects';
 
             const textThemeClass = isLightBg ? "text-[#563320]" : "text-[#E5D9C4]";
             const borderThemeClass = isLightBg
