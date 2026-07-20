@@ -100,11 +100,19 @@ const REVALIDATE_VAL = process.env.NODE_ENV === "development" ? 0 : 60;
  */
 export function mapWpUrl(url: string): string {
   if (!url) return "";
+  let fullUrl = url;
   // Ensure the URL is absolute
-  if (url.startsWith("http")) return url;
-  // If it's a relative wp-content path, prepend the site base
-  if (url.startsWith("/wp-content")) return `https://samaproductionme.com${url}`;
-  return url;
+  if (!fullUrl.startsWith("http")) {
+    if (fullUrl.startsWith("/wp-content")) {
+      fullUrl = `https://samaproductionme.com${fullUrl}`;
+    }
+  }
+
+  // Strip WordPress image dimension suffixes (e.g. -1024x683, -768x1024, -300x200)
+  // to fetch original full-resolution master images without compression
+  fullUrl = fullUrl.replace(/-\d+x\d+(\.[a-z0-9]+)$/i, "$1");
+
+  return fullUrl;
 }
 
 /**
@@ -992,6 +1000,87 @@ export async function getProjectsPageData(): Promise<ProjectsPageData> {
   }
 }
 
+async function fetchProjectGalleryImages(p: any, featuredImage: string): Promise<string[]> {
+  const gallery: string[] = [];
+
+  // 1. Featured image (if set)
+  if (featuredImage) {
+    gallery.push(mapWpUrl(featuredImage));
+  }
+
+  // 2. Fetch live project page HTML to extract ONLY active gallery images currently present on the published project
+  if (p.slug) {
+    try {
+      const pageUrl = `https://samaproductionme.com/projects/${p.slug}/`;
+      const res = await fetch(pageUrl, {
+        next: { revalidate: REVALIDATE_VAL },
+        headers: { "User-Agent": "Mozilla/5.0" },
+      });
+      if (res.ok) {
+        const html = await res.text();
+        // Extract <img> src attributes
+        const imgRegex = /<img[^>]+src=['"]([^'"]+)['"]/gi;
+        let match;
+        while ((match = imgRegex.exec(html)) !== null) {
+          const src = mapWpUrl(match[1]);
+          if (
+            src &&
+            !src.includes("logo") &&
+            !src.includes("hamburger") &&
+            !src.includes("Line-") &&
+            !src.includes("intereor-form-img") &&
+            !src.includes("contact-form") &&
+            !src.includes("icon") &&
+            !gallery.includes(src)
+          ) {
+            gallery.push(src);
+          }
+        }
+
+        // Extract background-image: url(...)
+        const bgRegex = /background-image:\s*url\(['"]?([^'")]+)['"]?\)/gi;
+        while ((match = bgRegex.exec(html)) !== null) {
+          const src = mapWpUrl(match[1]);
+          if (
+            src &&
+            !src.includes("logo") &&
+            !src.includes("hamburger") &&
+            !src.includes("Line-") &&
+            !src.includes("intereor-form-img") &&
+            !src.includes("contact-form") &&
+            !src.includes("icon") &&
+            !gallery.includes(src)
+          ) {
+            gallery.push(src);
+          }
+        }
+      }
+    } catch (err) {
+      console.warn(`Scraping active gallery images for ${p.slug} failed, falling back to content extraction:`, err);
+    }
+  }
+
+  // 3. Fallback: extract images embedded in post content HTML
+  const contentHtml = p.content?.rendered || "";
+  if (contentHtml) {
+    const imgRegex = /<img[^>]+src="([^"]+)"/gi;
+    let match;
+    while ((match = imgRegex.exec(contentHtml)) !== null) {
+      const src = mapWpUrl(match[1]);
+      if (src && !src.includes("logo") && !src.includes("icon") && !gallery.includes(src)) {
+        gallery.push(src);
+      }
+    }
+  }
+
+  // 4. Fallback if gallery is still empty
+  if (gallery.length === 0 && featuredImage) {
+    gallery.push(mapWpUrl(featuredImage));
+  }
+
+  return gallery;
+}
+
 export async function getInteriorProjects(): Promise<InteriorProject[]> {
   try {
     const res = await fetch("https://samaproductionme.com/wp-json/wp/v2/project?project_category=7&per_page=100", {
@@ -1012,20 +1101,8 @@ export async function getInteriorProjects(): Promise<InteriorProject[]> {
         }
       }
 
-      // Get gallery (attached media items)
-      const mediaRes = await fetch(`https://samaproductionme.com/wp-json/wp/v2/media?parent=${p.id}&per_page=100`, {
-        next: { revalidate: REVALIDATE_VAL },
-      });
-      let gallery: string[] = [];
-      if (mediaRes.ok) {
-        const mediaItems = await mediaRes.json();
-        gallery = mediaItems.map((m: any) => mapWpUrl(m.source_url));
-      }
-
-      // If gallery is empty, put featured image inside it
-      if (gallery.length === 0 && featuredImage) {
-        gallery = [featuredImage];
-      }
+      // Fetch full gallery (WordPress Gallery section + featured + content images)
+      const gallery = await fetchProjectGalleryImages(p, featuredImage);
 
       projects.push({
         id: p.id,
@@ -1070,18 +1147,8 @@ export async function getProjectBySlug(slug: string): Promise<InteriorProject | 
       }
     }
 
-    const mediaRes = await fetch(`https://samaproductionme.com/wp-json/wp/v2/media?parent=${p.id}&per_page=100`, {
-      next: { revalidate: REVALIDATE_VAL },
-    });
-    let gallery: string[] = [];
-    if (mediaRes.ok) {
-      const mediaItems = await mediaRes.json();
-      gallery = mediaItems.map((m: any) => mapWpUrl(m.source_url));
-    }
-
-    if (gallery.length === 0 && featuredImage) {
-      gallery = [featuredImage];
-    }
+    // Fetch full gallery (WordPress Gallery section + featured + content images)
+    const gallery = await fetchProjectGalleryImages(p, featuredImage);
 
     return {
       id: p.id,
@@ -1124,18 +1191,8 @@ export async function getExhibitionProjects(): Promise<InteriorProject[]> {
         }
       }
 
-      const mediaRes = await fetch(`https://samaproductionme.com/wp-json/wp/v2/media?parent=${p.id}&per_page=100`, {
-        next: { revalidate: REVALIDATE_VAL },
-      });
-      let gallery: string[] = [];
-      if (mediaRes.ok) {
-        const mediaItems = await mediaRes.json();
-        gallery = mediaItems.map((m: any) => mapWpUrl(m.source_url));
-      }
-
-      if (gallery.length === 0 && featuredImage) {
-        gallery = [featuredImage];
-      }
+      // Fetch full gallery (WordPress Gallery section + featured + content images)
+      const gallery = await fetchProjectGalleryImages(p, featuredImage);
 
       projects.push({
         id: p.id,
@@ -1180,18 +1237,8 @@ export async function getEventsProjects(): Promise<InteriorProject[]> {
         }
       }
 
-      const mediaRes = await fetch(`https://samaproductionme.com/wp-json/wp/v2/media?parent=${p.id}&per_page=100`, {
-        next: { revalidate: REVALIDATE_VAL },
-      });
-      let gallery: string[] = [];
-      if (mediaRes.ok) {
-        const mediaItems = await mediaRes.json();
-        gallery = mediaItems.map((m: any) => mapWpUrl(m.source_url));
-      }
-
-      if (gallery.length === 0 && featuredImage) {
-        gallery = [featuredImage];
-      }
+      // Fetch full gallery (WordPress Gallery section + featured + content images)
+      const gallery = await fetchProjectGalleryImages(p, featuredImage);
 
       projects.push({
         id: p.id,
@@ -1236,18 +1283,8 @@ export async function getMallActivationProjects(): Promise<InteriorProject[]> {
         }
       }
 
-      const mediaRes = await fetch(`https://samaproductionme.com/wp-json/wp/v2/media?parent=${p.id}&per_page=100`, {
-        next: { revalidate: REVALIDATE_VAL },
-      });
-      let gallery: string[] = [];
-      if (mediaRes.ok) {
-        const mediaItems = await mediaRes.json();
-        gallery = mediaItems.map((m: any) => mapWpUrl(m.source_url));
-      }
-
-      if (gallery.length === 0 && featuredImage) {
-        gallery = [featuredImage];
-      }
+      // Fetch full gallery (WordPress Gallery section + featured + content images)
+      const gallery = await fetchProjectGalleryImages(p, featuredImage);
 
       projects.push({
         id: p.id,

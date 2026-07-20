@@ -111,6 +111,7 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
                 alt={project.title}
                 fill
                 priority
+                unoptimized
                 sizes="100vw"
                 className="object-cover"
               />

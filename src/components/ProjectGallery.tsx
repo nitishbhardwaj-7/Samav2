@@ -105,6 +105,7 @@ export default function ProjectGallery({ gallery, projectTitle }: ProjectGallery
                   alt={`${projectTitle} gallery ${i}`}
                   fill
                   priority={i === 0}
+                  unoptimized
                   sizes="(max-width: 768px) 100vw, 33vw"
                   className="object-cover group-hover:scale-105 transition-transform duration-700 ease-out"
                 />

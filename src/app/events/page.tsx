@@ -25,15 +25,17 @@ export default async function EventsPage() {
 
   return (
     <div className="relative w-full min-h-screen flex flex-col">
-      <div
-        className="flex flex-col flex-grow"
-        style={{ background: 'linear-gradient(180deg, #8B6759 0%, #8B6759 10%, #714230 30%, #DAC6AE 45%, #DAC6AE 90%, #FFFFFF 100%)' }}
-      >
+      <div className="flex flex-col flex-grow">
         {/* ─── HEADER ───────────────────────────────────────────── */}
-        <InteriorHeader title={title} description={description} breadcrumbLabel="Events" />
+        <div style={{ background: 'linear-gradient(180deg, #8B6759 0%, #714230 100%)' }}>
+          <InteriorHeader title={title} description={description} breadcrumbLabel="Events" />
+        </div>
 
         {/* ─── PROJECT GRID ───────────────────────────────────────────── */}
-        <section className="relative w-full py-12 sm:py-16 px-4 sm:px-8 md:px-12 lg:px-16 flex-grow">
+        <section
+          className="relative w-full py-12 sm:py-16 px-4 sm:px-8 md:px-12 lg:px-16 flex-grow"
+          style={{ background: 'linear-gradient(180deg, #714230 0%, #DAC6AE 75%, #FFFFFF 100%)' }}
+        >
           <div className="w-full max-w-[92%] sm:max-w-[88%] md:max-w-[85%] mx-auto">
             <div className="flex flex-wrap justify-center -mx-3 md:-mx-4 lg:-mx-5">
               {projects.map((project, index) => {
