@@ -1,6 +1,7 @@
+import ReachOutSection from "@/components/ReachOutSection";
 import Footer from "../../components/Footer";
 import ProjectsSection from "../../components/ProjectsSection";
-import { getHomepageData, getPageMetadataBySlug } from "../../lib/wordpress";
+import { getProjectsPageData, getPageMetadataBySlug } from "../../lib/wordpress";
 
 export const revalidate = 3600;
 
@@ -14,14 +15,17 @@ export async function generateMetadata() {
 }
 
 export default async function ProjectsPage() {
-  const homepageData = await getHomepageData();
-  const { projects } = homepageData;
+  const projectsData = await getProjectsPageData();
 
   return (
     <div className="relative w-full min-h-screen bg-[#496449]">
       {/* ─── HEADER padding so the Navbar doesn't overlap the title. Solid background blends seamlessly into the section's gradient ─── */}
-      <div className="pt-32 sm:pt-40">
-        <ProjectsSection data={projects} />
+      <div className="pt-20 sm:pt-24">
+        <ProjectsSection
+          data={projectsData.projects}
+          headerData={projectsData.header}
+          showArchiveHeader={true}
+        />
       </div>
 
 

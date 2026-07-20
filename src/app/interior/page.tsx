@@ -40,7 +40,7 @@ export default async function InteriorPage() {
                 // Calculate if it's the last row based on 4 items per row (desktop layout)
                 const isLastRow = index >= projects.length - (projects.length % 4 === 0 ? 4 : projects.length % 4);
                 const titleColorClass = isLastRow ? "text-[#563320] hover:text-[#563320]/80" : "text-white hover:text-white/80";
-                
+
                 // Calculate stagger delay based on column index (4 items per row on desktop)
                 const staggerIndex = index % 4;
 
@@ -58,7 +58,7 @@ export default async function InteriorPage() {
                       aria-label={`View project: ${project.title}`}
                     >
                       <Image
-                         src={project.featuredImage || "/uploads/2026/06/Frame-146-3-1.png"}
+                        src={project.featuredImage || "/uploads/2026/06/Frame-146-3-1.png"}
                         alt={project.title}
                         fill
                         sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"

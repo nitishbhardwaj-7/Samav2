@@ -40,7 +40,7 @@ export default async function ExhibitionPage() {
                 // Calculate if it's the last row based on 4 items per row (desktop layout)
                 const isLastRow = index >= projects.length - (projects.length % 4 === 0 ? 4 : projects.length % 4);
                 const titleColorClass = isLastRow ? "text-[#563320] hover:text-[#563320]/80" : "text-white hover:text-white/80";
-                
+
                 // Calculate stagger delay based on column index (4 items per row on desktop)
                 const staggerIndex = index % 4;
 

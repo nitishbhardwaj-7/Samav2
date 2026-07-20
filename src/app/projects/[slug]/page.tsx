@@ -95,14 +95,14 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
 
   return (
     <div className="relative w-full min-h-screen bg-[#7C8C70] font-ivymode flex flex-col">
-      
+
       <div className="w-full bg-gradient-to-b from-[#7C8C70] via-[#563320] to-white">
         {/* ─── MAIN CONTENT CONTAINER ─── */}
         <div className="w-full max-w-[92%] sm:max-w-[88%] md:max-w-[85%] mx-auto pt-24 sm:pt-32 pb-24">
-          
+
           {/* ─── HERO IMAGE ─── */}
           {project.featuredImage && (
-            <div 
+            <div
               data-project-hero-wrap
               className="w-full relative aspect-[21/9] sm:aspect-[2/1] md:aspect-[2.4/1] rounded-2xl sm:rounded-3xl overflow-hidden shadow-2xl mb-8"
             >
@@ -130,7 +130,7 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
           </FadeUp>
 
           {/* ─── TITLE ─── */}
-          <RevealText 
+          <RevealText
             as="h1"
             type="words"
             delay={1.5}
@@ -141,10 +141,10 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
 
           {/* ─── 3-COLUMN GRID ─── */}
           <FadeUp delay={1.6} className="grid grid-cols-1 md:grid-cols-[1fr_1.5fr_1.5fr] gap-10 md:gap-8 lg:gap-16">
-            
+
             {/* LEFT WRAPPER (Meta & Desc) */}
             <div className="md:col-span-2 grid grid-cols-1 md:grid-cols-[1fr_1.5fr] border-t border-[#E5D9C4]/40 pt-8">
-              
+
               {/* COLUMN 1: META */}
               <div className="flex flex-col border-b md:border-b-0 border-[#E5D9C4]/20 md:border-r md:border-[#E5D9C4]/20 pr-0 md:pr-6 pb-6 md:pb-0 mb-6 md:mb-0 gap-8">
                 {isValidField(project.client) && (
@@ -153,7 +153,7 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
                     <span className="font-ivymode text-sm md:text-base text-white tracking-wider uppercase">{project.client}</span>
                   </div>
                 )}
-                
+
                 {!project.isEvent ? (
                   isValidField(project.size) && (
                     <div className="flex flex-col">
@@ -189,14 +189,14 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
               {/* COLUMN 2: DESCRIPTION */}
               <div className="flex flex-col md:pl-8 lg:pl-12">
                 <h2 className="font-ivymode text-[2.25rem] text-[#E5D9C4] mb-6">About the Project</h2>
-                <div 
+                <div
                   className="font-ivymode text-sm md:text-base text-white/90 leading-relaxed space-y-4 mb-10"
                   dangerouslySetInnerHTML={{ __html: project.content }}
                 />
-                
+
                 <div>
-                  <a 
-                    href="/uploads/SAMA-Production-Portfolio.pdf" 
+                  <a
+                    href="/uploads/SAMA-Production-Portfolio.pdf"
                     download
                     className="inline-flex items-center gap-2 bg-[#714230] hover:bg-[#5a3220] transition-colors text-white font-ivymode px-6 py-3 rounded-full text-sm sm:text-base tracking-wide shadow-lg border border-[#E5D9C4]/20"
                   >

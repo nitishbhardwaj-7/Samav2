@@ -781,8 +781,8 @@ export async function getGenericCategoryPageData(
 
     // 4. CTA Title
     const ctaTitleMatch = html.match(/<h[1-6][^>]*>([^<]*closer look[^<]*)<\/h[1-6]>/i) ||
-                          html.match(/<h[1-6][^>]*>([^<]*projects and capabilities[^<]*)<\/h[1-6]>/i);
-    const ctaTitle = ctaTitleMatch 
+      html.match(/<h[1-6][^>]*>([^<]*projects and capabilities[^<]*)<\/h[1-6]>/i);
+    const ctaTitle = ctaTitleMatch
       ? decodeHtmlEntities(ctaTitleMatch[1].replace(/<[^>]+>/g, "").trim())
       : "Take a closer look at our projects and capabilities.";
 
@@ -851,6 +851,145 @@ export async function getMallActivationPageData(): Promise<CategoryPageData> {
     "Our clients include leading global brands who trust us to deliver refined, high-quality environments.",
     "https://samaproductionme.com/wp-content/uploads/2026/06/Frame-146-3-1.png"
   );
+}
+
+export interface ProjectsPageData {
+  header: {
+    logo: string;
+    description: string;
+  };
+  projects: {
+    title: string;
+    subtitle: string;
+    description: string;
+    items: ProjectItem[];
+  };
+}
+
+const FALLBACK_PROJECTS_DATA: ProjectsPageData = {
+  header: {
+    logo: "https://samaproductionme.com/wp-content/uploads/2026/04/sama-logo-2.png",
+    description: "Our clients include leading global brands who trust us to deliver refined, high-quality environments that elevate their presence and reflect their identity with excellence.",
+  },
+  projects: {
+    title: "Projects",
+    subtitle: "Spaces Brought to Life",
+    description: "A curated selection of interiors that reflect our design philosophy, attention to detail, and regional expertise.",
+    items: [
+      { number: "01", title: "Interior", image: "https://samaproductionme.com/wp-content/uploads/2026/06/interior-1-1.png", link: "/interior", btnText: "Know More" },
+      { number: "02", title: "Exhibition Design & Build", image: "https://samaproductionme.com/wp-content/uploads/2026/06/Exhibition-1-1.png", link: "/exhibition", btnText: "Know More" },
+      { number: "03", title: "Events", image: "https://samaproductionme.com/wp-content/uploads/2026/06/events-1-1.png", link: "/events", btnText: "Know More" },
+      { number: "04", title: "Mall Activation & Travel Retail", image: "https://samaproductionme.com/wp-content/uploads/2026/06/Mall-Activation-1-1-2.png", link: "/mall-activation-travel-retail", btnText: "Know More" },
+    ],
+  },
+};
+
+export async function getProjectsPageData(): Promise<ProjectsPageData> {
+  const url = "https://samaproductionme.com/projects/";
+  try {
+    const res = await fetch(url, {
+      next: { revalidate: REVALIDATE_VAL },
+      headers: { "User-Agent": "Mozilla/5.0" },
+    });
+
+    if (!res.ok) {
+      console.warn(`Failed to fetch WordPress projects page: ${res.statusText}. Using fallback data.`);
+      return FALLBACK_PROJECTS_DATA;
+    }
+
+    const html = await res.text();
+    if (!html) {
+      return FALLBACK_PROJECTS_DATA;
+    }
+
+    const data: ProjectsPageData = JSON.parse(JSON.stringify(FALLBACK_PROJECTS_DATA));
+
+    // Parse Logo
+    const logoMatch = html.match(/class="[^"]*elementor-element-731f0b0[^"]*"[\s\S]*?<img[^>]+src="([^"]+)"/i);
+    if (logoMatch) {
+      data.header.logo = mapWpUrl(logoMatch[1].trim());
+    }
+
+    // Parse Header Description
+    const headerDescMatch = html.match(/class="[^"]*elementor-element-e0731fb[^"]*"[\s\S]*?<p[^>]*>([\s\S]*?)<\/p>/i);
+    if (headerDescMatch) {
+      data.header.description = decodeHtmlEntities(headerDescMatch[1].replace(/<[^>]+>/g, "").trim());
+    }
+
+    // Parse Main Title
+    const titleMatch = html.match(/class="[^"]*elementor-element-7028bdb[^"]*"[\s\S]*?<h[1-6][^>]*>([\s\S]*?)<\/h[1-6]>/i);
+    if (titleMatch) {
+      data.projects.title = decodeHtmlEntities(titleMatch[1].replace(/<[^>]+>/g, "").trim());
+    }
+
+    // Parse Subtitle
+    const subtitleMatch = html.match(/class="[^"]*elementor-element-9dacc4e[^"]*"[\s\S]*?<h[1-6][^>]*>([\s\S]*?)<\/h[1-6]>/i);
+    if (subtitleMatch) {
+      data.projects.subtitle = decodeHtmlEntities(subtitleMatch[1].replace(/<[^>]+>/g, "").trim());
+    }
+
+    // Parse Description
+    const descMatch = html.match(/class="[^"]*elementor-element-e77726b[^"]*"[\s\S]*?<p[^>]*>([\s\S]*?)<\/p>/i);
+    if (descMatch) {
+      data.projects.description = decodeHtmlEntities(descMatch[1].replace(/<[^>]+>/g, "").trim());
+    }
+
+    // Parse Projects Grid Items
+    const projectCards = html.split('<div class="proj-card');
+    if (projectCards.length > 1) {
+      const parsedItems: ProjectItem[] = [];
+      for (let i = 1; i < projectCards.length; i++) {
+        const cardHtml = projectCards[i];
+
+        const numMatch = cardHtml.match(/class="proj-number-box">([^<]+)/);
+        const titleMatch = cardHtml.match(/<h3><a[^>]*>([\s\S]*?)<\/a>/);
+        const imgMatch = cardHtml.match(/<img[^>]+src="([^"]+)"/);
+        const linkMatch = cardHtml.match(/class="proj-btn"><a href="([^"]+)"[^>]*>([\s\S]*?)<\/a>/i) || cardHtml.match(/href="([^"]+)"[^>]*style="[^"]*color:[^"]*#fff;[^"]*">know more<\/a>/i);
+
+        if (imgMatch) {
+          let finalLink = "#";
+          let btnText = "Know More";
+          if (linkMatch) {
+            const rawLink = linkMatch[1].trim();
+            btnText = decodeHtmlEntities(linkMatch[2]?.replace(/<[^>]+>/g, "").trim()) || "Know More";
+            finalLink = mapWpLinkToLocal(rawLink);
+          }
+
+          const parsedTitle = titleMatch
+            ? decodeHtmlEntities(titleMatch[1].replace(/<br\s*\/?>/g, " ").replace(/<[^>]+>/g, "").trim())
+            : "Project";
+
+          // Normalize links to match local routing
+          if (parsedTitle.toLowerCase().includes("interior")) {
+            finalLink = "/interior";
+          } else if (parsedTitle.toLowerCase().includes("exhibition")) {
+            finalLink = "/exhibition";
+          } else if (parsedTitle.toLowerCase().includes("events")) {
+            finalLink = "/events";
+          } else if (parsedTitle.toLowerCase().includes("mall activation") || parsedTitle.toLowerCase().includes("travel retail")) {
+            finalLink = "/mall-activation-travel-retail";
+          }
+
+          parsedItems.push({
+            number: numMatch ? numMatch[1].trim() : `0${i}`,
+            title: parsedTitle,
+            image: mapWpUrl(imgMatch[1].trim()),
+            link: finalLink,
+            btnText: btnText,
+          });
+        }
+      }
+
+      if (parsedItems.length > 0) {
+        data.projects.items = parsedItems;
+      }
+    }
+
+    return data;
+  } catch (err) {
+    console.error("Error in getProjectsPageData:", err);
+    return FALLBACK_PROJECTS_DATA;
+  }
 }
 
 export async function getInteriorProjects(): Promise<InteriorProject[]> {
@@ -1289,7 +1428,7 @@ export function mapYoastToMetadata(yoastJson: any): Metadata {
   if (yoastJson.og_site_name) openGraph.siteName = yoastJson.og_site_name;
   if (yoastJson.og_type) openGraph.type = yoastJson.og_type;
   if (yoastJson.og_locale) openGraph.locale = yoastJson.og_locale;
-  
+
   if (yoastJson.og_image && Array.isArray(yoastJson.og_image)) {
     openGraph.images = yoastJson.og_image.map((img: any) => ({
       url: img.url,

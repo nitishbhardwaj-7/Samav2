@@ -27,9 +27,14 @@ interface ProjectsSectionProps {
     description: string;
     items: ProjectItem[];
   };
+  headerData?: {
+    logo: string;
+    description: string;
+  };
+  showArchiveHeader?: boolean;
 }
 
-export default function ProjectsSection({ data }: ProjectsSectionProps) {
+export default function ProjectsSection({ data, headerData, showArchiveHeader }: ProjectsSectionProps) {
   const pathname = usePathname();
   const title = data?.title || "Projects";
   const subtitle = data?.subtitle || "Spaces Brought to Life";
@@ -191,17 +196,52 @@ export default function ProjectsSection({ data }: ProjectsSectionProps) {
   return (
     <section
       ref={sectionRef}
-      className="relative w-full pt-16 pb-16 sm:pt-24 sm:pb-24 flex flex-col items-center justify-center overflow-hidden"
+      className={`relative w-full ${showArchiveHeader ? "pt-6 sm:pt-8 pb-16 sm:pb-24" : "pt-16 pb-16 sm:pt-24 sm:pb-24"} flex flex-col items-center justify-center overflow-hidden`}
       style={{
         background: pathname === '/projects'
-          ? 'linear-gradient(180deg, #496449 0%, #778065 11%, #778065 42%, #DAC6AE 90%, #DAC6AE 100%)'
+          ? 'linear-gradient(180deg, #496449 0%, #778065 10%, #DAC6AE 20%, #DAC6AE 100%)'
           : 'linear-gradient(180deg, #496449 0%, #714230 11%, #714230 70%, #DAC6AE 90%, #DAC6AE 100%)'
       }}
     >
       <div className="w-full flex flex-col gap-20 sm:gap-28 z-10">
 
-        {/* Header Block */}
-        <div ref={headerRef} className="w-full max-w-[92%] sm:max-w-[88%] md:max-w-[85%] mx-auto flex flex-col md:flex-row justify-between items-start md:items-end gap-6 border-b border-white/10 pb-8 sm:pb-12">
+        {/* Group Archive Header and Header Block together to keep their spacing tight */}
+        <div className="w-full flex flex-col gap-6 sm:gap-10">
+          {/* Dynamic Archive Header (Logo, Description, Breadcrumbs, Line) */}
+          {showArchiveHeader && headerData && (
+            <div className="w-full flex flex-col items-center justify-center gap-4 sm:gap-5 pt-2 pb-2 px-4 max-w-[92%] sm:max-w-[88%] md:max-w-[85%] mx-auto text-center animate-fade-in">
+              {headerData.logo && (
+                <div className="relative w-48 h-20 sm:w-64 sm:h-28 flex items-center justify-center">
+                  <img
+                    src={headerData.logo}
+                    alt="SAMA Production"
+                    className="max-h-full max-w-full object-contain filter brightness-100"
+                  />
+                </div>
+              )}
+              {headerData.description && (
+                <p className="font-ivymode text-center text-sm sm:text-base md:text-lg text-white max-w-3xl leading-relaxed">
+                  {headerData.description}
+                </p>
+              )}
+              {/* Breadcrumbs */}
+              <div className="flex items-center justify-center gap-2 text-xs sm:text-sm text-[#E5D9C4]/80 font-ivymode">
+                <Link href="/" className="flex items-center gap-1.5 hover:text-white transition-colors">
+                  <svg aria-hidden="true" className="w-3.5 h-3.5 fill-[#E5D9C4] opacity-80 hover:opacity-100" viewBox="0 0 576 512" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M570.69,236.27,512,184.44V48a16,16,0,0,0-16-16H432a16,16,0,0,0-16,16V99.67L314.78,10.3C308.5,4.61,296.53,0,288,0s-20.46,4.61-26.74,10.3l-256,226A18.27,18.27,0,0,0,0,248.2a18.64,18.64,0,0,0,4.09,10.71L25.5,282.7a21.14,21.14,0,0,0,12,5.3,21.67,21.67,0,0,0,10.69-4.11l15.9-14V480a32,32,0,0,0,32,32H480a32,32,0,0,0,32-32V269.88l15.91,14A21.94,21.94,0,0,0,538.63,288a20.89,20.89,0,0,0,11.87-5.31l21.41-23.81A21.64,21.64,0,0,0,576,248.19,21,21,0,0,0,570.69,236.27ZM288,176a64,64,0,1,1-64,64A64,64,0,0,1,288,176ZM400,448H176a16,16,0,0,1-16-16,96,96,0,0,1,96-96h64a96,96,0,0,1,96,96A16,16,0,0,1,400,448Z" />
+                  </svg>
+                  <span>Home</span>
+                </Link>
+                <span className="opacity-60">/</span>
+                <span className="underline decoration-1 underline-offset-4 text-[#E5D9C4]">Our Projects</span>
+              </div>
+              {/* Divider line */}
+              <div className="w-full h-[1px] bg-white/10 mt-4 sm:mt-6" />
+            </div>
+          )}
+
+          {/* Header Block */}
+          <div ref={headerRef} className="w-full max-w-[92%] sm:max-w-[88%] md:max-w-[85%] mx-auto flex flex-col md:flex-row justify-between items-start md:items-end gap-6 pb-8 sm:pb-12">
           {/* Main Title */}
           <h2 ref={titleRef} className="font-ivymode font-normal text-[5.5rem] sm:text-[7.5rem] md:text-[9rem] lg:text-[10.5rem] xl:text-[12.5rem] text-[#E5D9C4] leading-[0.8] select-none whitespace-nowrap">
             {title}
@@ -217,6 +257,7 @@ export default function ProjectsSection({ data }: ProjectsSectionProps) {
             </p>
           </div>
         </div>
+      </div>
 
         {/* Dynamic Projects Grid */}
         <div className="w-full flex flex-col gap-0">
@@ -224,12 +265,15 @@ export default function ProjectsSection({ data }: ProjectsSectionProps) {
             const isReverse = index % 2 === 1;
             const isLastItem = index === items.length - 1;
 
-            // Apply dark brown text styling for the last project item that sits on the light background
-            const textThemeClass = isLastItem ? "text-[#563320]" : "text-[#E5D9C4]";
-            const borderThemeClass = isLastItem
+            // On the /projects page, all items sit on the light background due to the rapid gradient.
+            // On other pages, only the last item sits on the light background.
+            const isLightBg = pathname === '/projects' || isLastItem;
+
+            const textThemeClass = isLightBg ? "text-[#563320]" : "text-[#E5D9C4]";
+            const borderThemeClass = isLightBg
               ? "border-[#563320]/60 text-[#563320]"
               : "border-[#E5D9C4]/40 text-[#E5D9C4]";
-            const lineThemeClass = isLastItem ? "bg-[#563320]/30" : "bg-white/20";
+            const lineThemeClass = isLightBg ? "bg-[#563320]/30" : "bg-white/20";
             const alignmentClass = isReverse ? "items-start md:items-end text-left md:text-right" : "items-start text-left";
 
             return (

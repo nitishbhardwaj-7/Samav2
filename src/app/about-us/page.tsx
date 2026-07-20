@@ -30,7 +30,7 @@ export default async function AboutUsPage() {
       <AboutSection data={about} hideKnowMore={true} />
 
       {/* Section 3: Design Section */}
-      <div 
+      <div
         className="relative w-full"
         style={{ background: 'linear-gradient(180deg, #496449 0%, #714230 100%)' }}
       >
@@ -38,7 +38,7 @@ export default async function AboutUsPage() {
       </div>
 
       {/* Section 4: Who We Are Section */}
-      <div 
+      <div
         className="relative w-full"
         style={{ background: 'linear-gradient(180deg, #714230 0%, #DAC6AE 100%)' }}
       >
